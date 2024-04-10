@@ -105,7 +105,7 @@ SELECT
     attachment.ROWID AS 'attachment.ROWID',
     attachment.filename AS 'attachment.filename',
     attachment.transfer_name AS 'attachment.transfer_name',
-    PRINTF("%,d", attachment.total_bytes) AS 'attachment.total_bytes',
+    printf("%,d", attachment.total_bytes) AS 'attachment.total_bytes',
     attachment.mime_type AS 'attachment.mime_type',
     /* Date the attachment was created */
     CASE
@@ -171,31 +171,20 @@ SELECT
         WHEN 1 THEN 'Yes'
         ELSE 'Unknown-Value! : ' || message.is_emote
     END AS 'message.is_emote',
-    -- chat.properties AS 'chat.properties(bplist)',
     message.guid AS 'message.guid',
     chat.account_id AS 'chat.account_id',
     chat.group_id AS 'chat.group_id',
     chat.guid AS 'chat.guid',
     /* Source for each line of data */
-    'File: \private\var\mobile\Library\SMS\sms.db; Table: messages(ROWID: ' || message.ROWID || ')' AS 'Data Source'
+    'File: /private/var/mobile/Library/SMS/sms.db; Table: messages(ROWID: ' || message.ROWID || ')' AS 'Data Source'
 
 FROM message
-    LEFT OUTER JOIN
-        message_attachment_join ON message.ROWID = message_attachment_join.message_id
-    LEFT OUTER JOIN
-        attachment ON message_attachment_join.attachment_id = attachment.ROWID
-    LEFT JOIN
-        handle ON message.handle_id = handle.ROWID OR message.other_handle = handle.ROWID
-    JOIN
-        chat_message_join ON message.ROWID = chat_message_join.message_id
-    JOIN
-        chat ON chat_message_join.chat_id = chat.ROWID
+    LEFT OUTER JOIN message_attachment_join ON message.ROWID = message_attachment_join.message_id
+    LEFT OUTER JOIN attachment ON message_attachment_join.attachment_id = attachment.ROWID
+    LEFT JOIN handle ON message.handle_id = handle.ROWID OR message.other_handle = handle.ROWID
+    JOIN chat_message_join ON message.ROWID = chat_message_join.message_id
+    JOIN chat ON chat_message_join.chat_id = chat.ROWID
 
 WHERE message.date BETWEEN 694224000000000000 AND 707616000000000000
-
-/*
-694224000000000000 = 2023-01-01 00:00:00.000 (UTC)
-707616000000000000 = 2023-06-05 00:00:00.000 (UTC)
-*/
 
 ORDER BY message.date ASC, message.ROWID

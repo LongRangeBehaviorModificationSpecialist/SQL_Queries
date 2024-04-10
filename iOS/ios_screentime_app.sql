@@ -4,9 +4,11 @@ File Names = RMAdminStore-Local.sqlite & RMAdminStore-Cloud.sqlite
 */
 
 SELECT
-    ROW_NUMBER() OVER() AS 'Record',
+    ROW_NUMBER() OVER() AS 'Record No.',
     datetime(ZUSAGEBLOCK.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'Start Date (UTC)',
+    datetime(ZUSAGEBLOCK.ZSTARTDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'Start Date (Local)',
     datetime(ZUSAGEBLOCK.ZLASTEVENTDATE + 978307200, 'UNIXEPOCH') AS 'End Date (UTC)',
+    datetime(ZUSAGEBLOCK.ZLASTEVENTDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'End Date (Local)',
     ZUSAGETIMEDITEM.ZTOTALTIMEINSECONDS AS 'App Usage Time (seconds)',
     ZUSAGETIMEDITEM.ZTOTALTIMEINSECONDS / 60.00 AS 'App Usage Time (minutes)',
     ZUSAGETIMEDITEM.ZBUNDLEIDENTIFIER AS 'Bundle ID',

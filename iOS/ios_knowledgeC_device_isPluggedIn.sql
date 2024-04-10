@@ -1,8 +1,11 @@
 SELECT
-    ROW_NUMBER() OVER() AS 'Row #',
-    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') as 'Entry Creation Date',
-    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH') as 'Start Time',
-    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH') as 'End Time',
+    ROW_NUMBER() OVER() AS 'Record No.',
+    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') as 'Entry Creation Date (UTC)',
+    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH', 'localtime') as 'Entry Creation Date (Local)',
+    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH') as 'Start Time (UTC)',
+    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH', 'localtime') as 'Start Time (Local)',
+    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH') as 'End Time (UTC)',
+    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH', 'localtime') as 'End Time (Local)',
     (ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE) as 'Usage (Seconds)',
     (ZOBJECT.ZSECONDSFROMGMT / 3600) as 'GMT Offset',
     CASE ZOBJECT.ZSTARTDAYOFWEEK
