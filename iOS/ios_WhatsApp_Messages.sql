@@ -1,0 +1,57 @@
+
+-- IOS11 - WhatsApp messages - \Application Groups\net.whatsapp.WhatsApp.shared\ChatStorage.sqlite
+-- net.whatsapp.WhatsApp 2.17.52.40
+
+SELECT
+    ROW_NUMBER() OVER() AS 'Record #',
+    ZWAMESSAGE.z_pk AS 'Primary ID',
+    datetime(ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'UNIXEPOCH') AS 'Message Date (UTC)',
+    datetime(ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'Message Date (Local Time)',
+    ZWACHATSESSION.ZPARTNERNAME AS 'Session Partner Name',
+    CASE ZWAMESSAGE.ZISFROMME
+        WHEN 0 THEN 'Incoming'
+        WHEN 1 THEN 'Outgoing'
+        ELSE 'Contact Examiner'
+    END AS 'Message Direction',
+    ZWAMESSAGE.ZFROMJID AS 'From',
+    ZWAMESSAGE.ZTOJID AS 'Sent To',
+    datetime(ZWAMESSAGE.ZSENTDATE + 978307200, 'UNIXEPOCH') AS 'Sent Date (UTC)',
+    datetime(ZWAMESSAGE.ZSENTDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'Sent Date (Local Time)',
+    CASE ZWAMESSAGE.ZMESSAGETYPE
+        WHEN 0 THEN 'Text'
+        WHEN 1 THEN 'Image'
+        WHEN 2 THEN 'Video'
+        WHEN 3 THEN 'Voice Message'
+        WHEN 4 THEN 'Gif'
+        WHEN 5 THEN 'Location'
+        WHEN 6 THEN 'Group Event'
+        WHEN 7 THEN 'Hyperlink'
+        WHEN 8 THEN 'Document'
+        WHEN 14 THEN 'Deleted Message'
+        WHEN 15 THEN 'Sticker'
+        ELSE ZWAMESSAGE.ZMESSAGETYPE
+    END AS 'Message Type',
+    CASE ZWACHATSESSION.ZHIDDEN
+        WHEN 0 THEN 'No'
+        WHEN 1 THEN 'Yes'
+    ELSE 'Contact Examiner'
+    END AS 'Is Hidden',
+    ZWAMESSAGE.ZMEDIASECTIONID AS 'Media Section ID',
+    ZWAMEDIAITEM.ZMEDIALOCALPATH AS 'Media Path',
+    ZWAMEDIAITEM.ZVCARDSTRING AS 'Media Type',
+    time(ZWAMEDIAITEM.ZMOVIEDURATION, 'UNIXEPOCH') AS 'Duration',
+    ZWAMESSAGE.ZSTARRED AS 'Starred',
+    ZWAMEDIAITEM.ZMEDIAURL AS 'Media URL',
+    datetime(ZWAMEDIAITEM.ZMEDIAURLDATE + 978307200, 'UNIXEPOCH') AS 'URL Date',
+    ZWAMEDIAITEM.ZTITLE AS 'Media Title',
+    ZWAMEDIAITEM.ZLONGITUDE AS 'Media Width',
+    ZWAMEDIAITEM.ZLATITUDE AS 'Media Height',
+    ZWAMEDIAITEM.ZFILESIZE AS 'File Size'
+
+FROM ZWAMESSAGE
+    LEFT JOIN ZWACHATSESSION ON ZWAMESSAGE.ZCHATSESSION = ZWACHATSESSION.Z_PK
+    LEFT JOIN ZWAPROFILEPUSHNAME ON ZWAMESSAGE.ZPUSHNAME = ZWAPROFILEPUSHNAME.ZPUSHNAME
+    LEFT JOIN ZWAMEDIAITEM ON ZWAMEDIAITEM.ZMESSAGE = ZWAMESSAGE.Z_PK
+    LEFT JOIN ZWAMESSAGEINFO ON ZWAMESSAGEINFO.ZMESSAGE = ZWAMESSAGE.Z_PK
+
+ORDER BY ZWAMESSAGE.ZMESSAGEDATE DESC

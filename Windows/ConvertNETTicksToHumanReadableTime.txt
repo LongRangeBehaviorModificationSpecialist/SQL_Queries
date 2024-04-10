@@ -1,0 +1,11 @@
+
+
+SELECT
+	RecentlyPlayed.ItemId AS 'ID',
+	datetime((RecentlyPlayed.PlayedTime - 621355968000000000) / 10000000, 'unixepoch') AS 'HumanReadableDateTime'
+
+
+	strftime(
+		"%m-%d-%Y %H:%M:%S",
+		datetime(([tableName].[columnName] - 621355968000000000) / 10000000, 'unixepoch', 'localtime')
+	) AS 'HumanReadableDateTime (Local)'
