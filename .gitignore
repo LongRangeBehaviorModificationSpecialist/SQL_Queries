@@ -1,0 +1,2 @@
+# Do not upload test database files
+database_files/
