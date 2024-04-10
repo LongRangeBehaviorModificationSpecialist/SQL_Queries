@@ -52,9 +52,3 @@ WHERE ZRTCLLOCATIONMO.ZTIMESTAMP BETWEEN 732859200 AND 732877200
 
 /* Will sort by timestamp value first. If two entries have the same timestamp, the entries will be sorted by their Z_PK value */
 ORDER BY ZRTCLLOCATIONMO.ZTIMESTAMP ASC, ZRTCLLOCATIONMO.Z_PK
-
-/*
-NOTE:
-732859200 = 2024-03-24 04:00:00 (UTC) [2024-03-24 00:00:00 (EDT)]
-732877200 = 2024-03-24 09:00:00 (UTC) [2024-03-24 05:00:00 (EDT)]
-*/

@@ -1,3 +1,15 @@
+/*
+[Module Metadata]
+AUTHOR=[@mikespon]
+MODULE_NOTES=Locations from Wifi
+
+[Database Metadata]
+DATABASE=cache_encryptedB.db
+DATABASEPATH=/private/var/root/Library/Caches/locationd/
+PLATFORM=iOS
+VERSION=iOS 16.6 (20G75)
+*/
+
 SELECT
     ROW_NUMBER() OVER() AS 'Record No.',
     UPPER(substr(printf("%0!.12x", MAC), 1, 2) || ':' ||

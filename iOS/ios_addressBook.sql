@@ -1,5 +1,5 @@
 SELECT
-    ROW_NUMBER() OVER() AS 'Record #',
+    ROW_NUMBER() OVER() AS 'Record No.',
     ABPerson.ROWID AS 'ABPerson.ROWID',
     ABPerson.First AS ' ABPerson.First',
     ABPerson.Middle AS 'ABPerson.Middle',
