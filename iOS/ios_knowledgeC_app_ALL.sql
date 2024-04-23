@@ -18,7 +18,7 @@ SELECT
     datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'Entry Creation Date (Local)',
     (ZOBJECT.ZSECONDSFROMGMT / 3600) AS 'Device GMT Offset',
     ZOBJECT.ZUUID AS 'UUID',
-    'File: \private\var\mobile\Library\CoreDuet\Knowledge\knowledgeC.db; Table: ZOBJECT(Z_PK: ' || ZOBJECT.Z_PK || ')' AS 'Data Source'
+    'File: /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db; Table: ZOBJECT(Z_PK: ' || ZOBJECT.Z_PK || ')' AS 'Data Source'
 
 FROM ZOBJECT
     LEFT JOIN ZSTRUCTUREDMETADATA ON ZOBJECT.ZSTRUCTUREDMETADATA = ZSTRUCTUREDMETADATA.Z_PK

@@ -1,0 +1,47 @@
+/*
+Copied from https://www.mac4n6.com/blog/2018/8/5/knowledge-is-power-using-the-knowledgecdb-database-on-macos-and-ios-to-determine-precise-user-and-application-usage
+*/
+
+
+SELECT
+    ROW_NUMBER() OVER() AS 'Record No.',
+    ZOBJECT.Z_PK AS 'ZOBJECT.Z_PK',
+    ZOBJECT.ZSOURCE AS 'ZOBJECT.ZSOURCE',
+    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'Entry Creation (Local)',
+    CASE ZOBJECT.ZSTARTDAYOFWEEK
+        WHEN '1' THEN 'Sunday'
+        WHEN '2' THEN 'Monday'
+        WHEN '3' THEN 'Tuesday'
+        WHEN '4' THEN 'Wednesday'
+        WHEN '5' THEN 'Thursday'
+        WHEN '6' THEN 'Friday'
+        WHEN '7' THEN 'Saturday'
+    END 'DAY OF WEEK',
+    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'Start Time (Local)',
+    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'End Time (Local)',
+    (ZOBJECT.ZENDDATE-ZOBJECT.ZSTARTDATE) AS 'Usage (seconds)',
+    ZSOURCE.ZDEVICEID AS 'Device ID',
+    ZOBJECT.ZSTREAMNAME AS 'Stream Name',
+    ZOBJECT.ZVALUESTRING AS 'Value String',
+    ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONACTIVITYMETADATAKEY__ACTIVITYTYPE AS 'Acitivity Type',
+    ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONACTIVITYMETADATAKEY__TITLE AS 'Title',
+    ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONACTIVITYMETADATAKEY__USERACTIVITYREQUIREDSTRING AS 'Activity String',
+    datetime(ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONACTIVITYMETADATAKEY__EXPIRATIONDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'Expiration Date (Local)',
+    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTCLASS AS 'Intent Class',
+    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTVERB AS 'Intent Verb',
+    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__SERIALIZEDINTERACTION AS 'Serialized Interaction',
+    ZSOURCE.ZBUNDLEID AS 'Bundle ID',
+    'File: /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db; Table: ZOBJECT(Z_PK: ' || ZOBJECT.Z_PK || ')' AS 'Data Source'
+
+FROM ZOBJECT
+
+    LEFT JOIN ZSTRUCTUREDMETADATA ON ZOBJECT.ZSTRUCTUREDMETADATA = ZSTRUCTUREDMETADATA.Z_PK
+    LEFT JOIN ZSOURCE ON ZOBJECT.ZSOURCE = ZSOURCE.Z_PK
+
+WHERE
+    ZSTREAMNAME IS '/app/activity' OR
+    ZSTREAMNAME IS '/app/inFocus' OR
+    ZSTREAMNAME IS '/app/intents' AND
+    ZBUNDLEID IS 'com.toyopagroup.picaboo'
+
+ORDER BY 'START'

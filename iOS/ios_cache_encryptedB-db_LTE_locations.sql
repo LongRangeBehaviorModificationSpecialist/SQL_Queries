@@ -16,11 +16,11 @@ SELECT
     strftime('%Y-%m-%d %H:%M:%S', datetime(timestamp + 978307200, 'UNIXEPOCH', 'localtime')) AS 'Timestamp (Local)',
     Latitude AS 'Latitude',
     Longitude AS 'Longitude',
-	MCC AS 'MCC',
-	MNC AS 'MNC',
-	TAC AS 'TAC',
-	CI AS 'CI',
-	HorizontalAccuracy AS 'HorizontalAccuracy',
+    MCC AS 'MCC',
+    MNC AS 'MNC',
+    TAC AS 'TAC',
+    CI AS 'CI',
+    HorizontalAccuracy AS 'HorizontalAccuracy',
     Altitude AS 'Altitude',
     Confidence AS 'Confidence'
 
