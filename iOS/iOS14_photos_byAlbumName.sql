@@ -3,31 +3,45 @@ Need to fix this query for iOS 14.  The album names have changed.
 */
 
 SELECT
-    ROW_NUMBER() OVER() AS 'Row #',
-    ZGENERICALBUM.Z_PK AS 'Index #',
-    ZGENERICALBUM.ZTITLE AS 'Album Title',
+    ROW_NUMBER() OVER() AS 'RecordNo.',
+
+    ZGENERICALBUM.Z_PK AS 'IndexNo.',
+
+    ZGENERICALBUM.ZTITLE AS 'AlbumTitle',
+
     ZASSET.ZDIRECTORY AS 'Directory',
-    ZASSET.ZFILENAME AS 'File Name',
-    ZASSET.ZUNIFORMTYPEIDENTIFIER AS 'File Type',
+
+    ZASSET.ZFILENAME AS 'FileName',
+
+    ZASSET.ZUNIFORMTYPEIDENTIFIER AS 'FileType',
+
     CASE ZASSET.ZFAVORITE
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
         ELSE ZASSET.ZFAVORITE
     END AS 'Favorite',
-    ZASSET.ZDURATION AS 'Duration (seconds)',
+
+    ZASSET.ZDURATION AS 'Duration(seconds)',
+
     CASE
         WHEN LENGTH (ZASSET.ZDATECREATED) = 18 THEN datetime((ZASSET.ZDATECREATED / 1000000000) + 978307200, 'UNIXEPOCH')
         WHEN LENGTH (ZASSET.ZDATECREATED) = 9 THEN datetime(ZASSET.ZDATECREATED + 978307200, 'UNIXEPOCH')
         ELSE ZASSET.ZDATECREATED
-    END AS 'Date Created (UTC)',
+    END AS 'DateCreated(UTC)',
+
     datetime(ZASSET.ZADDEDDATE + 978307200, 'UNIXEPOCH') AS 'Date Added (UTC)',
-    datetime(ZASSET.ZMODIFICATIONDATE + 978307200, 'UNIXEPOCH') AS 'Modification Date (UTC)',
-    datetime(ZASSET.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'Trashed Date (UTC)',
-    ZASSET.ZTHUMBNAILINDEX AS 'Thumbnail Index',
+
+    datetime(ZASSET.ZMODIFICATIONDATE + 978307200, 'UNIXEPOCH') AS 'ModificationDate(UTC)',
+
+    datetime(ZASSET.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'TrashedDate(UTC)',
+
+    ZASSET.ZTHUMBNAILINDEX AS 'ThumbnailIndex',
+
     CASE ZASSET.ZLATITUDE
         WHEN '-180.0' THEN 'n/a'
         ELSE ZASSET.ZLATITUDE
     END 'LATITUDE',
+
     CASE ZASSET.ZLONGITUDE
         WHEN '-180.0' THEN 'n/a'
         ELSE ZASSET.ZLONGITUDE
