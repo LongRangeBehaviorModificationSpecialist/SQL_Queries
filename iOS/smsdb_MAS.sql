@@ -2,7 +2,7 @@
 File sms.db is located at /private/var/mobile/Library/SMS/sms.db
 */
 
-ATTACH DATABASE 'AddressBook.sqlitedb' AS 'AddressBook_db';
+-- ATTACH DATABASE 'AddressBook.sqlitedb' AS 'AddressBook_db';
 SELECT
     /* Add a row number at the beggining of each row */
     ROW_NUMBER() OVER() AS 'RecordNo.',
