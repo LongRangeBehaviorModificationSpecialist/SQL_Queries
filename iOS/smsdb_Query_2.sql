@@ -1,5 +1,7 @@
 /*
-  DLU: 2024-10-16
+  DLU: 2024-10-17
+  [VERSION]
+    Tested on iOS 18
   [SMS]
     FILE PATH = /private/var/mobile/Library/SMS/sms.db
   [AddressBook]
@@ -12,15 +14,35 @@ SELECT
 
     ROW_NUMBER() OVER() AS 'RecordNo.',
     message.ROWID AS 'MessageROWID',
-    chat_message_join.chat_id AS "ChatMessageJoinChatId",
+    chat_message_join.chat_id AS 'ChatMessageJoinChatId',
 
-
+    CASE
+        WHEN chat_message_join.chat_id IS NULL THEN 'DELETED MESSAGE'
+        ELSE 'No'
+    END AS 'WasDeleted',
 
     CASE
         WHEN LENGTH(message.date) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date / 1000000000) + 978307200, 'UNIXEPOCH')
         WHEN LENGTH(message.date) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date + 978307200, 'UNIXEPOCH')
         ELSE message.date
-    END AS 'MessageDate(UTC)',
+    END AS 'MessageDateTime(UTC)',
+
+    CASE
+        WHEN LENGTH(chat_recoverable_message_join.delete_date) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (chat_recoverable_message_join.delete_date / 1000000000) + 978307200, 'UNIXEPOCH')
+        WHEN LENGTH(chat_recoverable_message_join.delete_date) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', chat_recoverable_message_join.delete_date + 978307200, 'UNIXEPOCH')
+        ELSE chat_recoverable_message_join.delete_date
+    END AS 'DeletedDateTime(UTC)',
+
+    CASE message.is_from_me
+        WHEN 0 THEN 'Incoming'
+        WHEN 1 THEN 'Outgoing'
+        ELSE message.is_from_me
+    END AS 'MessageDirection',
+
+    CASE
+        WHEN message.text IS NOT NULL THEN message.text
+        ELSE NULL
+    END AS 'MessageText',
 
     CASE message.is_delivered
         WHEN 0 THEN 'No'
@@ -31,16 +53,30 @@ SELECT
     CASE
         WHEN LENGTH(message.date_delivered) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_delivered / 1000000000) + 978307200, 'UNIXEPOCH')
         WHEN LENGTH(message.date_delivered) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_delivered + 978307200, 'UNIXEPOCH')
-        WHEN message.date_delivered IS 0 THEN 'n/a'
+        WHEN message.date_delivered IS 0 THEN NULL
         ELSE message.date_delivered
-    END AS 'MessageDateDelivered(UTC)',
+    END AS 'MessageDeliveredDateTime(UTC)',
 
     CASE
         WHEN LENGTH(message.date_read) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_read / 1000000000) + 978307200, 'UNIXEPOCH')
         WHEN LENGTH(message.date_read) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_read + 978307200, 'UNIXEPOCH')
-        WHEN message.date_read IS 0 THEN 'n/a'
+        WHEN message.date_read IS 0 THEN NULL
         ELSE message.date_read
-    END AS 'MessageDateRead(UTC)',
+    END AS 'MessageReadDateTime(UTC)',
+
+    CASE
+        WHEN LENGTH(message.date_edited) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_edited / 1000000000) + 978307200, 'UNIXEPOCH')
+        WHEN LENGTH(message.date_edited) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_edited + 978307200, 'UNIXEPOCH')
+        WHEN message.date_edited IS 0 THEN NULL
+        ELSE message.date_edited
+    END AS 'MessageEditedDateTime(UTC)',
+
+    CASE
+        WHEN LENGTH(message.date_retracted) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_retracted / 1000000000) + 978307200, 'UNIXEPOCH')
+        WHEN LENGTH(message.date_retracted) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_retracted + 978307200, 'UNIXEPOCH')
+        WHEN message.date_retracted IS 0 THEN NULL
+        ELSE message.date_retracted
+    END AS 'MessageRetractedDateTime(UTC)',
 
     CASE message.handle_id
         WHEN 0 THEN 'n/a'
@@ -50,9 +86,9 @@ SELECT
     handle.ROWID AS 'HandleROWID',
 
     CASE
-        WHEN LENGTH(handle.id) = 14 AND handle.id LIKE '%p:+1%' THEN '(' ||  SUBSTR(handle.id, 5, 3) || ')' || SUBSTR(handle.id, 8, 3) || '-' || SUBSTR(handle.id, 11, 4)
+        WHEN LENGTH(handle.id) = 14 AND handle.id LIKE '%p:+1%' THEN '(' || SUBSTR(handle.id, 5, 3) || ')' || SUBSTR(handle.id, 8, 3) || '-' || SUBSTR(handle.id, 11, 4)
         WHEN LENGTH(handle.id) = 12 AND handle.id LIKE '+1%' THEN '(' || SUBSTR(handle.id, 3, 3) || ')' || SUBSTR(handle.id, 6, 3) || '-' || SUBSTR(handle.id, 9, 4)
-        WHEN LENGTH(handle.id) = 11 AND handle.id LIKE '1%' THEN '(' ||  SUBSTR(handle.id, 2, 3) || ')' || SUBSTR(handle.id, 5, 3) || '-' || SUBSTR(handle.id, 8, 4)
+        WHEN LENGTH(handle.id) = 11 AND handle.id LIKE '1%' THEN '(' || SUBSTR(handle.id, 2, 3) || ')' || SUBSTR(handle.id, 5, 3) || '-' || SUBSTR(handle.id, 8, 4)
         WHEN LENGTH(handle.id) = 10 THEN '(' || SUBSTR(handle.id, 1, 3) || ')' || SUBSTR(handle.id, 4, 3) || '-' || SUBSTR(handle.id, 7, 4)
         WHEN handle.id IS NULL THEN 'n/a'
         ELSE handle.id
@@ -65,12 +101,6 @@ SELECT
     END AS 'ChatStyle',
 
     chat_message_join.chat_id AS 'ChatMessageJoinChatId',
-
-    CASE message.is_from_me
-        WHEN 0 THEN 'Incoming'
-        WHEN 1 THEN 'Outgoing'
-        ELSE message.is_from_me
-    END AS 'MessageIsFromMe',
 
     CASE message.type
         WHEN 0 THEN 'Message'
@@ -97,23 +127,6 @@ SELECT
     message.cache_roomnames AS 'MessageCacheRoomNames',
 
     CASE
-        WHEN message.text IS NOT NULL THEN message.text
-        WHEN message.text IS NULL THEN '**NO TEXT**'
-    END AS 'MessageText',
-
-    CASE
-        WHEN LENGTH(message.date_edited) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_edited / 1000000000) + 978307200, 'UNIXEPOCH')
-        WHEN LENGTH(message.date_edited) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_edited + 978307200, 'UNIXEPOCH')
-        ELSE message.date_edited
-    END AS 'DateMessageEdited',
-
-    CASE
-        WHEN LENGTH(message.date_retracted) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_retracted / 1000000000) + 978307200, 'UNIXEPOCH')
-        WHEN LENGTH(message.date_retracted) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_retracted + 978307200, 'UNIXEPOCH')
-        ELSE message.date_retracted
-    END AS 'DateMessageRetracted',
-
-    CASE
         WHEN chat.display_name IS NULL THEN 'n/a'
         ELSE chat.display_name
     END AS 'ChatDisplayName',
@@ -130,7 +143,7 @@ SELECT
         WHEN 0 THEN 'Incoming'
         WHEN 1 THEN 'Outgoing'
         ELSE attachment.is_outgoing
-    END AS 'AttachmentIsOutgoing',
+    END AS 'AttachmentDirection',
 
     attachment.ROWID AS 'AttachmentROWID',
     attachment.mime_type AS 'AttachmentMimeType',
@@ -143,9 +156,9 @@ SELECT
     CASE
         WHEN LENGTH(attachment.created_date) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (attachment.created_date / 1000000000) + 978307200, 'UNIXEPOCH')
         WHEN LENGTH(attachment.created_date) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', attachment.created_date + 978307200, 'UNIXEPOCH')
-        WHEN attachment.created_date IS NULL THEN 'n/a'
-        ELSE 'ContactExaminer'
-    END AS 'AttachmentCreatedDate(UTC)',
+        WHEN attachment.created_date IS NULL THEN NULL
+        ELSE attachment.created_date
+    END AS 'AttachmentCreatedDateTime(UTC)',
 
     attachment.uti AS 'AttachmentUTI',
     -- observed values 5 (temp folder) & 6 (Library)
@@ -215,10 +228,10 @@ SELECT
         ELSE message.is_emote
     END AS 'IsEmote',
 
-    message.guid AS 'messageGUID',
-    chat.account_id AS 'chatAccountId',
-    chat.group_id AS 'chatGroupId',
-    chat.guid AS 'chatGUID',
+    message.guid AS 'MessageGUID',
+    chat.account_id AS 'ChatAccountId',
+    chat.group_id AS 'ChatGroupId',
+    chat.guid AS 'ChatGUID',
 
     --Source for each line of data
     '/private/var/mobile/Library/SMS/sms.db' AS 'DatabaseFile',
@@ -228,20 +241,19 @@ SELECT
 FROM message
 
     LEFT JOIN message_attachment_join ON message.ROWID = message_attachment_join.message_id
-    -- LEFT JOIN chat_message_join ON message_attachment_join.message_id = chat_message_join.message_id
+    LEFT JOIN chat_recoverable_message_join ON message.ROWID = chat_recoverable_message_join.message_id
     LEFT JOIN chat_message_join ON message.ROWID = chat_message_join.message_id
     LEFT JOIN attachment ON attachment.ROWID = message_attachment_join.attachment_id
     LEFT JOIN chat ON chat_message_join.chat_id = chat.ROWID
     LEFT JOIN handle ON message.handle_id = handle.ROWID OR message.other_handle = handle.ROWID
 
 
---To filter between date/time points
 WHERE
-
+    --To filter between date/time points
     message.date BETWEEN 750312000000000000 AND 750449160000000000
-    /* When CharMessaheJoinChatID is NULL, that means that the message was deleted,
+    /* When `chat_message_join.chat_id` is NULL, that means that the message was deleted,
     but there is still a record in the message table */
-    AND "ChatMessageJoinChatId" IS NULL
+    -- AND chat_message_join.chat_id IS NULL
 
 
 ORDER BY message.date ASC, message.ROWID
