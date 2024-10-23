@@ -13,10 +13,10 @@ SELECT * FROM (
 */
 
 SELECT * FROM (
-    SELECT LAG (ROWID,1) OVER (ORDER BY ROWID) AS "PreviousROWID",
+    SELECT LAG (ROWID, 1) OVER (ORDER BY ROWID) AS "PreviousROWID",
     rowid AS ROWID,
-    (ROWID - (LAG (ROWID,1) OVER (ORDER BY ROWID)) - 1) AS "NumberOfMissingRows",
-    LAG(datetime(date/1000000000 + 978307200, 'UNIXEPOCH'),1) OVER (ORDER BY ROWID) AS "BeginningTimestamp",
-    datetime(date/ 1000000000 + 978307200, 'UNIXEPOCH') AS "EndingTimestamp"
+    (ROWID - (LAG (ROWID, 1) OVER (ORDER BY ROWID)) - 1) AS "NumberOfMissingRows",
+    LAG(datetime(date / 1000000000 + 978307200, 'UNIXEPOCH'), 1) OVER (ORDER BY ROWID) AS "BeginningTimestamp",
+    datetime(date / 1000000000 + 978307200, 'UNIXEPOCH') AS "EndingTimestamp"
     from message) list
-    where ROWID - "PreviousROWID" > 1;
+    where ROWID - "PreviousROWID" > 1;\]=[-p0.9o8ik,7 u6j54]
