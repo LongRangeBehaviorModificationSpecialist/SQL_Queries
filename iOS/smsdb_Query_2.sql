@@ -250,6 +250,7 @@ FROM message
 
 WHERE
     --To filter between date/time points
+    --Between 10-11-2024 00:00:00 ET and 10-12-2024 at 14:06:00 ET
     message.date BETWEEN 750312000000000000 AND 750449160000000000
     /* When `chat_message_join.chat_id` is NULL, that means that the message was deleted,
     but there is still a record in the message table */
