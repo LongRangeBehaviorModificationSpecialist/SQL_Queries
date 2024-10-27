@@ -147,14 +147,17 @@ SELECT
     message.ck_record_change_tag AS 'message.ck_record_change_tag',
     attachment.ck_server_change_token_blob AS 'attachment.ck_server_change_token_blob',
     /* Source for each line of data */
-    'File: \private\var\mobile\Library\SMS\sms.db; Table: messages(ROWID: ' || message.ROWID || ')' AS 'Data Source'
+    'File: /private/var/mobile/Library/SMS/sms.db; Table: messages(ROWID: ' || message.ROWID || ')' AS 'Data Source'
+
 
 FROM message
+
     LEFT JOIN message_attachment_join ON message.ROWID = message_attachment_join.message_id
     LEFT JOIN chat_message_join ON message_attachment_join.message_id = chat_message_join.message_id
     LEFT JOIN attachment ON attachment.ROWID = message_attachment_join.attachment_id
     LEFT JOIN chat ON chat_message_join.chat_id = chat.ROWID
     LEFT JOIN chat_handle_join ON chat.ROWID = chat_handle_join.chat_id
     LEFT JOIN handle ON handle.ROWID = chat_handle_join.handle_id
+
 
 ORDER BY message.date
