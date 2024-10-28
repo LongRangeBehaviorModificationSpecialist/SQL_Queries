@@ -1,6 +1,3 @@
--- Attach database for AddressBook if needed
--- ATTACH DATABASE 'AddressBook.sqlitedb' AS 'AddressBook_db';
-
 WITH DateFormat AS (
     SELECT
         message.ROWID AS "MessageROWID",
@@ -27,14 +24,11 @@ WITH DateFormat AS (
             WHEN attachment.created_date IS NULL THEN 'N/A'
             ELSE attachment.created_date
         END AS "AttachmentCreatedDate"
-
     FROM message
-
           --LEFT JOIN attachment ON message.ROWID = attachment.message_id
           LEFT JOIN message_attachment_join ON message.ROWID = message_attachment_join.message_id
           LEFT JOIN attachment ON attachment.ROWID = message_attachment_join.attachment_id
 ),
-
 FormattedHandle AS (
     SELECT
         handle.ROWID AS HandleRowID,
@@ -53,8 +47,12 @@ SELECT
     -- ROW_NUMBER() OVER() AS 'RecordNo.',
     --m.MessageROWID,
     m.ROWID as 'Message.ROWID',
-    cmj.message_id AS 'ChatMessageJoin.MessageID',
+    cmj.message_id AS 'cmj.MessageID',
     df.MessageDate AS 'MessageDate(UTC)',
+    CASE
+        WHEN cmj.chat_id IS NULL THEN 'DELETED MESSAGE'
+        ELSE 'No'
+    END AS 'WasDeleted',
 
     CASE m.is_delivered
         WHEN 1 THEN 'Yes'
@@ -100,17 +98,18 @@ SELECT
     a.transfer_name AS 'AttachmentTransferName',
     printf("%,d", a.total_bytes) AS 'AttachmentFileSize(bytes)',
     df.AttachmentCreatedDate AS 'AttachmentCreatedDate(UTC)',
-    'File: /private/var/mobile/Library/SMS/sms.db' AS 'DatabaseFile'
-
+    '/private/var/mobile/Library/SMS/sms.db; Table: messages(ROWID: ' || m.ROWID || ')' AS 'DataSource'
 
 FROM message m
 
-    JOIN DateFormat df ON m.ROWID = df.MessageROWID
+    LEFT JOIN DateFormat df ON m.ROWID = df.MessageROWID
     LEFT JOIN message_attachment_join maj ON m.ROWID = maj.message_id
     LEFT JOIN attachment a ON maj.attachment_id = a.ROWID
-    JOIN chat_message_join cmj ON m.ROWID = cmj.message_id
-    JOIN chat c ON cmj.chat_id = c.ROWID
+    LEFT JOIN chat_message_join cmj ON m.ROWID = cmj.message_id
+    LEFT JOIN chat c ON cmj.chat_id = c.ROWID
     LEFT JOIN FormattedHandle fh ON m.handle_id = fh.HandleRowID
 
+WHERE m.ROWID IS '131' OR m.ROWID IS '442'
 
-ORDER BY m.date ASC, m.ROWID;
+
+ORDER BY m.ROWID
