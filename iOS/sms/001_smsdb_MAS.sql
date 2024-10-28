@@ -35,11 +35,6 @@ SELECT
         ELSE message.date_read
     END AS 'MessageDateRead(UTC)',
 
-    CASE message.handle_id
-        WHEN 0 THEN 'N/A'
-        ELSE message.handle_id
-    END AS 'MessageHandleID',
-
     handle.ROWID AS 'HandleRowID',
 
     /*
