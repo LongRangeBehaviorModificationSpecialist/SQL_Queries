@@ -1,3 +1,13 @@
+/*
+  DLU: 2024-10-31
+  [VERSION]
+    Tested on iOS 18
+  [SMS]
+    FILE PATH = /private/var/mobile/Library/SMS/sms.db
+  [AddressBook]
+    FILE PATH = /private/var/mobile/Library/AddressBook/AddressBook.sqlitedb
+*/
+
 SELECT
 
     m.ROWID AS 'Message.ROWID',
@@ -158,7 +168,6 @@ SELECT
         WHEN a.created_date IS NULL THEN 'N/A'
         ELSE a.created_date
     END AS 'AttachmentCreatedDate(UTC)',
-
     /* Source for each line of data */
     '/private/var/mobile/Library/SMS/sms.db; Table: messages(ROWID: ' || m.ROWID || ')' AS 'DataSource'
 
@@ -172,7 +181,19 @@ FROM message m
     LEFT JOIN handle ON m.handle_id = handle.ROWID
 
 
--- WHERE m.ROWID IS '128689'
+WHERE
+
+    /*
+    To filter between date/time points
+    Between 10-11-2024 00:00:00 ET and 10-12-2024 at 14:06:00 ET
+    */
+    message.date BETWEEN 750312000000000000 AND 750449160000000000
+    /*
+    When `chat_message_join.chat_id` is NULL, that means that the message was deleted,
+    but there is still a record of the message in the message table.
+    It is likely that the vacuum functions has not run to delete the message from the table
+    */
+    --chat_message_join.chat_id IS NULL
 
 
 ORDER BY m.ROWID
