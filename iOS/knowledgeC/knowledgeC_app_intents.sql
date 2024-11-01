@@ -14,7 +14,6 @@ SELECT
     ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTVERB AS 'IntentAction',
     ZSOURCE.ZBUNDLEID AS 'BundleID',
     datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'RecordedDateTime(UTC)',
-    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'RecordedDateTime(Local)',
     (ZOBJECT.ZSECONDSFROMGMT / 3600) AS 'GMTOffset',
 
     CASE ZOBJECT.ZSTARTDAYOFWEEK
@@ -30,8 +29,8 @@ SELECT
 
     ZSOURCE.ZSOURCEID as 'SourceID',
 
-    'File: /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db' AS 'DatabaseFile',
-    'Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS 'DataSource'
+    /* Source for each line of data */
+    '/private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS 'DataSource'
 
 
 FROM ZOBJECT
@@ -40,7 +39,9 @@ FROM ZOBJECT
     LEFT JOIN ZSOURCE ON ZOBJECT.ZSOURCE = ZSOURCE.Z_PK
 
 
-WHERE ZBUNDLEID LIKE '%whatsapp%' AND ZSOURCEID LIKE 'intents'
+WHERE
+
+    ZBUNDLEID LIKE '%whatsapp%' AND ZSOURCEID LIKE 'intents'
 
 
 ORDER BY ZOBJECT.ZCREATIONDATE ASC

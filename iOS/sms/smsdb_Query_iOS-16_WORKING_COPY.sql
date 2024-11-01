@@ -1,4 +1,5 @@
 SELECT
+
     -- ROW_NUMBER() OVER() AS 'record.number',
     message.ROWID AS 'message.ROWID',
 --     chat.service_name AS 'chat.service name',
@@ -178,27 +179,9 @@ SELECT
 --     message.ck_record_change_tag AS 'message.ck_record_change_tag',
 --     attachment.ck_server_change_token_blob AS 'attachment.ck_server_change_token_blob',
     /* Source for each line of data */
-    'File: /private/var/mobile/Library/SMS/sms.db; Table: message(ROWID: ' || message.ROWID || ')' AS 'data_source'
+    '/private/var/mobile/Library/SMS/sms.db; Table: message(ROWID: ' || message.ROWID || ')' AS 'DataSource'
 
 FROM message
-
-  /* Returned 141,196 rows */
-  LEFT JOIN message_attachment_join ON message."ROWID" = message_attachment_join.message_id
-  LEFT JOIN chat_message_join ON message_attachment_join.message_id = chat_message_join.message_id
-  LEFT JOIN attachment ON attachment."ROWID" = message_attachment_join.attachment_id
-  LEFT JOIN chat ON chat_message_join.chat_id = chat."ROWID"
-  LEFT JOIN chat_handle_join ON chat."ROWID" = chat_handle_join.chat_id
-  LEFT JOIN handle ON handle."ROWID" = chat_handle_join.handle_id
-
-
-
-    -- LEFT JOIN handle ON message.handle_id = handle.ROWID
-    -- LEFT JOIN message_attachment_join ON message.ROWID = message_attachment_join.message_id
-    -- LEFT JOIN chat_message_join ON message_attachment_join.message_id = chat_message_join.message_id
-    -- LEFT JOIN attachment ON attachment.ROWID = message_attachment_join.attachment_id
-    -- LEFT JOIN chat ON chat_message_join.chat_id = chat.ROWID
-    -- LEFT JOIN chat_handle_join ON chat.ROWID = chat_handle_join.chat_id
-
     LEFT JOIN message_attachment_join ON message.ROWID = message_attachment_join.message_id
     LEFT JOIN chat_message_join ON message_attachment_join.message_id = chat_message_join.message_id
     LEFT JOIN attachment ON attachment.ROWID = message_attachment_join.attachment_id
@@ -207,8 +190,5 @@ FROM message
     LEFT JOIN handle ON message.handle_id = handle.ROWID
 
 
-
-
-
-
-ORDER BY message.date
+ORDER BY
+    message.date

@@ -232,13 +232,11 @@ SELECT
     chat.group_id AS 'ChatGroupId',
     chat.guid AS 'ChatGUID',
 
-    --Source for each line of data
-    '/private/var/mobile/Library/SMS/sms.db' AS 'DatabaseFile',
-    'Table: messages(ROWID: ' || message.ROWID || ')' AS 'DataSource'
+    /* Source for each line of data */
+    '/private/var/mobile/Library/SMS/sms.db; messages(ROWID: ' || message.ROWID || ')' AS 'DataSource'
 
 
 FROM message
-
     LEFT JOIN message_attachment_join ON message.ROWID = message_attachment_join.message_id
     LEFT JOIN chat_recoverable_message_join ON message.ROWID = chat_recoverable_message_join.message_id
     LEFT JOIN chat_message_join ON message.ROWID = chat_message_join.message_id
@@ -257,4 +255,5 @@ WHERE
     -- AND chat_message_join.chat_id IS NULL
 
 
-ORDER BY message.date ASC, message.ROWID
+ORDER BY
+    message.date ASC, message.ROWID

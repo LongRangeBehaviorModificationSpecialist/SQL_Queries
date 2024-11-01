@@ -184,6 +184,7 @@ SELECT
         WHEN a.created_date IS NULL THEN 'N/A'
         ELSE a.created_date
     END AS 'AttachmentCreatedDate(UTC)',
+
     /* Source for each line of data */
     '/private/var/mobile/Library/SMS/sms.db; Table: messages(ROWID: ' || m.ROWID || ')' AS 'DataSource'
 

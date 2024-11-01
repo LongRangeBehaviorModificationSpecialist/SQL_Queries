@@ -3,7 +3,7 @@
 SELECT
 
     ROW_NUMBER() OVER() AS 'RecordNo.',
-    ABPerson.ROWID AS 'ABPerson.ROWID',
+    ABPerson.ROWID AS 'PersonROWID',
     ABPerson.First AS 'FirstName',
     ABPerson.Middle AS 'MiddleName',
     ABPerson.Last AS 'LastName',
@@ -55,7 +55,7 @@ SELECT
             ELSE ABMultiValueEntry.key || ': ' || value
         END, ' | ')
         FROM ABMultiValueEntry WHERE parent_id IN (
-            SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID)) AS '**Services (TESTING)',
+            SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID)) AS '**Services(TESTING)',
 
     CASE
         WHEN LENGTH(ABPerson.CreationDate) = 18 THEN strftime(
@@ -74,12 +74,12 @@ SELECT
     END AS 'ModificationDate(UTC)',
 
     /* Source for each line of data */
-    'File: /private/var/mobile/Library/AddressBook/AddressBook.sqlitedb' AS 'DatabaseFile',
-    'Table: ABPerson(ROWID:' || ABPerson.ROWID || ')' AS 'DataSource'
+    '/private/var/mobile/Library/AddressBook/AddressBook.sqlitedb; Table: ABPerson(ROWID:' || ABPerson.ROWID || ')' AS 'DataSource'
 
 
 FROM ABPerson
     LEFT OUTER JOIN ABPersonFullTextSearch_content ON ABPerson.ROWID = ABPersonFullTextSearch_content.ROWID
 
 
-ORDER BY ABPerson.ROWID
+ORDER BY
+    ABPerson.ROWID

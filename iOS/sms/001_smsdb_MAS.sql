@@ -3,7 +3,9 @@ File sms.db is located at /private/var/mobile/Library/SMS/sms.db
 */
 
 -- ATTACH DATABASE 'AddressBook.sqlitedb' AS 'AddressBook_db';
+
 SELECT
+
     /* Add a row number at the beggining of each row */
     -- ROW_NUMBER() OVER() AS 'RecordNo.',
     message.ROWID AS 'MessageROWID',
@@ -218,4 +220,5 @@ WHERE
 
 
 ORDER BY
-    message.date ASC, message.ROWID
+    message.date ASC,
+    message.ROWID

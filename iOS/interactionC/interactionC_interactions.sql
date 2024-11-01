@@ -9,6 +9,7 @@
 
 
 SELECT
+
     ROW_NUMBER() OVER() AS 'RecordNo.',
     ZINTERACTIONS.Z_PK AS 'InteractionsPK',
 
@@ -45,13 +46,11 @@ SELECT
     datetime(ZCONTACTS.ZLASTINCOMINGSENDERDATE + 978307200, 'UNIXEPOCH') AS 'LastIncomingSenderDateTime(UTC)',
     datetime(ZCONTACTS.ZLASTOUTGOINGRECIPIENTDATE + 978307200, 'UNIXEPOCH') AS 'LastOutgoingRecipientDateTime(UTC)',
 
-    --Source for each line of data
-    '/private/var/mobile/Library/CoreDuet/People/interactionC.db' AS 'DatabaseFile',
-    'Table: ZINTERACTIONS(Z_PK: ' || ZINTERACTIONS.Z_PK || ')' AS 'DataSource'
+    /* Source for each line of data */
+    '/private/var/mobile/Library/CoreDuet/People/interactionC.db; Table: ZINTERACTIONS(Z_PK: ' || ZINTERACTIONS.Z_PK || ')' AS 'DataSource'
 
 
 FROM ZINTERACTIONS
-
     LEFT JOIN Z_2INTERACTIONRECIPIENT ON ZINTERACTIONS.Z_PK = Z_2INTERACTIONRECIPIENT.Z_3INTERACTIONRECIPIENT
     LEFT JOIN ZCONTACTS ON ZINTERACTIONS.ZSENDER = ZCONTACTS.Z_PK
 
@@ -61,4 +60,5 @@ WHERE
     ZINTERACTIONS.ZSTARTDATE BETWEEN 750312000 AND 750449160
 
 
-ORDER BY ZINTERACTIONS.ZSTARTDATE ASC
+ORDER BY
+    ZINTERACTIONS.ZSTARTDATE ASC

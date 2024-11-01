@@ -10,9 +10,9 @@ SELECT
     ZRTCLLOCATIONMO.Z_PK AS 'Z_PK',
     -- ZRTCLLOCATIONMO.ZTIMESTAMP AS 'Timestamp (Original)',
     /* Convert the ZTIMESTAMP value to UTC in the 'yyyy-mm-ddTHH:MM:SSZ' format */
-    strftime('%Y-%m-%dT%H:%M:%SZ', datetime(ZRTCLLOCATIONMO.ZTIMESTAMP + 978307200, 'UNIXEPOCH')) AS 'Timestamp(UTC)',
+    strftime('%Y-%m-%dT%H:%M:%SZ', datetime(ZRTCLLOCATIONMO.ZTIMESTAMP + 978307200, 'UNIXEPOCH')) AS 'DateTimestamp(UTC)',
     /* Convert the ZTIMESTAMP value to local time in the 'yyyy-mm-dd HH:MM:SS' format */
-    strftime('%Y-%m-%d %H:%M:%S (UTC-4)', datetime(ZRTCLLOCATIONMO.ZTIMESTAMP + 978307200, 'UNIXEPOCH', 'localtime')) AS 'Timestamp(Local)',
+    strftime('%Y-%m-%d %H:%M:%S (UTC-4)', datetime(ZRTCLLOCATIONMO.ZTIMESTAMP + 978307200, 'UNIXEPOCH', 'localtime')) AS 'DateTimestamp(Local)',
     /* Latitude value of the entry */
     ZRTCLLOCATIONMO.ZLATITUDE AS 'LATITUDE',
     /* Longitude value of the entry */
@@ -45,20 +45,18 @@ SELECT
     ROUND(ZRTCLLOCATIONMO.ZVERTICALACCURACY * 3.281, 4) AS 'VerticalAccuracy(feet)',
 
     /* Source for each line of data */
-    'File: /private/var/mobile/Library/Caches/com.apple.routined/Cache.sqlite' AS 'DatabaseFile',
-    'Table: ZRTCLLOCATIONMO(Z_PK:' || ZRTCLLOCATIONMO.Z_PK || ')' AS 'DataSource'
+    '/private/var/mobile/Library/Caches/com.apple.routined/Cache.sqlite; Table: ZRTCLLOCATIONMO(Z_PK:' || ZRTCLLOCATIONMO.Z_PK || ')' AS 'DataSource'
 
 
 FROM ZRTCLLOCATIONMO
 
-/*
-Use this to search for records between a certain timestamp
-Comment out if not needed
-*/
-WHERE ZRTCLLOCATIONMO.ZTIMESTAMP BETWEEN 732859200 AND 732877200
+
+WHERE
+    -- Use this to search for records between a certain timestamp / Comment out if not needed
+    ZRTCLLOCATIONMO.ZTIMESTAMP BETWEEN 732859200 AND 732877200
 
 
-/* Will sort by timestamp value first. If two entries have the same timestamp,
-the entries will be sorted by their Z_PK value
-*/
-ORDER BY ZRTCLLOCATIONMO.ZTIMESTAMP ASC, ZRTCLLOCATIONMO.Z_PK
+ORDER BY
+    -- Will sort by timestamp value first. If two entries have the same timestamp, the entries will be sorted by their Z_PK value
+    ZRTCLLOCATIONMO.ZTIMESTAMP ASC,
+    ZRTCLLOCATIONMO.Z_PK

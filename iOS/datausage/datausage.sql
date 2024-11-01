@@ -8,9 +8,9 @@
 SELECT
 
     ROW_NUMBER() OVER() AS 'RecordNo.',
-    datetime(ZLIVEUSAGE.ZTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'LiveUsageTimestamp(UTC)',
-    datetime(ZPROCESS.ZFIRSTTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'ProcessFirstTimestamp(UTC)',
-    datetime(ZPROCESS.ZTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'ProcessTimestamp(UTC)',
+    datetime(ZLIVEUSAGE.ZTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'LiveUsageDateTimestamp(UTC)',
+    datetime(ZPROCESS.ZFIRSTTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'ProcessFirstDateTimestamp(UTC)',
+    datetime(ZPROCESS.ZTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'ProcessDateTimestamp(UTC)',
     ZPROCESS.ZPROCNAME AS 'ProcessName',
     ZPROCESS.ZBUNDLENAME AS 'BundleID',
     Z_PRIMARYKEY.Z_NAME as 'Type',
@@ -19,17 +19,18 @@ SELECT
     ZLIVEUSAGE.ZWWANIN AS 'WwanIn',
     ZLIVEUSAGE.ZWWANOUT AS 'WwanOut',
 
-    'File: /private/var/wireless/Library/Databases/DataUsage.sqlite' AS 'DatabaseFile',
-    'Table: ZLIVEUSAGE(Z_PK:' || ZLIVEUSAGE.Z_PK || '), ' || 'Table: ZPROCESS(Z_PK:' || ZPROCESS.Z_PK || ')' AS 'DataSource'
+    /* Source for each line of data */
+    '/private/var/wireless/Library/Databases/DataUsage.sqlite; Table: ZLIVEUSAGE(Z_PK:' || ZLIVEUSAGE.Z_PK || '), ' || 'Table: ZPROCESS(Z_PK:' || ZPROCESS.Z_PK || ')' AS 'DataSource'
 
 
 FROM ZLIVEUSAGE
-
     LEFT JOIN ZPROCESS ON ZLIVEUSAGE.ZHASPROCESS = ZPROCESS.Z_PK
     LEFT JOIN Z_PRIMARYKEY ON ZPROCESS.Z_ENT = Z_PRIMARYKEY.Z_ENT
 
 
-WHERE 'PROCESS NAME' LIKE '%whisper%'
+WHERE
+    ZPROCESS.ZPROCNAME LIKE '%whisper%'
 
 
-ORDER BY 'TIMESTAMP' ASC
+ORDER BY
+    ZLIVEUSAGE.ZTIMESTAMP ASC

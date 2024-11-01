@@ -9,12 +9,9 @@ SELECT
 
     ROW_NUMBER() OVER() AS 'RecordNo.',
     ZOBJECT.Z_PK AS 'ZOBJECT.Z_PK',
-    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'EntryCreationDate(UTC)',
-    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'EntryCreationDate(Local)',
-    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'StartTime(UTC)',
-    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'StartTime(Local)',
-    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'EndTime(UTC)',
-    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'EndTime(Local)',
+    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'EntryCreationDateTime(UTC)',
+    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'StartDateTime(UTC)',
+    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'EndDateTime(UTC)',
     (ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE) AS 'Usage(Seconds)',
     (ZOBJECT.ZSECONDSFROMGMT / 3600) AS 'GMTOffset',
 
@@ -37,14 +34,16 @@ SELECT
         ELSE ZOBJECT.ZVALUEINTEGER
     END 'DeviceStatus',
 
-    'File: /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db' AS 'DatabaseFile',
-    'Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS 'DataSource'
+    /* Source for each line of data */
+    '/private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS 'DataSource'
 
 
 FROM ZOBJECT
 
 
-WHERE ZSTREAMNAME LIKE '/device/isPluggedIn'
+WHERE
+    ZSTREAMNAME LIKE '/device/isPluggedIn'
 
 
-ORDER BY ZOBJECT.ZSTARTDATE DESC
+ORDER BY
+    ZOBJECT.ZSTARTDATE DESC

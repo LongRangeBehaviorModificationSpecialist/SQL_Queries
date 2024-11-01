@@ -19,4 +19,4 @@ SELECT * FROM (
     LAG(datetime(date / 1000000000 + 978307200, 'UNIXEPOCH'), 1) OVER (ORDER BY ROWID) AS "BeginningTimestamp",
     datetime(date / 1000000000 + 978307200, 'UNIXEPOCH') AS "EndingTimestamp"
     from message) list
-    where ROWID - "PreviousROWID" > 1;
+    WHERE ROWID - "PreviousROWID" > 1;

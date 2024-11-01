@@ -242,11 +242,11 @@ SELECT
     chat.group_id AS 'ChatGroupId',
     chat.guid AS 'ChatGUID',
 
+    /* Source for each line of data */
     '/private/var/mobile/Library/SMS/sms.db; Table: messages(ROWID: ' || message.ROWID || ')' AS 'DataSource'
 
 
 FROM message
-
         LEFT JOIN message_attachment_join ON message.ROWID = message_attachment_join.message_id
         LEFT JOIN chat_recoverable_message_join ON message.ROWID = chat_recoverable_message_join.message_id
         LEFT JOIN chat_message_join ON message.ROWID = chat_message_join.message_id
@@ -256,10 +256,12 @@ FROM message
 
 
 WHERE
-        --To filter between date/time points
-        message.date BETWEEN 750312000000000000 AND 750449160000000000
-        /* When `chat_message_join.chat_id` is NULL, that means that the message
-        was deleted, but there is still a record in the message table */
-        -- AND chat_message_join.chat_id IS NULL
+    --To filter between date/time points
+    message.date BETWEEN 750312000000000000 AND 750449160000000000
+    /* When `chat_message_join.chat_id` is NULL, that means that the message
+    was deleted, but there is still a record in the message table */
+    -- AND chat_message_join.chat_id IS NULL
 
-ORDER BY message.date ASC, message.ROWID
+ORDER BY
+    message.date ASC,
+    message.ROWID

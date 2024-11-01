@@ -9,9 +9,7 @@ SELECT
     ROW_NUMBER() OVER() AS 'RecordNo.',
     ZCALLRECORD.Z_PK AS 'CallSequenceNo.',
     datetime(ZCALLRECORD.ZDATE + 978307200, 'UNIXEPOCH') AS 'CallStartTime(UTC)',
-    datetime(ZCALLRECORD.ZDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'CallStartTime(Local)',
     datetime((ZCALLRECORD.ZDATE + 978307200) + ZCALLRECORD.ZDURATION, 'UNIXEPOCH') AS 'CallEndTime(UTC)',
-    datetime((ZCALLRECORD.ZDATE + 978307200) + ZCALLRECORD.ZDURATION, 'UNIXEPOCH', 'localtime') AS 'CallEndTime(Local)',
     TIME(ZCALLRECORD.ZDURATION, 'UNIXEPOCH') AS 'CallDuration',
     ZCALLRECORD.ZADDRESS AS 'ContactNumber',
     ZCALLRECORD.ZLOCATION AS 'Location',
@@ -35,14 +33,14 @@ SELECT
         ELSE ZCALLRECORD.ZCALLTYPE
     END AS 'CallType',
 
-    ZCALLRECORD.ZSERVICE_PROVIDER AS 'Service Provider',
+    ZCALLRECORD.ZSERVICE_PROVIDER AS 'ServiceProvider',
 
     /* Source for each line of data */
-    'File: /private/var/mobile/Library/CallHistoryDB/CallHistory.storedata' AS 'DatabaseFile',
-    'Table: ZCALLRECORD(Z_PK:' || ZCALLRECORD.Z_PK || ')' AS 'DataSource'
+    '/private/var/mobile/Library/CallHistoryDB/CallHistory.storedata; Table: ZCALLRECORD(Z_PK:' || ZCALLRECORD.Z_PK || ')' AS 'DataSource'
 
 
 FROM ZCALLRECORD
 
 
-ORDER BY ZCALLRECORD.ZDATE DESC
+ORDER BY
+    ZCALLRECORD.ZDATE DESC

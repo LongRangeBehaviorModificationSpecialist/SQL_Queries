@@ -11,30 +11,28 @@ SELECT
     ZOBJECT.ZVALUESTRING AS 'BundleID',
     ZOBJECT.ZSTREAMNAME AS 'StreamName',
     ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONMETADATAKEY__LAUNCHREASON AS 'LaunchReason',
-    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'StartTime(UTC)',
-    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'StartTime(Local)',
-    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'EndTime(UTC)',
-    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'EndTime(Local)',
+    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'StartDateTime(UTC)',
+    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'EndDateTime(UTC)',
     (ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE) AS 'Usage(Seconds)',
-    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'EntryCreationDate(UTC)',
-    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH', 'localtime') AS 'EntryCreationDate(Local)',
+    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'EntryCreationDateTime(UTC)',
     (ZOBJECT.ZSECONDSFROMGMT / 3600) AS 'DeviceGMTOffset',
     ZOBJECT.ZUUID AS 'UUID',
 
-    'File: /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db' AS 'DatabaseFile',
-    'Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS 'DataSource'
+    /* Source for each line of data */
+    'File: /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS 'DataSource'
 
 
 FROM ZOBJECT
-
     LEFT JOIN ZSTRUCTUREDMETADATA ON ZOBJECT.ZSTRUCTUREDMETADATA = ZSTRUCTUREDMETADATA.Z_PK
     LEFT JOIN ZSOURCE ON ZOBJECT.ZSOURCE = ZSOURCE.Z_PK
 
 
-WHERE (ZSTREAMNAME LIKE '%') AND ZVALUESTRING LIKE '%whatsapp%'
+WHERE
+    (ZSTREAMNAME LIKE '%') AND ZVALUESTRING LIKE '%whatsapp%'
 
 
-ORDER BY ZOBJECT.ZSTARTDATE DESC
+ORDER BY
+    ZOBJECT.ZSTARTDATE DESC
 
 
 --ZSTREAMNAME LIKE '/app/activity' OR
