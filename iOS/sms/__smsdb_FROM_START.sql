@@ -15,6 +15,7 @@ SELECT
     CASE
         WHEN LENGTH(m.date) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (m.date / 1000000000) + 978307200, 'UNIXEPOCH')
         WHEN LENGTH(m.date) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', m.date + 978307200, 'UNIXEPOCH')
+        WHEN m.date IS 0 THEN NULL
         ELSE m.date
     END AS 'MessageDate(UTC)',
 
@@ -71,32 +72,29 @@ SELECT
         ELSE 'Unknown-Value : ' || m.is_emote
     END AS 'MessageIsEmote',
 
-    m.guid AS 'MessageGUID',
-    m.associated_message_guid AS 'AssociatedMessageGUID',
-
     CASE m.handle_id
-        WHEN 0 THEN 'N/A'
+        WHEN 0 THEN NULL
         ELSE m.handle_id
     END AS 'MessageHandleID',
 
     CASE
         WHEN LENGTH(m.date_delivered) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (m.date_delivered / 1000000000) + 978307200, 'UNIXEPOCH')
         WHEN LENGTH(m.date_delivered) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', m.date_delivered + 978307200, 'UNIXEPOCH')
-        WHEN m.date_delivered IS 0 THEN 'N/A'
+        WHEN m.date_delivered IS 0 THEN NULL
         ELSE m.date_delivered
     END AS 'MessageDateDelivered(UTC)',
 
     CASE
         WHEN LENGTH(m.date_read) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (m.date_read / 1000000000) + 978307200, 'UNIXEPOCH')
         WHEN LENGTH(m.date_read) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', m.date_read + 978307200, 'UNIXEPOCH')
-        WHEN m.date_read IS 0 THEN 'N/A'
+        WHEN m.date_read IS 0 THEN NULL
         ELSE m.date_read
     END AS 'MessageDateRead(UTC)',
 
     CASE
         WHEN LENGTH(m.date_edited) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (m.date_edited / 1000000000) + 978307200, 'UNIXEPOCH')
         WHEN LENGTH(m.date_edited) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', m.date_edited + 978307200, 'UNIXEPOCH')
-        WHEN m.date_edited IS 0 THEN 'N/A'
+        WHEN m.date_edited IS 0 THEN NULL
         ELSE m.date_edited
     END AS 'MessageDateEdited(UTC)',
 
@@ -104,8 +102,8 @@ SELECT
         WHEN LENGTH(handle.id) = 14 AND handle.id LIKE '%p:+1%' THEN '(' || SUBSTR(handle.id, 5, 3) || ') ' || SUBSTR(handle.id, 8, 3) || '-' || SUBSTR(handle.id, 11, 4)
         WHEN LENGTH(handle.id) = 12 AND handle.id LIKE '+1%' THEN '(' || SUBSTR(handle.id, 3, 3) || ') ' || SUBSTR(handle.id, 6, 3) || '-' || SUBSTR(handle.id, 9, 4)
         WHEN LENGTH(handle.id) = 11 AND handle.id LIKE '1%' THEN '(' || SUBSTR(handle.id, 2, 3) || ') ' || SUBSTR(handle.id, 5, 3) || '-' || SUBSTR(handle.id, 8, 4)
-        WHEN LENGTH(handle.id) = 10 THEN '(' || SUBSTR(handle.id,1,3) || ') ' || SUBSTR(handle.id, 4, 3) || '-' || SUBSTR(handle.id, 7, 4)
-        WHEN handle.id IS NULL THEN 'N/A'
+        WHEN LENGTH(handle.id) = 10 THEN '(' || SUBSTR(handle.id, 1, 3) || ') ' || SUBSTR(handle.id, 4, 3) || '-' || SUBSTR(handle.id, 7, 4)
+        WHEN handle.id IS NULL THEN NULL
         ELSE handle.id
     END AS 'HandleID',
 
@@ -122,7 +120,7 @@ SELECT
         ELSE 'Unknown-Value : ' || m.is_from_me
     END AS 'MessageIsFromMe',
 
-    CASE m.type
+    CASE m.item_type
         WHEN 0 THEN 'Message'
         WHEN 1 THEN 'GroupParticipantAdded'
         WHEN 2 THEN 'GroupRenamed'
@@ -130,13 +128,43 @@ SELECT
         WHEN 4 THEN 'LocationSharingData'
         WHEN 5 THEN 'Unknown'
         WHEN 6 THEN 'Unknown'
-        ELSE 'Unknown-Value : ' || m.type
-    END AS 'MessageType',
+        ELSE 'Unknown-Value : ' || m.item_type
+    END AS 'ItemType',
+
+    m.guid AS 'MessageGUID',
 
     CASE
-        WHEN m.text IS NULL THEN '**NO TEXT**'
+        WHEN m.text IS NULL THEN NULL
         ELSE m.text
     END AS 'MessageText',
+
+    SUBSTR(m.associated_message_guid, 5, 36) AS 'AssociatedMessageGUID',
+
+    CASE m.associated_message_type
+        WHEN 0 THEN NULL
+        WHEN 2 THEN 'UnknownValue-2-ApplePaymentSent'
+        WHEN 3 THEN 'UnknownValue-3-ApplePaymentRequested'
+        WHEN 2000 THEN 'LOVEDReaction'
+        WHEN 2001 THEN 'LIKEDReaction'
+        WHEN 2002 THEN 'DISLIKEDReaction'
+        WHEN 2003 THEN 'LAUGHEDReaction'
+        WHEN 2004 THEN 'EMPHASIZEDReaction'
+        WHEN 2005 THEN 'QUESTIONEDReaction'
+        WHEN 3000 THEN 'RemovedLOVEDReaction'
+        WHEN 3001 THEN 'RemovedLIKEReaction'
+        WHEN 3002 THEN 'RemovedDISLIKEReaction'
+        WHEN 3003 THEN 'RemovedLAUGHReaction'
+        WHEN 3004 THEN 'RemovedEXCLAMATIONReaction'
+        WHEN 3005 THEN 'RemovedQUESTIONReaction'
+    END AS 'AssociatedMessageType',
+
+    m.balloon_bundle_id AS 'BalloonBundleID',
+
+    CASE m.was_delivered_quietly
+        WHEN '0' THEN 'No'
+        WHEN '1' THEN 'Yes'
+        ELSE 'Unknown-Value : '  || m.was_delivered_quietly
+    END AS 'WasDeliveredQuietly',
 
     CASE m.expressive_send_style_id
         WHEN 'com.apple.messages.effect.CKSpotlightEffect' THEN 'SpotlightEffect'
@@ -151,7 +179,7 @@ SELECT
         WHEN 'com.apple.MobileSMS.expressivesend.invisibleink' THEN 'SMSExpressiveSendInvisibleInk'
         WHEN 'com.apple.MobileSMS.expressivesend.impact' THEN 'SMSExpressiveSendImpact'
         WHEN 'com.apple.MobileSMS.expressivesend.gentle' THEN 'SMSExpressiveSendGentle'
-        ELSE 'n/a'
+        ELSE NULL
     END AS 'ExpressiveSendStyle',
 
     CASE m.is_read
@@ -161,7 +189,7 @@ SELECT
     END AS 'MessageIsRead',
 
     CASE c.display_name
-        WHEN NULL THEN 'N/A'
+        WHEN '' THEN NULL
         ELSE c.display_name
     END AS 'ChatDisplayName',
 
@@ -174,14 +202,21 @@ SELECT
     maj.attachment_id AS 'AttachmentID',
     a.filename AS 'AttachmentFileName',
     a.transfer_name AS 'AttachmentTransferName',
-    printf("%,d", a.total_bytes) AS 'AttachmentFileSize(bytes)',
+
+    CASE
+        WHEN a.total_bytes > 0 THEN printf("%,d", a.total_bytes)
+        WHEN a.total_bytes IS 0 THEN '0'
+        ELSE NULL
+    END AS 'AttachmentFileSize(bytes)',
+
     a.mime_type AS 'AttachmentMimeType',
     a.uti AS 'AttachmentUTI',
+
     /* Date the attachment was created */
     CASE
         WHEN LENGTH(a.created_date) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (a.created_date / 1000000000) + 978307200, 'UNIXEPOCH')
         WHEN LENGTH(a.created_date) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', a.created_date + 978307200, 'UNIXEPOCH')
-        WHEN a.created_date IS NULL THEN 'N/A'
+        WHEN a.created_date IS NULL THEN NULL
         ELSE a.created_date
     END AS 'AttachmentCreatedDate(UTC)',
 
@@ -190,7 +225,6 @@ SELECT
 
 
 FROM message m
-
     LEFT JOIN message_attachment_join maj ON m.ROWID = maj.message_id
     LEFT JOIN attachment a ON maj.attachment_id = a.ROWID
     LEFT JOIN chat_message_join cmj ON m.ROWID = cmj.message_id
@@ -198,8 +232,9 @@ FROM message m
     LEFT JOIN handle ON m.handle_id = handle.ROWID
 
 
-WHERE
-    m.expressive_send_style_id IS NOT NULL
+-- WHERE
+--     m.associated_message_type IS NOT '0'
+    -- m.expressive_send_style_id IS NOT NULL
     /*
     To filter between date/time points
     Between 10-11-2024 00:00:00 ET and 10-12-2024 at 14:06:00 ET
@@ -213,4 +248,5 @@ WHERE
     --chat_message_join.chat_id IS NULL
 
 
-ORDER BY m.ROWID
+ORDER BY
+    m.ROWID ASC
