@@ -138,6 +138,22 @@ SELECT
         ELSE m.text
     END AS 'MessageText',
 
+    CASE m.expressive_send_style_id
+        WHEN 'com.apple.messages.effect.CKSpotlightEffect' THEN 'SpotlightEffect'
+        WHEN 'com.apple.messages.effect.CKSparklesEffect' THEN 'SparklesEffect'
+        WHEN 'com.apple.messages.effect.CKLasersEffect' THEN 'LaserEffect'
+        WHEN 'com.apple.messages.effect.CKHeartEffect' THEN 'HeartEffect'
+        WHEN 'com.apple.messages.effect.CKHappyBirthdayEffect' THEN 'HappyBirthdayEffect'
+        WHEN 'com.apple.messages.effect.CKFireworksEffect' THEN 'FireworksEffect'
+        WHEN 'com.apple.messages.effect.CKEchoEffect' THEN 'EchoEffect'
+        WHEN 'com.apple.messages.effect.CKConfettiEffect' THEN 'ConfettiEffect'
+        WHEN 'com.apple.MobileSMS.expressivesend.loud' THEN 'SMSExpressiveSendLoud'
+        WHEN 'com.apple.MobileSMS.expressivesend.invisibleink' THEN 'SMSExpressiveSendInvisibleInk'
+        WHEN 'com.apple.MobileSMS.expressivesend.impact' THEN 'SMSExpressiveSendImpact'
+        WHEN 'com.apple.MobileSMS.expressivesend.gentle' THEN 'SMSExpressiveSendGentle'
+        ELSE 'n/a'
+    END AS 'ExpressiveSendStyle',
+
     CASE m.is_read
         WHEN 0 THEN 'Unread'
         WHEN 1 THEN 'Read'
@@ -182,12 +198,12 @@ FROM message m
 
 
 WHERE
-
+    m.expressive_send_style_id IS NOT NULL
     /*
     To filter between date/time points
     Between 10-11-2024 00:00:00 ET and 10-12-2024 at 14:06:00 ET
     */
-    message.date BETWEEN 750312000000000000 AND 750449160000000000
+    -- message.date BETWEEN 750312000000000000 AND 750449160000000000
     /*
     When `chat_message_join.chat_id` is NULL, that means that the message was deleted,
     but there is still a record of the message in the message table.
