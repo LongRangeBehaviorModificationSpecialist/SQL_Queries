@@ -1,17 +1,18 @@
+--DLU 17-Jul-2025
 
 
 SELECT
 
     ROW_NUMBER() OVER() AS 'RecordNo.',
-    ABPerson.ROWID AS 'PersonROWID',
-    ABPerson.First AS 'FirstName',
-    ABPerson.Middle AS 'MiddleName',
-    ABPerson.Last AS 'LastName',
-    ABPerson.Organization AS 'Organization',
-    ABPerson.Department AS 'Department',
-    ABPerson.Birthday AS 'Birthday',
-    ABPerson.JobTitle AS 'JobTitle',
-    ABPerson.Note AS 'Note',
+    ABPerson.ROWID AS 'ABPerson.ROWID',
+    ABPerson.First AS 'ABPerson.First',
+    ABPerson.Middle AS 'ABPerson.Middle',
+    ABPerson.Last AS 'ABPerson.Last',
+    ABPerson.Organization AS 'ABPerson.Organization',
+    ABPerson.Department AS 'ABPerson.Department',
+    ABPerson.Birthday AS 'ABPerson.Birthday',
+    ABPerson.JobTitle AS 'ABPerson.JobTitle',
+    ABPerson.Note AS 'ABPerson.Note',
 
     (SELECT value FROM ABMultiValue WHERE property = 3 AND record_id = ABPerson.ROWID AND label = (
         SELECT ROWID FROM ABMultiValueLabel WHERE value = '_$!<Work>!$_')) AS 'WorkPhone',
@@ -63,7 +64,7 @@ SELECT
         WHEN LENGTH(ABPerson.CreationDate) = 9 THEN strftime(
             '%Y-%m-%d %H:%M:%S', ABPerson.CreationDate + 978307200, 'UNIXEPOCH')
         ELSE ABPerson.CreationDate
-    END AS 'CreationDate(UTC)',
+    END AS 'ABPerson.CreationDate(UTC)',
 
     CASE
         WHEN LENGTH(ABPerson.ModificationDate) = 18 THEN strftime(
@@ -71,10 +72,10 @@ SELECT
         WHEN LENGTH(ABPerson.ModificationDate) = 9 THEN strftime(
             '%Y-%m-%d %H:%M:%S', ABPerson.ModificationDate + 978307200, 'UNIXEPOCH')
         ELSE ABPerson.ModificationDate
-    END AS 'ModificationDate(UTC)',
+    END AS 'ABPerson.ModificationDate(UTC)',
 
     /* Source for each line of data */
-    '/private/var/mobile/Library/AddressBook/AddressBook.sqlitedb; Table: ABPerson(ROWID:' || ABPerson.ROWID || ')' AS 'DataSource'
+    '/private/var/mobile/Library/AddressBook/AddressBook.sqlitedb; Table: ABPerson(ROWID:' || ABPerson.ROWID || ')' AS 'DATA_SOURCE'
 
 
 FROM ABPerson
