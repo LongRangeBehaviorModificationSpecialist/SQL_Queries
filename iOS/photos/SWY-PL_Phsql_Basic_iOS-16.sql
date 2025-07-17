@@ -1,739 +1,878 @@
 /*
+DLU: 15-Jul-2025
+
 Query copied from https://github.com/ScottKjr3347/iOS_SWY_PL_Photos.sqlite_Queries/blob/main/iOS16/iOS16_SWY-PL_Phsql_Basic.txt
 */
 
 SELECT
     ROW_NUMBER() OVER() AS 'Record #',
-    zAsset.ZSORTTOKEN AS 'zAsset-Sort Token',
-    zAsset.ZPROMOTIONSCORE AS 'zAsset-Promotion Score',
-    CASE zAsset.ZCOMPLETE
-        WHEN 1 THEN '1-Yes-1'
-    END AS 'zAsset Complete',
-    zAsset.Z_PK AS 'zAsset-zPK',
-    zAddAssetAttr.Z_PK AS 'zAddAssetAttr-zPK',
-    zCldMast.Z_PK AS 'zCldMast-zPK=zAsset-Master',
-    zAsset.ZMASTER AS 'zAsset-Master=zCldMast-zPK',
-    zAsset.ZEXTENDEDATTRIBUTES AS 'zAsset-Extended Attributes=zExtAttr-zPK',
-    zExtAttr.Z_PK AS 'zExtAttr-zPK=zAsset-zExtendedAttributes',
-    CMzCldMastMedData.ZCLOUDMASTER AS 'CMzCldMastMedData-CldMast=zCldMast-zPK',
-    zCldMast.ZMEDIAMETADATA AS 'zCldMast-Media Metadata Key=zCldMastMedData.zPK',
-    CMzCldMastMedData.Z_PK AS 'CMzCldMastMedData-zPK=zAddAssetAttr&zCldMast-MediaMetaData Key',
-    CMzCldMastMedData.Z_ENT AS 'CMzCldMastMedData-zENT',
-    zAsset.ZUUID AS 'zAsset-UUID = store.cloudphotodb',
-    zAsset.ZCLOUDASSETGUID AS 'zAsset-Cloud_Asset_GUID = store.cloudphotodb',
-    zAsset.ZCLOUDCOLLECTIONGUID AS 'zAsset.Cloud Collection GUID',
-    zCldMast.ZCLOUDMASTERGUID AS 'zCldMast-Cloud_Master_GUID = store.cloudphotodb',
-    zGenAlbum.ZCLOUDGUID AS 'zGenAlbum-Cloud_GUID = store.cloudphotodb',
-    zShare.ZSCOPEIDENTIFIER AS 'zShare-Scope ID = store.cloudphotodb',
-    zAddAssetAttr.ZORIGINALASSETSUUID AS 'zAddAssetAttr-Original Assets UUID',
-    zAddAssetAttr.ZPUBLICGLOBALUUID AS 'zAddAssetAttr-Public Global UUID',
-    zAddAssetAttr.ZMASTERFINGERPRINT AS 'zAddAssetAttr-Master Fingerprint',
-    zAddAssetAttr.ZORIGINATINGASSETIDENTIFIER AS 'zAddAssetAttr-Originating Asset Identifier',
-    zCldMast.ZORIGINATINGASSETIDENTIFIER AS 'zCldMast-Originating Asset ID',
-    zIntResou.ZFINGERPRINT AS 'zIntResou-Fingerprint',
-    zAddAssetAttr.ZADJUSTEDFINGERPRINT AS 'zAddAssetAttr.Adjusted Fingerprint',
-    zUnmAdj.ZOTHERADJUSTMENTSFINGERPRINT AS 'zUnmAdj-Other Adjustments Fingerprint',
-    zUnmAdj.ZSIMILARTOORIGINALADJUSTMENTSFINGERPRINT AS 'zUnmAdj-Similar to Orig Adjustments Fingerprint',
+    ZASSET.Z_PK AS 'ZASSET.Z_PK ',
+    ZASSET.ZSORTTOKEN AS 'ZASSET.ZSORTTOKEN',
+    ZASSET.ZPROMOTIONSCORE AS 'ZASSET.ZPROMOTIONSCORE',
+
+    CASE ZASSET.ZCOMPLETE
+        WHEN 1 THEN '1 [Yes]'
+    END AS 'ZASSET.ZCOMPLETE',
+
+    ZADDASSETATTR.Z_PK AS 'ZADDASSETATTR.Z_PK',
+    --[ZCLOUDMASTER.Z_PK = ZASSET.ZMaster]
+    ZCLOUDMASTER.Z_PK AS 'ZCLOUDMASTER.Z_PK',
+    --[ZASSET.ZMASTER = ZCLOUDMASTER.Z_PK]
+    ZASSET.ZMASTER AS 'ZASSET.ZMASTER',
+    --[ZASSET.ZEXTENDEDATTRIBUTES = ZEXTATTR.Z_PK]
+    ZASSET.ZEXTENDEDATTRIBUTES AS 'ZASSET.ZEXTENDEDATTRIBUTES',
+    --[ZEXTATTR.Z_PK = ZASSET.zExtendedAttributes]
+    ZEXTATTR.Z_PK AS 'ZEXTATTR.Z_PK',
+    --[CMzCldMastMedData-CldMast = ZCLOUDMASTER.Z_PK]
+    CMzCldMastMedData.ZCLOUDMASTER AS 'CMzCldMastMedData.ZCLOUDMASTER',
+    --[ZCLOUDMASTER.ZMEDIAMETADATA = zCldMastMedData.Z_PK]
+    ZCLOUDMASTER.ZMEDIAMETADATA AS 'ZCLOUDMASTER.ZMEDIAMETADATA',
+    --[CMzCldMastMedData.Z_PK=ZADDASSETATTR&ZCLOUDMASTER.ZMEDIAMETADATA]
+    CMzCldMastMedData.Z_PK AS 'CMzCldMastMedData.Z_PK',
+    CMzCldMastMedData.Z_ENT AS 'CMzCldMastMedData.Z_ENT',
+    --[ZASSET.UUID = store.cloudphotodb]
+    ZASSET.ZUUID AS 'ZASSET.ZUUID',
+    --[ZASSET.Cloud_Asset_GUID = store.cloudphotodb]
+    ZASSET.ZCLOUDASSETGUID AS 'ZASSET.ZCLOUDASSETGUID',
+    ZASSET.ZCLOUDCOLLECTIONGUID AS 'ZASSET.ZCLOUDCOLLECTIONGUID',
+    --[ZCLOUDMASTER.ZCLOUDMASTERGUID = store.cloudphotodb]
+    ZCLOUDMASTER.ZCLOUDMASTERGUID AS 'ZCLOUDMASTER.ZCLOUDMASTERGUID',
+    --[zGenAlbum.ZCLOUDGUID = store.cloudphotodb]
+    zGenAlbum.ZCLOUDGUID AS 'ZGENERICALBUM.ZCLOUDGUID',
+    --[zShare-Scope ID = store.cloudphotodb]
+    ZSHARE.ZSCOPEIDENTIFIER AS 'ZSHARE.ZSCOPEIDENTIFIER',
+    ZADDASSETATTR.ZORIGINALASSETSUUID AS 'ZADDASSETATTR.ZORIGINALASSETSUUID',
+    ZADDASSETATTR.ZPUBLICGLOBALUUID AS 'ZADDASSETATTR.ZPUBLICGLOBALUUID',
+    ZADDASSETATTR.ZMASTERFINGERPRINT AS 'ZADDASSETATTR.ZMASTERFINGERPRINT',
+    ZADDASSETATTR.ZORIGINATINGASSETIDENTIFIER AS 'ZADDASSETATTR.ZORIGINATINGASSETIDENTIFIER',
+    ZCLOUDMASTER.ZORIGINATINGASSETIDENTIFIER AS 'ZCLOUDMASTER.ZORIGINATINGASSETIDENTIFIER',
+    ZINTERNALRESOURCE.ZFINGERPRINT AS 'ZINTERNALRESOURCE.ZFINGERPRINT',
+    ZADDASSETATTR.ZADJUSTEDFINGERPRINT AS 'ZADDASSETATTR.ZADJUSTEDFINGERPRINT',
+    ZUNMANAGEDADJUSTMENT.ZOTHERADJUSTMENTSFINGERPRINT AS 'ZUNMANAGEDADJUSTMENT.ZOTHERADJUSTMENTSFINGERPRINT',
+    ZUNMANAGEDADJUSTMENT.ZSIMILARTOORIGINALADJUSTMENTSFINGERPRINT AS 'ZUNMANAGEDADJUSTMENT.ZSIMILARTOORIGINALADJUSTMENTSFINGERPRINT',
+
+    ZASSET.ZDIRECTORY AS 'ZASSET.ZDIRECTORY',
+    ZASSET.ZFILENAME AS 'ZASSET.ZFILENAME',
+    ZADDASSETATTR.ZORIGINALFILENAME AS 'ZADDASSETATTR.ZORIGINALFILENAME',
+    ZCLOUDMASTER.ZORIGINALFILENAME AS 'ZCLOUDMASTER.ZORIGINALFILENAME ',
+    ZADDASSETATTR.ZSYNDICATIONIDENTIFIER AS 'ZADDASSETATTR.ZSYNDICATIONIDENTIFIER',
+
+    datetime(ZASSET.ZADDEDDATE + 978307200, 'UNIXEPOCH') AS 'ZASSET.ZADDEDDATE(UTC)',
+	datetime(ZASSET.ZDATECREATED + 978307200, 'UNIXEPOCH') AS 'ZASSET.ZDATECREATED(UTC)',
+    datetime(ZCLOUDMASTER.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'ZCLOUDMASTER.ZCREATIONDATE(UTC)',
+    datetime(ZINTERNALRESOURCE.ZCLOUDMASTERDATECREATED + 978307200, 'UNIXEPOCH') AS 'ZINTERNALRESOURCE.ZCLOUDMASTERDATECREATED(UTC)',
+	datetime(ZASSET.ZMODIFICATIONDATE + 978307200, 'UNIXEPOCH') AS 'ZASSET.ZMODIFICATIONDATE(UTC)',
+
     CASE ParentzGenAlbum.ZCLOUDLOCALSTATE
-        WHEN 0 THEN '0-iCldPhotos-ON=Asset_In_Shared/Other-Album/iCldPhotos-OFF=Generic_Album-0'
-        WHEN 1 THEN '1-iCldPhotos-ON=Asset_In_Generic Album-1'
-        ELSE 'Unknown-New-Value!: ' || ParentzGenAlbum.ZCLOUDLOCALSTATE || ''
-    END AS 'ParentzGenAlbum-Cloud-Local-State-4Start',
-    ParentzGenAlbum.ZTITLE AS 'ParentzGenAlbum-Title-4Start',
-    datetime(ParentzGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'ParentzGenAlbum-Creation Date-4Start',
-    datetime(zGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Creation Date-4Start',
+        WHEN 0 THEN '0 [iCloudPhotos ON=Asset In Shared/Other Album / iCloudPhotos OFF=Generic Album]'
+        WHEN 1 THEN '1 [iCloudPhotos ON=Asset In Generic Album]'
+        ELSE 'Unknown New Value: ' || ParentzGenAlbum.ZCLOUDLOCALSTATE || ''
+    END AS 'ParentzGenAlbum.ZCLOUDLOCALSTATE',
+
+    ParentzGenAlbum.ZTITLE AS 'ParentzGenAlbum.ZTITLE',
+
+    datetime(ParentzGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'ParentzGenAlbum.ZCREATIONDATE(UTC)',
+    datetime(zGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZCREATIONDATE(UTC)',
+
     CASE zGenAlbum.ZCLOUDLOCALSTATE
-        WHEN 0 THEN '0-iCldPhotos-ON=Asset_In_Shared/Other-Album/iCldPhotos-OFF=Generic_Album-0'
-        WHEN 1 THEN '1-iCldPhotos-ON=Asset_In_Generic_ Album-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDLOCALSTATE || ''
-    END AS 'zGenAlbum-Cloud_Local_State-4Start',
-    zGenAlbum.ZTITLE AS 'zGenAlbum-Title-4Start',
-    CASE zAsset.ZBUNDLESCOPE
-        WHEN 0 THEN '0-iCldPhotos-ON=Not-In-Shared-Album_iCldPhotos-OFF=On-Local-Device-0'
-        WHEN 1 THEN '1-SWY-Syndication_CMMAsset-1'
-        WHEN 2 THEN '2-iCldPhotos-ON=Asset-In-Cloud-Shared-Album-2'
-        WHEN 3 THEN '3-iCldPhotos-ON=SWY-Syndication-Asset-3'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZBUNDLESCOPE || ''
-    END AS 'zAsset-Bundle Scope',
-    CASE zAsset.ZCLOUDISMYASSET
-        WHEN 0 THEN '0-Not_My_Asset_in_Shared_Album-0'
-        WHEN 1 THEN '1-My_Asset_in_Shared_Album-1'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZCLOUDISMYASSET || ''
-    END AS 'zAsset-Cloud is My Asset',
-    CASE zAsset.ZCLOUDISDELETABLE
-        WHEN 0 THEN '0-No-0'
-        WHEN 1 THEN '1-Yes-1'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZCLOUDISDELETABLE || ''
-    END AS 'zAsset-Cloud is deletable/Asset',
-    CASE zAsset.ZCLOUDLOCALSTATE
-        WHEN 0 THEN 'iCldPhotos ON=Asset In Shared-Other Album/iCldPhotos OFF=Not Synced-0'
-        WHEN 1 THEN 'iCldPhotos ON=Asset Synced with iCloud-1'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZCLOUDLOCALSTATE || ''
-    END AS 'zAsset-Cloud Local State',
-    CASE zAsset.ZVISIBILITYSTATE
-        WHEN 0 THEN '0-Visible-Photo-Library-0'
-        WHEN 2 THEN '2-Not-Visible-Photo-Library-2'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZVISIBILITYSTATE || ''
-    END AS 'zAsset-Visibility State',
-    zExtAttr.ZCAMERAMAKE AS 'zExtAttr-Camera Make',
-    zExtAttr.ZCAMERAMODEL AS 'zExtAttr-Camera Model',
-    zExtAttr.ZLENSMODEL AS 'zExtAttr-Lens Model',
-    CASE zExtAttr.ZFLASHFIRED
-        WHEN 0 THEN '0-No Flash-0'
-        WHEN 1 THEN '1-Flash Fired-1'
-        ELSE 'Unknown-New-Value!: ' || zExtAttr.ZFLASHFIRED || ''
-    END AS 'zExtAttr-Flash Fired',
-    zExtAttr.ZFOCALLENGTH AS 'zExtAttr-Focal Lenght',
-    zExtAttr.ZFOCALLENGTHIN35MM AS 'zExtAttr-Focal Lenth in 35MM',
-    zExtAttr.ZDIGITALZOOMRATIO AS 'zExtAttr-Digital Zoom Ratio',
-    CASE zAsset.ZDERIVEDCAMERACAPTUREDEVICE
-        WHEN 0 THEN '0-Back-Camera/Other-0'
-        WHEN 1 THEN '1-Front-Camera-1'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZDERIVEDCAMERACAPTUREDEVICE || ''
-    END AS 'zAsset-Derived Camera Capture Device',
-    CASE zAddAssetAttr.ZCAMERACAPTUREDEVICE
-        WHEN 0 THEN '0-Back-Camera/Other-0'
-        WHEN 1 THEN '1-Front-Camera-1'
-        ELSE 'Unknown-New-Value!: ' || zAddAssetAttr.ZCAMERACAPTUREDEVICE || ''
-    END AS 'zAddAssetAttr-Camera Captured Device',
-    CASE zAddAssetAttr.ZIMPORTEDBY
-        WHEN 0 THEN '0-Cloud-Other-0'
-        WHEN 1 THEN '1-Native-Back-Camera-1'
-        WHEN 2 THEN '2-Native-Front-Camera-2'
-        WHEN 3 THEN '3-Third-Party-App-3'
-        WHEN 4 THEN '4-StillTesting-4'
-        WHEN 5 THEN '5-PhotoBooth_PL-Asset-5'
-        WHEN 6 THEN '6-Third-Party-App-6'
-        WHEN 7 THEN '7-iCloud_Share_Link-CMMAsset-7'
-        WHEN 8 THEN '8-System-Package-App-8'
-        WHEN 9 THEN '9-Native-App-9'
-        WHEN 10 THEN '10-StillTesting-10'
-        WHEN 11 THEN '11-StillTesting-11'
-        WHEN 12 THEN '12-SWY_Syndication_PL-12'
-        ELSE 'Unknown-New-Value!: ' || zAddAssetAttr.ZIMPORTEDBY || ''
-    END AS 'zAddAssetAttr-Imported by',
-    CASE zCldMast.ZIMPORTEDBY
-        WHEN 0 THEN '0-Cloud-Other-0'
-        WHEN 1 THEN '1-Native-Back-Camera-1'
-        WHEN 2 THEN '2-Native-Front-Camera-2'
-        WHEN 3 THEN '3-Third-Party-App-3'
-        WHEN 4 THEN '4-StillTesting-4'
-        WHEN 5 THEN '5-PhotoBooth_PL-Asset-5'
-        WHEN 6 THEN '6-Third-Party-App-6'
-        WHEN 7 THEN '7-iCloud_Share_Link-CMMAsset-7'
-        WHEN 8 THEN '8-System-Package-App-8'
-        WHEN 9 THEN '9-Native-App-9'
-        WHEN 10 THEN '10-StillTesting-10'
-        WHEN 11 THEN '11-StillTesting-11'
-        WHEN 12 THEN '12-SWY_Syndication_PL-12'
-        ELSE 'Unknown-New-Value!: ' || zCldMast.ZIMPORTEDBY || ''
-    END AS 'zCldMast-Imported By',
-    zAddAssetAttr.ZIMPORTEDBYBUNDLEIDENTIFIER AS 'zAddAssetAttr.Imported by Bundle Identifier',
-    zAddAssetAttr.ZIMPORTEDBYDISPLAYNAME AS 'zAddAssetAttr-Imported By Display Name',
-    zCldMast.ZIMPORTEDBYBUNDLEIDENTIFIER AS 'zCldMast-Imported by Bundle ID',
-    zCldMast.ZIMPORTEDBYDISPLAYNAME AS 'zCldMast-Imported by Display Name',
-    zAsset.ZIMAGEREQUESTHINTS AS 'zAsset-ImageRequestHints/HEX-Path',
-    CASE zAsset.ZSAVEDASSETTYPE
-        WHEN 0 THEN '0-Saved-via-other-source-0'
-        WHEN 1 THEN '1-StillTesting-1'
-        WHEN 2 THEN '2-StillTesting-2'
-        WHEN 3 THEN '3-SWY-Syndicaion-PL-Asset_Not_In_Local_PL-3'
-        WHEN 4 THEN '4-Photo-Cloud-Sharing-Data-Asset-4'
-        WHEN 5 THEN '5-StillTesting-5'
-        WHEN 6 THEN '6-Cloud-Photo-Library-Asset-6'
-        WHEN 7 THEN '7-StillTesting-7'
-        WHEN 8 THEN '8-iCloudLink_CloudMasterMomentAsset-8'
-        WHEN 12 THEN '12-SWY-Syndicaion-PL-Asset_In_Local_PL-12'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZSAVEDASSETTYPE || ''
-    END AS 'zAsset-Saved Asset Type-SWYPL',
-    CASE zAsset.ZSAVEDASSETTYPE
-        WHEN 0 THEN '0-Saved-via-other-source-0'
-        WHEN 1 THEN '1-StillTesting-1'
-        WHEN 2 THEN '2-StillTesting-2'
-        WHEN 3 THEN '3-Local-Photo-Library-Asset-3'
-        WHEN 4 THEN '4-Photo-Cloud-Sharing-Data-Asset-4'
-        WHEN 5 THEN '5-PhotoBooth_Photo-Library-Asset-5'
-        WHEN 6 THEN '6-Cloud-Photo-Library-Asset-6'
-        WHEN 7 THEN '7-StillTesting-7'
-        WHEN 8 THEN '8-iCloudLink_CloudMasterMomentAsset-8'
-        WHEN 12 THEN '12-SWY-Syndication-PL-Asset/Auto-Displayed_in_LPL-12'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZSAVEDASSETTYPE || ''
-    END AS 'zAsset-Saved Asset Type-LPL',
-    zAsset.ZDIRECTORY AS 'zAsset-Directory/Path',
-    zAsset.ZFILENAME AS 'zAsset-Filename',
-    zAddAssetAttr.ZORIGINALFILENAME AS 'zAddAssetAttr-Original Filename',
-    zCldMast.ZORIGINALFILENAME AS 'zCldMast-Orig Filename',
-    zAddAssetAttr.ZSYNDICATIONIDENTIFIER AS 'zAddAssetAttr-Syndication Identifier',
-    CASE zAsset.ZSYNDICATIONSTATE
-        WHEN 0 THEN '0-Received-SWY_Synd_Asset-0'
-        WHEN 1 THEN '1-Sent-SWY_Synd_Asset-1'
-        WHEN 2 THEN '2-Manually-Saved_SWY_Synd_Asset-2'
-        WHEN 8 THEN '8-SWY_Linked_Asset_was_Visible_On-Device_User_Deleted_Link-8'
-        WHEN 10 THEN '10-Manually-Saved_SWY_Synd_Asset_User_Deleted_From_LPL-10'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZSYNDICATIONSTATE || ''
-    END AS 'zAsset-Syndication State-SWYPL',
-    CASE zAsset.ZSYNDICATIONSTATE
-        WHEN 0 THEN '0-Local-PL_Asset_Syndication_State_NA-0'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZSYNDICATIONSTATE || ''
-    END AS 'zAsset-Syndication State-LPL',
-    zAddAssetAttr.ZSYNDICATIONHISTORY AS 'zAddAssetAttr-Syndication History',
-    zMedAnlyAstAttr.ZSYNDICATIONPROCESSINGVERSION AS 'zMedAnlyAstAttr-Syndication Processing Version',
+        WHEN 0 THEN '0 [iCloudPhotos ON=Asset In Shared/Other Album / iCloudPhotos OFF=Generic Album]'
+        WHEN 1 THEN '1 [iCloudPhotos ON=Asset In Generic Album]'
+        ELSE 'Unknown New Value: ' || zGenAlbum.ZCLOUDLOCALSTATE || ''
+    END AS 'zGenAlbum.ZCLOUDLOCALSTATE',
+
+    zGenAlbum.ZTITLE AS 'zGenAlbum.ZTITLE',
+
+	CASE ZADDASSETATTR.ZIMPORTEDBY
+        WHEN 0 THEN '0 [Cloud Other]'
+        WHEN 1 THEN '1 [Native Back Camera]'
+        WHEN 2 THEN '2 [Native Front Camera]'
+        WHEN 3 THEN '3 [Third Party App]'
+        WHEN 4 THEN '4 [Still Testing]'
+        WHEN 5 THEN '5 [PhotoBooth PL Asset]'
+        WHEN 6 THEN '6 [Third Party App]'
+        WHEN 7 THEN '7 [iCloud Share Link CMMAsset]'
+        WHEN 8 THEN '8 [System Package App]'
+        WHEN 9 THEN '9 [Native App]'
+        WHEN 10 THEN '10 [Still Testing]'
+        WHEN 11 THEN '11 [Still Testing]'
+        WHEN 12 THEN '12 [SWY Syndication PL]'
+        ELSE 'Unknown New Value: ' || ZADDASSETATTR.ZIMPORTEDBY || ''
+    END AS 'ZADDASSETATTR.ZIMPORTEDBY',
+
+    datetime(ZCLOUDMASTER.ZIMPORTDATE + 978307200, 'UNIXEPOCH') AS 'ZCLOUDMASTER.ZIMPORTDATE(UTC)',
+
+	CASE ZCLOUDMASTER.ZIMPORTEDBY
+        WHEN 0 THEN '0 [Cloud Other]'
+        WHEN 1 THEN '1 [Native Back Camera]'
+        WHEN 2 THEN '2 [Native Front Camera]'
+        WHEN 3 THEN '3 [Third Party App]'
+        WHEN 4 THEN '4 [Still Testing]'
+        WHEN 5 THEN '5 [PhotoBooth PL Asset]'
+        WHEN 6 THEN '6 [Third Party App]'
+        WHEN 7 THEN '7 [iCloud Share Link CMMAsset]'
+        WHEN 8 THEN '8 [System Package App]'
+        WHEN 9 THEN '9 [Native App]'
+        WHEN 10 THEN '10 [Still Testing]'
+        WHEN 11 THEN '11 [Still Testing]'
+        WHEN 12 THEN '12 [SWY Syndication PL]'
+        ELSE 'Unknown New Value: ' || ZCLOUDMASTER.ZIMPORTEDBY || ''
+    END AS 'ZCLOUDMASTER.ZIMPORTEDBY',
+
+    ZADDASSETATTR.ZIMPORTEDBYBUNDLEIDENTIFIER AS 'ZADDASSETATTR.ZIMPORTEDBYBUNDLEIDENTIFIER',
+    ZADDASSETATTR.ZIMPORTEDBYDISPLAYNAME AS 'ZADDASSETATTR.ZIMPORTEDBYDISPLAYNAME',
+    ZCLOUDMASTER.ZIMPORTEDBYBUNDLEIDENTIFIER AS 'ZCLOUDMASTER.ZIMPORTEDBYBUNDLEIDENTIFIER',
+    ZCLOUDMASTER.ZIMPORTEDBYDISPLAYNAME AS 'ZCLOUDMASTER.ZIMPORTEDBYDISPLAYNAME',
+    --hex(ZASSET.ZIMAGEREQUESTHINTS) AS 'ZASSET.ZIMAGEREQUESTHINTS(HEX)',
+
+    CASE ZASSET.ZBUNDLESCOPE
+        WHEN 0 THEN '0 [iCloudPhotos ON=Not In Shared Album iCloudPhotos OFF=On Local Device]'
+        WHEN 1 THEN '1 [SWY Syndication CMMAsset]'
+        WHEN 2 THEN '2 [iCloudPhotos ON=Asset In Cloud Shared Album]'
+        WHEN 3 THEN '3 [iCloudPhotos ON=SWY Syndication Asset]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZBUNDLESCOPE || ''
+    END AS 'ZASSET.ZBUNDLESCOPE',
+
+    CASE ZASSET.ZCLOUDISMYASSET
+        WHEN 0 THEN '0 [Not My Asset in Shared Album]'
+        WHEN 1 THEN '1 [My Asset in Shared Album]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZCLOUDISMYASSET || ''
+    END AS 'ZASSET.ZCLOUDISMYASSET',
+
+    CASE ZASSET.ZCLOUDISDELETABLE
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZCLOUDISDELETABLE || ''
+    END AS 'ZASSET.ZCLOUDISDELETABLE',
+
+    CASE ZASSET.ZCLOUDLOCALSTATE
+        WHEN 0 THEN '0 [iCloudPhotos ON=Asset In Shared Other Album/iCloudPhotos OFF=Not Synced]'
+        WHEN 1 THEN '1 [iCloudPhotos ON=Asset Synced with iCloud]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZCLOUDLOCALSTATE || ''
+    END AS 'ZASSET.ZCLOUDLOCALSTATE',
+
+    CASE ZASSET.ZVISIBILITYSTATE
+        WHEN 0 THEN '0 [Visible Photo Library]'
+        WHEN 2 THEN '2 [Not Visible Photo Library]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZVISIBILITYSTATE || ''
+    END AS 'ZASSET.ZVISIBILITYSTATE',
+
+    ZEXTATTR.ZCAMERAMAKE AS 'ZEXTATTR.ZCAMERAMAKE',
+    ZEXTATTR.ZCAMERAMODEL AS 'ZEXTATTR.ZCAMERAMODEL',
+    ZEXTATTR.ZLENSMODEL AS 'ZEXTATTR.ZLENSMODEL',
+
+    CASE ZEXTATTR.ZFLASHFIRED
+        WHEN 0 THEN '0 [No Flash]'
+        WHEN 1 THEN '1 [Flash Fired]'
+        ELSE 'Unknown New Value: ' || ZEXTATTR.ZFLASHFIRED || ''
+    END AS 'ZEXTATTR.ZFLASHFIRED',
+
+    ZEXTATTR.ZFOCALLENGTH AS 'ZEXTATTR.ZFOCALLENGTH',
+    ZEXTATTR.ZFOCALLENGTHIN35MM AS 'ZEXTATTR.ZFOCALLENGTHIN35MM',
+    ZEXTATTR.ZDIGITALZOOMRATIO AS 'ZEXTATTR.ZDIGITALZOOMRATIO',
+
+    CASE ZASSET.ZDERIVEDCAMERACAPTUREDEVICE
+        WHEN 0 THEN '0 [Back Camera/Other]'
+        WHEN 1 THEN '1 [Front Camera]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZDERIVEDCAMERACAPTUREDEVICE || ''
+    END AS 'ZASSET.ZDERIVEDCAMERACAPTUREDEVICE',
+
+    CASE ZADDASSETATTR.ZCAMERACAPTUREDEVICE
+        WHEN 0 THEN '0 [Back Camera/Other]'
+        WHEN 1 THEN '1 [Front Camera]'
+        ELSE 'Unknown New Value: ' || ZADDASSETATTR.ZCAMERACAPTUREDEVICE || ''
+    END AS 'ZADDASSETATTR.ZCAMERACAPTUREDEVICE',
+
+    CASE ZASSET.ZSAVEDASSETTYPE
+        WHEN 0 THEN '0 [Saved via other source]'
+        WHEN 1 THEN '1 [Still Testing]'
+        WHEN 2 THEN '2 [Still Testing]'
+        WHEN 3 THEN '3 [SWY Syndicaion PL Asset Not In Local PL]'
+        WHEN 4 THEN '4 [Photo Cloud Sharing Data Asset]'
+        WHEN 5 THEN '5 [Still Testing]'
+        WHEN 6 THEN '6 [Cloud Photo Library Asset]'
+        WHEN 7 THEN '7 [Still Testing]'
+        WHEN 8 THEN '8 [iCloud Link CloudMaster Moment Asset]'
+        WHEN 12 THEN '12 [SWY Syndicaion PL Asset In Local PL]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZSAVEDASSETTYPE || ''
+    END AS 'ZASSET.ZSAVEDASSETTYPE',
+
+    CASE ZASSET.ZSAVEDASSETTYPE
+        WHEN 0 THEN '0 [Saved via other source]'
+        WHEN 1 THEN '1 [Still Testing]'
+        WHEN 2 THEN '2 [Still Testing]'
+        WHEN 3 THEN '3 [Local Photo Library Asset]'
+        WHEN 4 THEN '4 [Photo Cloud Sharing Data Asset]'
+        WHEN 5 THEN '5 [PhotoBooth Photo Library Asset]'
+        WHEN 6 THEN '6 [Cloud Photo Library Asset]'
+        WHEN 7 THEN '7 [Still Testing]'
+        WHEN 8 THEN '8 [iCloud Link CloudMaster Moment Asset]'
+        WHEN 12 THEN '12 [SWY Syndication PL Asset/Auto Displayed in LPL]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZSAVEDASSETTYPE || ''
+    END AS 'ZASSET.ZSAVEDASSETTYPE',
+
+    CASE ZASSET.ZSYNDICATIONSTATE
+        WHEN 0 THEN '0 [Received SWY Synd Asset]'
+        WHEN 1 THEN '1 [Sent SWY Synd Asset]'
+        WHEN 2 THEN '2 [Manually Saved SWY Synd Asset]'
+        WHEN 8 THEN '8 [SWY Linked Asset was Visible On Device User Deleted Link]'
+        WHEN 10 THEN '10 [Manually Saved SWY Synd Asset User Deleted From LPL]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZSYNDICATIONSTATE || ''
+    END AS 'ZASSET.ZSYNDICATIONSTATE',
+
+    ZADDASSETATTR.ZSYNDICATIONHISTORY AS 'ZADDASSETATTR.ZSYNDICATIONHISTORY',
+    zMedAnlyAstAttr.ZSYNDICATIONPROCESSINGVERSION AS 'zMedAnlyAstAttr.ZSYNDICATIONPROCESSINGVERSION',
+
     CASE zMedAnlyAstAttr.ZSYNDICATIONPROCESSINGVALUE
-        WHEN 0 THEN '0-NA-0'
-        WHEN 1 THEN '1-STILLTESTING_Wide-Camera_JPG-1'
-        WHEN 2 THEN '2-STILLTESTING_Telephoto_Camear_Lens-2'
-        WHEN 4 THEN '4-STILLTESTING_SWY_Asset_OrigAssetImport_SystemPackageApp-4'
-        WHEN 16 THEN '16-STILLTESTING-16'
-        WHEN 1024 THEN '1024-STILLTESTING_SWY_Asset_OrigAssetImport_NativeCamera-1024'
-        WHEN 2048 THEN '2048-STILLTESTING-2048'
-        WHEN 4096 THEN '4096-STILLTESTING_SWY_Asset_Manually_Saved-4096'
-        ELSE 'Unknown-New-Value!: ' || zMedAnlyAstAttr.ZSYNDICATIONPROCESSINGVALUE || ''
-    END AS 'zMedAnlyAstAttr-Syndication Processing Value',
-    datetime(zAsset.ZADDEDDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Add Date',
-    CASE zAddAssetAttr.ZDATECREATEDSOURCE
-        WHEN 0 THEN '0-Cloud-Asset-0'
-        WHEN 1 THEN '1-Local_Asset_EXIF-1'
-        WHEN 3 THEN '3-Local_Asset_No_EXIF-3'
-        ELSE 'Unknown-New-Value!: ' || zAddAssetAttr.ZDATECREATEDSOURCE || ''
-    END AS 'zAddAssetAttr-Date Created Source',
-    datetime(zAsset.ZDATECREATED + 978307200, 'UNIXEPOCH') AS 'zAsset-Date Created',
-    datetime(zCldMast.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zCldMast-Creation Date',
-    datetime(zIntResou.ZCLOUDMASTERDATECREATED + 978307200, 'UNIXEPOCH') AS 'zIntResou-CldMst Date Created',
-    zAddAssetAttr.ZTIMEZONENAME AS 'zAddAssetAttr-Time Zone Name',
-    zAddAssetAttr.ZTIMEZONEOFFSET AS 'zAddAssetAttr-Time Zone Offset',
-    zAddAssetAttr.ZINFERREDTIMEZONEOFFSET AS 'zAddAssetAttr-Inferred Time Zone Offset',
-    zAddAssetAttr.ZEXIFTIMESTAMPSTRING AS 'zAddAssetAttr-EXIF-String',
-    datetime(zAsset.ZMODIFICATIONDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Modification Date',
-    CASE zCldMast.ZCLOUDLOCALSTATE
-        WHEN 0 THEN '0-Not Synced with Cloud-0'
-        WHEN 1 THEN '1-Pending Upload-1'
-        WHEN 2 THEN '2-StillTesting'
-        WHEN 3 THEN '3-Synced with Cloud-3'
-        ELSE 'Unknown-New-Value!: ' || zCldMast.ZCLOUDLOCALSTATE || ''
-    END AS 'zCldMast-Cloud Local State',
-    datetime(zCldMast.ZIMPORTDATE + 978307200, 'UNIXEPOCH') AS 'zCldMast-Import Date',
-    zAsset.ZIMPORTSESSION AS 'zAsset-Import Session',
-    zAddAssetAttr.ZIMPORTSESSIONID AS 'zAddAssetAttr-Import Session ID',
-    datetime(zAddAssetAttr.ZALTERNATEIMPORTIMAGEDATE + 978307200, 'UNIXEPOCH') AS 'zAddAssetAttr-Alt Import Image Date',
-    zCldMast.ZIMPORTSESSIONID AS 'zCldMast-Import Session ID',
-    datetime(zAsset.ZCLOUDBATCHPUBLISHDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Cloud Batch Publish Date',
-    datetime(zAsset.ZCLOUDSERVERPUBLISHDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Cloud Server Publish Date',
-    zAsset.ZCLOUDDOWNLOADREQUESTS AS 'zAsset-Cloud Download Requests',
-    zAsset.ZCLOUDBATCHID AS 'zAsset-Cloud Batch ID',
-    datetime(zAddAssetAttr.ZLASTUPLOADATTEMPTDATE + 978307200, 'UNIXEPOCH') AS 'zAddAssetAttr-Last Upload Attempt Date-SWY',
-    zAddAssetAttr.ZUPLOADATTEMPTS AS 'zAddAssetAttr-Upload Attempts',
-    CASE zAsset.ZLATITUDE
+        WHEN 0 THEN '0 [NA]'
+        WHEN 1 THEN '1 [Still Testing Wide Camera JPG]'
+        WHEN 2 THEN '2 [Still Testing Telephoto Camear Lens]'
+        WHEN 4 THEN '4 [Still Testing SWY Asset OrigAssetImport SystemPackageApp]'
+        WHEN 16 THEN '16 [Still Testing]'
+        WHEN 1024 THEN '1024 [Still Testing SWY Asset OrigAssetImport Native Camera]'
+        WHEN 2048 THEN '2048 [Still Testing]'
+        WHEN 4096 THEN '4096 [Still Testing SWY Asset Manually Saved]'
+        ELSE 'Unknown New Value: ' || zMedAnlyAstAttr.ZSYNDICATIONPROCESSINGVALUE || ''
+    END AS 'zMedAnlyAstAttr.ZSYNDICATIONPROCESSINGVALUE',
+
+    CASE ZADDASSETATTR.ZDATECREATEDSOURCE
+        WHEN 0 THEN '0 [Cloud Asset]'
+        WHEN 1 THEN '1 [Local Asset EXIF]'
+        WHEN 3 THEN '3 [Local Asset No EXIF]'
+        ELSE 'Unknown New Value: ' || ZADDASSETATTR.ZDATECREATEDSOURCE || ''
+    END AS 'ZADDASSETATTR.ZDATECREATEDSOURCE',
+
+    ZADDASSETATTR.ZTIMEZONENAME AS 'ZADDASSETATTR.ZTIMEZONENAME',
+    ZADDASSETATTR.ZTIMEZONEOFFSET AS 'ZADDASSETATTR.ZTIMEZONEOFFSET',
+    ZADDASSETATTR.ZINFERREDTIMEZONEOFFSET AS 'ZADDASSETATTR.ZINFERREDTIMEZONEOFFSET',
+    ZADDASSETATTR.ZEXIFTIMESTAMPSTRING AS 'ZADDASSETATTR.ZEXIFTIMESTAMPSTRING',
+
+    CASE ZCLOUDMASTER.ZCLOUDLOCALSTATE
+        WHEN 0 THEN '0 [Not Synced with Cloud]'
+        WHEN 1 THEN '1 [Pending Upload]'
+        WHEN 2 THEN '2 [Still Testing]'
+        WHEN 3 THEN '3 [Synced with Cloud]'
+        ELSE 'Unknown New Value: ' || ZCLOUDMASTER.ZCLOUDLOCALSTATE || ''
+    END AS 'ZCLOUDMASTER.ZCLOUDLOCALSTATE',
+
+    ZASSET.ZIMPORTSESSION AS 'ZASSET.ZIMPORTSESSION',
+    ZADDASSETATTR.ZIMPORTSESSIONID AS 'ZADDASSETATTR.ZIMPORTSESSIONID',
+
+    datetime(ZADDASSETATTR.ZALTERNATEIMPORTIMAGEDATE + 978307200, 'UNIXEPOCH') AS 'ZADDASSETATTR.ZALTERNATEIMPORTIMAGEDATE(UTC)',
+
+    ZCLOUDMASTER.ZIMPORTSESSIONID AS 'ZCLOUDMASTER.ZIMPORTSESSIONID',
+
+    datetime(ZASSET.ZCLOUDBATCHPUBLISHDATE + 978307200, 'UNIXEPOCH') AS 'ZASSET.ZCLOUDBATCHPUBLISHDATE(UTC)',
+    datetime(ZASSET.ZCLOUDSERVERPUBLISHDATE + 978307200, 'UNIXEPOCH') AS 'ZASSET.ZCLOUDSERVERPUBLISHDATE(UTC)',
+
+    ZASSET.ZCLOUDDOWNLOADREQUESTS AS 'ZASSET.ZCLOUDDOWNLOADREQUESTS',
+    ZASSET.ZCLOUDBATCHID AS 'ZASSET.ZCLOUDBATCHID',
+
+    datetime(ZADDASSETATTR.ZLASTUPLOADATTEMPTDATE + 978307200, 'UNIXEPOCH') AS 'ZADDASSETATTR.ZLASTUPLOADATTEMPTDATE(UTC)',
+
+    ZADDASSETATTR.ZUPLOADATTEMPTS AS 'ZADDASSETATTR.ZUPLOADATTEMPTS',
+
+    CASE ZASSET.ZLATITUDE
         WHEN -180.0 THEN '-180.0'
-        ELSE zAsset.ZLATITUDE
-    END AS 'zAsset-Latitude',
-    zExtAttr.ZLATITUDE AS 'zExtAttr-Latitude',
-    CASE zAsset.ZLONGITUDE
+        ELSE ZASSET.ZLATITUDE
+    END AS 'ZASSET.ZLATITUDE',
+
+    ZEXTATTR.ZLATITUDE AS 'ZEXTATTR.ZLATITUDE',
+
+    CASE ZASSET.ZLONGITUDE
         WHEN -180.0 THEN '-180.0'
-        ELSE zAsset.ZLONGITUDE
-    END AS 'zAsset-Longitude',
-    zExtAttr.ZLONGITUDE AS 'zExtAttr-Longitude',
-    CASE zAddAssetAttr.ZGPSHORIZONTALACCURACY
+        ELSE ZASSET.ZLONGITUDE
+    END AS 'ZASSET.ZLONGITUDE',
+
+    ZEXTATTR.ZLONGITUDE AS 'ZEXTATTR.ZLONGITUDE',
+
+    CASE ZADDASSETATTR.ZGPSHORIZONTALACCURACY
         WHEN -1.0 THEN '-1.0'
-        ELSE zAddAssetAttr.ZGPSHORIZONTALACCURACY
-    END AS 'zAddAssetAttr-GPS Horizontal Accuracy',
-    zAsset.ZLOCATIONDATA AS 'zAsset-Location Data/HEX',
-    zAddAssetAttr.ZREVERSELOCATIONDATA AS 'zAddAssetAttr-Reverse Location Data/Orig-Asset/HEX NSKeyed Plist',
-    CASE zAddAssetAttr.ZSHIFTEDLOCATIONISVALID
-        WHEN 0 THEN '0-Shifted Location Not Valid-0'
-        WHEN 1 THEN '1-Shifted Location Valid-1'
-    END AS 'zAddAssetAttr-Shifted Location Valid',
-    zAddAssetAttr.ZSHIFTEDLOCATIONDATA AS 'zAddAssetAttr-Shifted Location Data',
-    zAddAssetAttr.ZLOCATIONHASH AS 'zAddAssetAttr-Location Hash',
+        ELSE ZADDASSETATTR.ZGPSHORIZONTALACCURACY
+    END AS 'ZADDASSETATTR.ZGPSHORIZONTALACCURACY',
+
+    --hex(ZASSET.ZLOCATIONDATA) AS 'ZASSET.ZLOCATIONDATA(HEX)',
+    --hex(ZADDASSETATTR.ZREVERSELOCATIONDATA) AS 'ZADDASSETATTR.ZREVERSELOCATIONDATA(HEX NSKeyed .plist)',
+
+    CASE ZADDASSETATTR.ZSHIFTEDLOCATIONISVALID
+        WHEN 0 THEN '0 [Shifted Location Not Valid]'
+        WHEN 1 THEN '1 [Shifted Location Valid]'
+    END AS 'ZADDASSETATTR.ZSHIFTEDLOCATIONISVALID',
+
+    ZADDASSETATTR.ZSHIFTEDLOCATIONDATA AS 'ZADDASSETATTR.ZSHIFTEDLOCATIONDATA',
+    ZADDASSETATTR.ZLOCATIONHASH AS 'ZADDASSETATTR.ZLOCATIONHASH',
+
     CASE AAAzCldMastMedData.Z_OPT
-        WHEN 1 THEN '1-StillTesting-Cloud-1'
-        WHEN 2 THEN '2-StillTesting-This Device-2'
-        WHEN 3 THEN '3-StillTesting-Muted-3'
-        WHEN 4 THEN '4-StillTesting-Unknown-4'
-        WHEN 5 THEN '5-StillTesting-Unknown-5'
-        ELSE 'Unknown-New-Value!: ' || AAAzCldMastMedData.Z_OPT || ''
-    END AS 'AAAzCldMastMedData-zOPT',
-    zAddAssetAttr.ZMEDIAMETADATATYPE AS 'zAddAssetAttr-Media Metadata Type',
-    AAAzCldMastMedData.ZDATA AS 'AAAzCldMastMedData-Data/HEX',
+        WHEN 1 THEN '1 [Still Testing Cloud]'
+        WHEN 2 THEN '2 [Still Testing This Device]'
+        WHEN 3 THEN '3 [Still Testing Muted]'
+        WHEN 4 THEN '4 [Still Testing Unknown]'
+        WHEN 5 THEN '5 [Still Testing Unknown]'
+        ELSE 'Unknown New Value: ' || AAAzCldMastMedData.Z_OPT || ''
+    END AS 'AAAzCldMastMedData.Z_OPT',
+
+    ZADDASSETATTR.ZMEDIAMETADATATYPE AS 'ZADDASSETATTR.ZMEDIAMETADATATYPE',
+    --hex(AAAzCldMastMedData.ZDATA) AS 'AAAzCldMastMedData.ZDATA(HEX)',
+
     CASE CMzCldMastMedData.Z_OPT
-        WHEN 1 THEN '1-StillTesting-Has_CldMastAsset-1'
-        WHEN 2 THEN '2-StillTesting-Local_Asset-2'
-        WHEN 3 THEN '3-StillTesting-Muted-3'
-        WHEN 4 THEN '4-StillTesting-Unknown-4'
-        WHEN 5 THEN '5-StillTesting-Unknown-5'
-        ELSE 'Unknown-New-Value!: ' || CMzCldMastMedData.Z_OPT || ''
-    END AS 'CldMasterzCldMastMedData-zOPT',
-    zCldMast.ZMEDIAMETADATATYPE AS 'zCldMast-Media Metadata Type',
-    CMzCldMastMedData.ZDATA AS 'CMzCldMastMedData-Data/HEX',
-    CASE zAsset.ZSEARCHINDEXREBUILDSTATE
-        WHEN 0 THEN '0-StillTesting-0'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZSEARCHINDEXREBUILDSTATE || ''
-    END AS 'zAsset-Search Index Rebuild State',
-    CASE zAsset.ZORIENTATION
-        WHEN 1 THEN '1-Video-Default/Adjustment/Horizontal-Camera-(left)-1'
-        WHEN 2 THEN '2-Horizontal-Camera-(right)-2'
-        WHEN 3 THEN '3-Horizontal-Camera-(right)-3'
-        WHEN 4 THEN '4-Horizontal-Camera-(left)-4'
-        WHEN 5 THEN '5-Vertical-Camera-(top)-5'
-        WHEN 6 THEN '6-Vertical-Camera-(top)-6'
-        WHEN 7 THEN '7-Vertical-Camera-(bottom)-7'
-        WHEN 8 THEN '8-Vertical-Camera-(bottom)-8'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZORIENTATION || ''
-    END AS 'zAsset-Orientation',
-    CASE zAddAssetAttr.ZORIGINALORIENTATION
-        WHEN 1 THEN '1-Video-Default/Adjustment/Horizontal-Camera-(left)-1'
-        WHEN 2 THEN '2-Horizontal-Camera-(right)-2'
-        WHEN 3 THEN '3-Horizontal-Camera-(right)-3'
-        WHEN 4 THEN '4-Horizontal-Camera-(left)-4'
-        WHEN 5 THEN '5-Vertical-Camera-(top)-5'
-        WHEN 6 THEN '6-Vertical-Camera-(top)-6'
-        WHEN 7 THEN '7-Vertical-Camera-(bottom)-7'
-        WHEN 8 THEN '8-Vertical-Camera-(bottom)-8'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZORIENTATION || ''
-    END AS 'zAddAssetAttr-Original Orientation',
-    CASE zIntResou.ZORIENTATION
-        WHEN 0 THEN '0-NA-0'
-        WHEN 1 THEN '1-Video-Default/Adjustment/Horizontal-Camera-(left)-1'
-        WHEN 2 THEN '2-Horizontal-Camera-(right)-2'
-        WHEN 3 THEN '3-Horizontal-Camera-(right)-3'
-        WHEN 4 THEN '4-Horizontal-Camera-(left)-4'
-        WHEN 5 THEN '5-Vertical-Camera-(top)-5'
-        WHEN 6 THEN '6-Vertical-Camera-(top)-6'
-        WHEN 7 THEN '7-Vertical-Camera-(bottom)-7'
-        WHEN 8 THEN '8-Vertical-Camera-(bottom)-8'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZORIENTATION || ''
-    END AS 'zIntResou-Orientation',
-    CASE zAsset.ZKIND
-        WHEN 0 THEN '0-Photo-0'
-        WHEN 1 THEN '1-Video-1'
-    END AS 'zAsset-Kind',
-    CASE zAsset.ZKINDSUBTYPE
-        WHEN 0 THEN '0-Still-Photo-0'
-        WHEN 2 THEN '2-Live-Photo-2'
-        WHEN 10 THEN '10-SpringBoard-Screenshot-10'
-        WHEN 100 THEN '100-Video-100'
-        WHEN 101 THEN '101-Slow-Mo-Video-101'
-        WHEN 102 THEN '102-Time-lapse-Video-102'
-        WHEN 103 THEN '103-Replay_Screen_Recording-103'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZKINDSUBTYPE || ''
-    END AS 'zAsset-Kind-Sub-Type',
-    CASE zAddAssetAttr.ZCLOUDKINDSUBTYPE
-        WHEN 0 THEN '0-Still-Photo-0'
-        WHEN 1 THEN '1-StillTesting'
-        WHEN 2 THEN '2-Live-Photo-2'
-        WHEN 3 THEN '3-Screenshot-3'
-        WHEN 10 THEN '10-SpringBoard-Screenshot-10'
-        WHEN 100 THEN '100-Video-100'
-        WHEN 101 THEN '101-Slow-Mo-Video-101'
-        WHEN 102 THEN '102-Time-lapse-Video-102'
-        WHEN 103 THEN '103-Replay_Screen_Recording-103'
-        ELSE 'Unknown-New-Value!: ' || zAddAssetAttr.ZCLOUDKINDSUBTYPE || ''
-    END AS 'zAddAssetAttr-Cloud Kind Sub Type',
-    CASE zAsset.ZPLAYBACKSTYLE
-        WHEN 1 THEN '1-Image-1'
-        WHEN 2 THEN '2-Image-Animated-2'
-        WHEN 3 THEN '3-Live-Photo-3'
-        WHEN 4 THEN '4-Video-4'
-        WHEN 5 THEN '5-Video-Looping-5'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZPLAYBACKSTYLE || ''
-    END AS 'zAsset-Playback Style',
-    zAsset.ZPLAYBACKVARIATION AS 'zAsset-Playback Variation',
-    zAsset.ZDURATION AS 'zAsset-Video Duration',
-    zExtAttr.ZDURATION AS 'zExtAttr-Duration',
-    zAsset.ZVIDEOCPDURATIONVALUE AS 'zAsset-Video CP Duration',
-    zAddAssetAttr.ZVIDEOCPDURATIONTIMESCALE AS 'zAddAssetAttr-Video CP Duration Time Scale',
-    zAsset.ZVIDEOCPVISIBILITYSTATE AS 'zAsset-Video CP Visibility State',
-    zAddAssetAttr.ZVIDEOCPDISPLAYVALUE AS 'zAddAssetAttr-Video CP Display Value',
-    zAddAssetAttr.ZVIDEOCPDISPLAYTIMESCALE AS 'zAddAssetAttr-Video CP Display Time Scale',
-    zIntResou.ZASSET AS 'zIntResou-Asset=zAsset.zPK',
-    zIntResou.Z_PK AS 'zIntResou-zPK',
-    zIntResou.Z_ENT AS 'zIntResou-zENT',
-    zIntResou.Z_OPT AS 'zIntResou-zOPT',
-    zIntResou.ZQUALITYSORTVALUE AS 'zIntResou-Quality Sort Value Key',
-    CASE zIntResou.ZDATASTORECLASSID
-        WHEN 0 THEN '0-LPL-Asset_CPL-Asset-0'
-        WHEN 1 THEN '1-StillTesting-1'
-        WHEN 2 THEN '2-Photo-Cloud-Sharing-Asset-2'
-        WHEN 3 THEN '3-SWY_Syndication_Asset-3'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZDATASTORECLASSID || ''
-    END AS 'zIntResou-Datastore Class ID',
-    CASE zAsset.ZCLOUDPLACEHOLDERKIND
-        WHEN 0 THEN '0-Local&CloudMaster Asset-0'
-        WHEN 1 THEN '1-StillTesting-1'
-        WHEN 2 THEN '2-StillTesting-2'
-        WHEN 3 THEN '3-JPG-Asset_Only_PhDa/Thumb/V2-3'
-        WHEN 4 THEN '4-LPL-JPG-Asset_CPL-Asset-HEIC-JPG-JPEG-MOV-PNG-4'
-        WHEN 5 THEN '5-Asset_synced_via_iCloud_Photos_2_Device-5'
-        WHEN 6 THEN '6-StillTesting-6'
-        WHEN 7 THEN '7-LPL-poster-JPG-Asset_CPL-Asset-MP4-7'
-        WHEN 8 THEN '8-LPL-JPG_Asset_CPL-Asset-LivePhoto-MOV-8'
-        WHEN 9 THEN '9-CPL_MP4_Asset_Saved_2_LPL-9'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZCLOUDPLACEHOLDERKIND || ''
-    END AS 'zAsset-Cloud Placeholder Kind',
-    CASE zIntResou.ZLOCALAVAILABILITY
-        WHEN -1 THEN '(-1)_IR_Asset_Not_Available_Local-Device(-1)'
-        WHEN 1 THEN '1-IR_Asset_Available_Local-Device-1'
-        WHEN -32768 THEN '(-32768)_IR_Asset-SWY-Linked_Asset(-32768)'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZLOCALAVAILABILITY || ''
-    END AS 'zIntResou-Local Availability',
-    CASE zIntResou.ZLOCALAVAILABILITYTARGET
-        WHEN 0 THEN '0-StillTesting-0'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZLOCALAVAILABILITYTARGET || ''
-    END AS 'zIntResou-Local Availability Target',
-    CASE zIntResou.ZCLOUDLOCALSTATE
-        WHEN 0 THEN '0-IR_Asset_Not_Synced_No_IR-CldMastDateCreated-0'
-        WHEN 1 THEN '1-IR_Asset_Pening-Upload-1'
-        WHEN 2 THEN '2-IR_Asset_Photo_Cloud_Share_Asset_On-Local-Device-2'
-        WHEN 3 THEN '3-IR_Asset_Synced_iCloud-3'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZCLOUDLOCALSTATE || ''
-    END AS 'zIntResou-Cloud Local State',
-    CASE zIntResou.ZREMOTEAVAILABILITY
-        WHEN 0 THEN '0-IR_Asset-Not-Available-Remotely-0'
-        WHEN 1 THEN '1-IR_Asset_Available-Remotely-1'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZREMOTEAVAILABILITY || ''
-    END AS 'zIntResou-Remote Availability',
-    CASE zIntResou.ZREMOTEAVAILABILITYTARGET
-        WHEN 0 THEN '0-StillTesting-0'
-        WHEN 1 THEN '1-StillTesting-1'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZREMOTEAVAILABILITYTARGET || ''
-    END AS 'zIntResou-Remote Availability Target',
-    zIntResou.ZTRANSIENTCLOUDMASTER AS 'zIntResou-Transient Cloud Master',
-    zIntResou.ZSIDECARINDEX AS 'zIntResou-Side Car Index',
-    zIntResou.ZFILEID AS 'zIntResou-File ID',
-    CASE zIntResou.ZVERSION
-        WHEN 0 THEN '0-IR_Asset_Standard-0'
-        WHEN 1 THEN '1-StillTesting-1'
-        WHEN 2 THEN '2-IR_Asset_Adjustments-Mutation-2'
-        WHEN 3 THEN '3-IR_Asset_No_ IR-CldMastDateCreated-3'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZVERSION || ''
-    END AS 'zIntResou-Version',
-    zAddAssetAttr.ZORIGINALFILESIZE AS 'zAddAssetAttr-Original File Size',
-    CASE zIntResou.ZRESOURCETYPE
-        WHEN 0 THEN '0-Photo-0'
-        WHEN 1 THEN '1-Video-1'
-        WHEN 3 THEN '3-Live-Photo-3'
-        WHEN 5 THEN '5-Adjustement-Data-5'
-        WHEN 6 THEN '6-Screenshot-6'
-        WHEN 9 THEN '9-AlternatePhoto-3rdPartyApp-StillTesting-9'
-        WHEN 13 THEN '13-Movie-13'
-        WHEN 14 THEN '14-Wallpaper-14'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZRESOURCETYPE || ''
-    END AS 'zIntResou-Resource Type',
-    zIntResou.ZDATASTOREKEYDATA AS 'zIntResou-DataStoreKeyData/HEX',
-    CASE zIntResou.ZDATASTORESUBTYPE
-        WHEN 0 THEN '0-No Cloud Inter Resource-0'
-        WHEN 1 THEN '1-Main-Asset-Orig-Size-1'
-        WHEN 2 THEN '2-Photo-with-Adjustments-2'
-        WHEN 3 THEN '3-JPG-Large-Thumb-3'
-        WHEN 4 THEN '4-JPG-Med-Thumb-4'
-        WHEN 5 THEN '5-JPG-Small-Thumb-5'
-        WHEN 6 THEN '6-Video-Med-Data-6'
-        WHEN 7 THEN '7-Video-Small-Data-7'
-        WHEN 8 THEN '8-MP4-Cloud-Share-8'
-        WHEN 9 THEN '9-StillTesting'
-        WHEN 10 THEN '10-3rdPartyApp_thumb-StillTesting-10'
-        WHEN 11 THEN '11-StillTesting'
-        WHEN 12 THEN '12-StillTesting'
-        WHEN 13 THEN '13-PNG-Optimized_CPLAsset-13'
-        WHEN 14 THEN '14-Wallpaper-14'
-        WHEN 15 THEN '15-Has-Markup-and-Adjustments-15'
-        WHEN 16 THEN '16-Video-with-Adjustments-16'
-        WHEN 17 THEN '17-RAW_Photo-17_RT'
-        WHEN 18 THEN '18-Live-Photo-Video_Optimized_CPLAsset-18'
-        WHEN 19 THEN '19-Live-Photo-with-Adjustments-19'
-        WHEN 20 THEN '20-StillTesting'
-        WHEN 21 THEN '21-StillTesting'
-        WHEN 22 THEN '22-Adjust-Mutation_AAE_Asset-22'
-        WHEN 23 THEN '23-StillTesting'
-        WHEN 24 THEN '24-StillTesting'
-        WHEN 25 THEN '25-StillTesting'
-        WHEN 26 THEN '26-MOV-Optimized_CPLAsset-26'
-        WHEN 27 THEN '27-StillTesting'
-        WHEN 28 THEN '28-MOV-Med-hdr-Data-28'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZDATASTORESUBTYPE || ''
-    END AS 'zIntResou-Datastore Sub-Type',
-    CASE zIntResou.ZCLOUDSOURCETYPE
-        WHEN 0 THEN '0-NA-0'
-        WHEN 1 THEN '1-Main-Asset-Orig-Size-1'
-        WHEN 2 THEN '2-Photo-with-Adjustments-2'
-        WHEN 3 THEN '3-JPG-Large-Thumb-3'
-        WHEN 4 THEN '4-JPG-Med-Thumb-4'
-        WHEN 5 THEN '5-JPG-Small-Thumb-5'
-        WHEN 6 THEN '6-Video-Med-Data-6'
-        WHEN 7 THEN '7-Video-Small-Data-7'
-        WHEN 8 THEN '8-MP4-Cloud-Share-8'
-        WHEN 9 THEN '9-StillTesting'
-        WHEN 10 THEN '10-3rdPartyApp_thumb-StillTesting-10'
-        WHEN 11 THEN '11-StillTesting'
-        WHEN 12 THEN '12-StillTesting'
-        WHEN 13 THEN '13-PNG-Optimized_CPLAsset-13'
-        WHEN 14 THEN '14-Wallpaper-14'
-        WHEN 15 THEN '15-Has-Markup-and-Adjustments-15'
-        WHEN 16 THEN '16-Video-with-Adjustments-16'
-        WHEN 17 THEN '17-RAW_Photo-17_RT'
-        WHEN 18 THEN '18-Live-Photo-Video_Optimized_CPLAsset-18'
-        WHEN 19 THEN '19-Live-Photo-with-Adjustments-19'
-        WHEN 20 THEN '20-StillTesting'
-        WHEN 21 THEN '21-StillTesting'
-        WHEN 22 THEN '22-Adjust-Mutation_AAE_Asset-22'
-        WHEN 23 THEN '23-StillTesting'
-        WHEN 24 THEN '24-StillTesting'
-        WHEN 25 THEN '25-StillTesting'
-        WHEN 26 THEN '26-MOV-Optimized_CPLAsset-26'
-        WHEN 27 THEN '27-StillTesting'
-        WHEN 28 THEN '28-MOV-Med-hdr-Data-28'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZCLOUDSOURCETYPE || ''
-    END AS 'zIntResou-Cloud Source Type',
-    zIntResou.ZDATALENGTH AS 'zIntResou-Data Length',
-    CASE zIntResou.ZRECIPEID
-        WHEN 0 THEN '0-OrigFileSize_match_DataLength_or_Optimized-0'
-        WHEN 65739 THEN '65739-JPG_Large_Thumb-65739'
-        WHEN 65741 THEN '65741-Various_Asset_Types-or-Thumbs-65741'
-        WHEN 65743 THEN '65743-ResouType-Photo_5003-or-5005-JPG_Thumb-65743'
-        WHEN 65749 THEN '65749-LocalVideoKeyFrame-JPG_Thumb-65749'
-        WHEN 65938 THEN '65938-FullSizeRender-Photo-or-plist-65938'
-        WHEN 131072 THEN '131072-FullSizeRender-Video-or-plist-131072'
-        WHEN 131079 THEN '131079-medium-MP4_Adj-Mutation_Asset-131079'
-        WHEN 131081 THEN '131081-ResouType-Video_5003-or-5005-JPG_Thumb-131081'
-        WHEN 131272 THEN '131272-FullSizeRender-Video_LivePhoto_Adj-Mutation-131272'
-        WHEN 131275 THEN '131275-medium-MOV_LivePhoto-131275'
-        WHEN 131277 THEN '131277-No-IR-Asset_LivePhoto-iCloud_Sync_Asset-131277'
-        WHEN 131475 THEN '131475-medium-hdr-MOV-131475'
-        WHEN 327683 THEN '327683-JPG-Thumb_for_3rdParty-StillTesting-327683'
-        WHEN 327687 THEN '627687-WallpaperComputeResource-627687'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZRECIPEID || ''
-    END AS 'zIntResou-Recipe ID',
-    CASE zIntResou.ZCLOUDLASTPREFETCHDATE
-        WHEN 0 THEN '0-NA-0'
-        ELSE datetime(zIntResou.ZCLOUDLASTPREFETCHDATE + 978307200, 'UNIXEPOCH')
-    END AS 'zIntResou-Cloud Last Prefetch Date',
-    zIntResou.ZCLOUDPREFETCHCOUNT AS 'zIntResou-Cloud Prefetch Count',
-    datetime(zIntResou.ZCLOUDLASTONDEMANDDOWNLOADDATE + 978307200, 'UNIXEPOCH') AS 'zIntResou-Last OnDemand Download Date',
-    CASE zIntResou.ZUTICONFORMANCEHINT
-        WHEN 0 THEN '0-NA/Doesnt_Conform-0'
-        WHEN 1 THEN '1-UTTypeImage-1'
-        WHEN 2 THEN '2-StillTesting'
-        WHEN 3 THEN '3-UTTypeMovie-3'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZUTICONFORMANCEHINT || ''
-    END AS 'zIntResou-UniformTypeID_UTI_Conformance_Hint',
-    CASE zIntResou.ZCOMPACTUTI
-        WHEN 1 THEN '1-jpeg/thm-1'
-        WHEN 3 THEN '3-heic-3'
-        WHEN 6 THEN '6-png-6'
-        WHEN 7 THEN '7-StillTesting'
-        WHEN 23 THEN '23-jpeg/heic/quicktime-mov-23'
-        WHEN 24 THEN '24-mpeg4-24'
-        WHEN 36 THEN '36-Wallpaper-36'
-        WHEN 37 THEN '37-Adj/Mutation_Data-37'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZCOMPACTUTI || ''
-    END AS 'zIntResou-Compact-UTI',
-    zAsset.ZUNIFORMTYPEIDENTIFIER AS 'zAsset-Uniform Type ID',
-    zAsset.ZORIGINALCOLORSPACE AS 'zAsset-Original Color Space',
-    zCldMast.ZUNIFORMTYPEIDENTIFIER AS 'zCldMast-Uniform_Type_ID',
-    CASE zCldMast.ZFULLSIZEJPEGSOURCE
-        WHEN 0 THEN '0-CldMast-JPEG-Source-Video-0'
-        WHEN 1 THEN '1-CldMast-JPEG-Source-Other-1'
-        ELSE 'Unknown-New-Value!: ' || zCldMast.ZFULLSIZEJPEGSOURCE || ''
-    END AS 'zCldMast-Full Size JPEG Source',
-    zAsset.ZHDRGAIN AS 'zAsset-HDR Gain',
-    CASE zAsset.ZHDRTYPE
-        WHEN 0 THEN '0-No-HDR-0'
-        WHEN 3 THEN '3-HDR_Photo-3_RT'
-        WHEN 4 THEN '4-Non-HDR_Version-4_RT'
-        WHEN 5 THEN '5-HEVC_Movie-5'
-        WHEN 6 THEN '6-Panorama-6_RT'
-        WHEN 10 THEN '10-HDR-Gain-10'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZHDRTYPE || ''
-    END AS 'zAsset-zHDR_Type',
-    zExtAttr.ZCODEC AS 'zExtAttr-Codec',
-    zIntResou.ZCODECFOURCHARCODENAME AS 'zIntResou-Codec Four Char Code Name',
-    zCldMast.ZCODECNAME AS 'zCldMast-Codec Name',
-    zCldMast.ZVIDEOFRAMERATE AS 'zCldMast-Video Frame Rate',
-    zCldMast.ZPLACEHOLDERSTATE AS 'zCldMast-Placeholder State',
-    CASE zAsset.ZDEPTHTYPE
-        WHEN 0 THEN '0-Not_Portrait-0_RT'
-        ELSE 'Portrait: ' || zAsset.ZDEPTHTYPE || ''
-    END AS 'zAsset-Depth_Type',
-    zAsset.ZAVALANCHEUUID AS 'zAsset-Avalanche UUID',
-    CASE zAsset.ZMONOSKITYPE
-        WHEN 0 THEN '0-StillTesting No-Monoski-0'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZMONOSKITYPE || ''
-    END AS 'zAsset-Mono Skin Type',
-    CASE zAsset.ZAVALANCHEPICKTYPE
-        WHEN 0 THEN '0-NA/Single_Asset_Burst_UUID-0_RT'
-        WHEN 2 THEN '2-Burst_Asset_Not_Selected-2_RT'
-        WHEN 4 THEN '4-Burst_Asset_PhotosApp_Picked_KeyImage-4_RT'
-        WHEN 8 THEN '8-Burst_Asset_Selected_for_LPL-8_RT'
-        WHEN 16 THEN '16-Top_Burst_Asset_inStack_KeyImage-16_RT'
-        WHEN 32 THEN '32-StillTesting-32_RT'
-        WHEN 52 THEN '52-Burst_Asset_Visible_LPL-52'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZAVALANCHEPICKTYPE || ''
-    END AS 'zAsset-Avalanche_Pick_Type/BurstAsset',
-    CASE zAddAssetAttr.ZCLOUDAVALANCHEPICKTYPE
-        WHEN 0 THEN '0-NA/Single_Asset_Burst_UUID-0_RT'
-        WHEN 2 THEN '2-Burst_Asset_Not_Selected-2_RT'
-        WHEN 4 THEN '4-Burst_Asset_PhotosApp_Picked_KeyImage-4_RT'
-        WHEN 8 THEN '8-Burst_Asset_Selected_for_LPL-8_RT'
-        WHEN 16 THEN '16-Top_Burst_Asset_inStack_KeyImage-16_RT'
-        WHEN 32 THEN '32-StillTesting-32_RT'
-        WHEN 52 THEN '52-Burst_Asset_Visible_LPL-52'
-        ELSE 'Unknown-New-Value!: ' || zAddAssetAttr.ZCLOUDAVALANCHEPICKTYPE || ''
-    END AS 'zAddAssetAttr-Cloud_Avalanche_Pick_Type/BurstAsset',
-    CASE zAddAssetAttr.ZCLOUDRECOVERYSTATE
-        WHEN 0 THEN '0-StillTesting'
-        WHEN 1 THEN '1-StillTesting'
-        ELSE 'Unknown-New-Value!: ' || zAddAssetAttr.ZCLOUDRECOVERYSTATE || ''
-    END AS 'zAddAssetAttr-Cloud Recovery State',
-    zAddAssetAttr.ZCLOUDSTATERECOVERYATTEMPTSCOUNT AS 'zAddAssetAttr-Cloud State Recovery Attempts Count',
-    zAsset.ZDEFERREDPROCESSINGNEEDED AS 'zAsset-Deferred Processing Needed',
-    zAsset.ZVIDEODEFERREDPROCESSINGNEEDED AS 'zAsset-Video Deferred Processing Needed',
-    zAddAssetAttr.ZDEFERREDPHOTOIDENTIFIER AS 'zAddAssetAttr-Deferred Photo Identifier',
-    zAddAssetAttr.ZDEFERREDPROCESSINGCANDIDATEOPTIONS AS 'zAddAssetAttr-Deferred Processing Candidate Options',
-    CASE zAsset.ZHASADJUSTMENTS
-        WHEN 0 THEN '0-No-Adjustments-0'
-        WHEN 1 THEN '1-Yes-Adjustments-1'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZHASADJUSTMENTS || ''
-    END AS 'zAsset-Has Adjustments/Camera-Effects-Filters',
-    zUnmAdj.ZASSETATTRIBUTES AS 'zUnmAdj-Asset Attributes=zAddAssetAttr.zPK',
-    zAddAssetAttr.ZUNMANAGEDADJUSTMENT AS 'zAddAssetAttr-UnmanAdjust Key=zUnmAdj.zPK',
-    zUnmAdj.Z_PK AS 'zUnmAdj-zPK=zAddAssetAttr.ZUnmanAdj Key',
-    zUnmAdj.ZUUID AS 'zUnmAdj-UUID',
-    datetime(zAsset.ZADJUSTMENTTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'zAsset-Adjustment Timestamp',
-    datetime(zUnmAdj.ZADJUSTMENTTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'zUnmAdj-Adjustment Timestamp',
-    zAddAssetAttr.ZEDITORBUNDLEID AS 'zAddAssetAttr-Editor Bundle ID',
-    zUnmAdj.ZEDITORLOCALIZEDNAME AS 'zUnmAdj-Editor Localized Name',
-    zUnmAdj.ZADJUSTMENTFORMATIDENTIFIER AS 'zUnmAdj-Adjustment Format ID',
-    zAddAssetAttr.ZMONTAGE AS 'zAddAssetAttr-Montage',
-    CASE zUnmAdj.ZADJUSTMENTRENDERTYPES
-        WHEN 0 THEN '0-Standard or Portrait with erros-0'
-        WHEN 1 THEN '1-StillTesting'
-        WHEN 2 THEN '2-Portrait-2'
-        WHEN 3 THEN '3-StillTesting'
-        WHEN 4 THEN '4-StillTesting'
-        ELSE 'Unknown-New-Value!: ' || zUnmAdj.ZADJUSTMENTRENDERTYPES || ''
-    END AS 'zUnmAdj-Adjustment Render Types',
-    CASE zUnmAdj.ZADJUSTMENTFORMATVERSION
-        WHEN 1.0 THEN '1.0-Markup-1.0'
-        WHEN 1.1 THEN '1.1-Slow-Mo-1.1'
-        WHEN 1.2 THEN '1.2-StillTesting'
-        WHEN 1.3 THEN '1.3-StillTesting'
-        WHEN 1.4 THEN '1.4-Filter-1.4'
-        WHEN 1.5 THEN '1.5-Adjust-1.5'
-        WHEN 1.6 THEN '1.6-Video-Trim-1.6'
-        WHEN 1.7 THEN '1.7-StillTesting'
-        WHEN 1.8 THEN '1.8-StillTesting'
-        WHEN 1.9 THEN '1.9-StillTesting'
-        WHEN 2.0 THEN '2.0-ScreenshotServices-2.0'
-        ELSE 'Unknown-New-Value!: ' || zUnmAdj.ZADJUSTMENTFORMATVERSION || ''
-    END AS 'zUnmAdj-Adjustment Format Version',
-    zUnmAdj.ZADJUSTMENTBASEIMAGEFORMAT AS 'zUnmAdj-Adjustment Base Image Format',
-    CASE zAsset.ZFAVORITE
-        WHEN 0 THEN '0-Asset Not Favorite-0'
-        WHEN 1 THEN '1-Asset Favorite-1'
-    END AS 'zAsset-Favorite',
-    CASE zAsset.ZHIDDEN
-        WHEN 0 THEN '0-Asset Not Hidden-0'
-        WHEN 1 THEN '1-Asset Hidden-1'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZHIDDEN || ''
-    END AS 'zAsset-Hidden',
-    CASE zAsset.ZTRASHEDSTATE
-        WHEN 0 THEN '0-Asset Not In Trash/Recently Deleted-0'
-        WHEN 1 THEN '1-Asset In Trash/Recently Deleted-1'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZTRASHEDSTATE || ''
-    END AS 'zAsset-Trashed State/LocalAssetRecentlyDeleted',
-    datetime(zAsset.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Trashed Date',
-    CASE zAsset.ZDELETEREASON
-        WHEN 1 THEN '1-StillTesting Delete-Reason-1'
-        WHEN 2 THEN '2-StillTesting Delete-Reason-2'
-        WHEN 3 THEN '3-StillTesting Delete-Reason-3'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZDELETEREASON || ''
-    END AS 'zAsset-Delete-Reason',
-    CASE zAsset.ZTRASHEDBYPARTICIPANT
-        WHEN 1 THEN '1-Asset Trashed/Recently Deleted by Participant-1'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZTRASHEDBYPARTICIPANT || ''
-    END AS 'zAsset-Trashed by Participant',
-    CASE zIntResou.ZTRASHEDSTATE
-        WHEN 0 THEN '0-zIntResou-Not In Trash/Recently Deleted-0'
-        WHEN 1 THEN '1-zIntResou-In Trash/Recently Deleted-1'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZTRASHEDSTATE || ''
-    END AS 'zIntResou-Trash State',
-    datetime(zIntResou.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'zIntResou-Trashed Date',
-    CASE zAsset.ZCLOUDDELETESTATE
-        WHEN 0 THEN '0-Cloud Asset Not Deleted-0'
-        WHEN 1 THEN '1-Cloud Asset Deleted-1'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZCLOUDDELETESTATE || ''
-    END AS 'zAsset-Cloud Delete State',
-    CASE zIntResou.ZCLOUDDELETESTATE
-        WHEN 0 THEN '0-Cloud IntResou Not Deleted-0'
-        WHEN 1 THEN '1-Cloud IntResou Deleted-1'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZCLOUDDELETESTATE || ''
-    END AS 'zIntResou-Cloud Delete State',
-    CASE zAddAssetAttr.ZPTPTRASHEDSTATE
-        WHEN 0 THEN '0-PTP Not in Trash-0'
-        WHEN 1 THEN '1-PTP In Trash-1'
-        ELSE 'Unknown-New-Value!: ' || zAddAssetAttr.ZPTPTRASHEDSTATE || ''
-    END AS 'zAddAssetAttr-PTP Trashed State',
-    CASE zIntResou.ZPTPTRASHEDSTATE
-        WHEN 0 THEN '0-PTP IntResou Not in Trash-0'
-        WHEN 1 THEN '1-PTP IntResou In Trash-1'
-        ELSE 'Unknown-New-Value!: ' || zIntResou.ZPTPTRASHEDSTATE || ''
-    END AS 'zIntResou-PTP Trashed State',
-    zIntResou.ZCLOUDDELETEASSETUUIDWITHRESOURCETYPE AS 'zIntResou-Cloud Delete Asset UUID With Resource Type',
-    datetime(zMedAnlyAstAttr.ZMEDIAANALYSISTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'zMedAnlyAstAttr-Media Analysis Timestamp',
-    datetime(zAsset.ZANALYSISSTATEMODIFICATIONDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Analysis State Modificaion Date',
-    zAddAssetAttr.ZPENDINGVIEWCOUNT AS 'zAddAssetAttr-Pending View Count',
-    zAddAssetAttr.ZVIEWCOUNT AS 'zAddAssetAttr-View Count',
-    zAddAssetAttr.ZPENDINGPLAYCOUNT AS 'zAddAssetAttr-Pending Play Count',
-    zAddAssetAttr.ZPLAYCOUNT AS 'zAddAssetAttr-Play Count',
-    zAddAssetAttr.ZPENDINGSHARECOUNT AS 'zAddAssetAttr-Pending Share Count',
-    zAddAssetAttr.ZSHARECOUNT AS 'zAddAssetAttr-Share Count',
-    datetime(zAsset.ZLASTSHAREDDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Last Shared Date',
-    zAddAssetAttr.ZSHAREORIGINATOR AS 'zAddAssetAttr-Share Originator',
-    CASE zAddAssetAttr.ZALLOWEDFORANALYSIS
-        WHEN 0 THEN '0-Asset Not Allowed For Analysis-0'
-        WHEN 1 THEN '1-Asset Allowed for Analysis-1'
-        ELSE 'Unknown-New-Value!: ' || zAddAssetAttr.ZALLOWEDFORANALYSIS || ''
-    END AS 'zAddAssetAttr-Allowed for Analysis',
-    zAddAssetAttr.ZSCENEANALYSISVERSION AS 'zAddAssetAttr-Scene Analysis Version',
-    CASE zAddAssetAttr.ZSCENEANALYSISISFROMPREVIEW
-        WHEN 0 THEN '0-No-0'
-        ELSE 'Unknown-New-Value!: ' || zAddAssetAttr.ZSCENEANALYSISISFROMPREVIEW || ''
-    END AS 'zAddAssetAttr-Scene Analysis is From Preview',
-    datetime(zAddAssetAttr.ZSCENEANALYSISTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'zAddAssetAttr-Scene Analysis Timestamp',
-    CASE zAsset.ZDUPLICATEASSETVISIBILITYSTATE
-        WHEN 0 THEN 'No-Duplicates-0'
-        WHEN 1 THEN 'Has Duplicate-1'
-        WHEN 2 THEN 'Is a Duplicate-2'
-        ELSE 'Unknown-New-Value!: ' || zAsset.ZDUPLICATEASSETVISIBILITYSTATE || ''
-    END AS 'zAsset-Duplication Asset Visibility State',
-    CASE zAddAssetAttr.ZDESTINATIONASSETCOPYSTATE
-        WHEN 0 THEN '0-No Copy-0'
-        WHEN 1 THEN '1-Has A Copy-1'
-        WHEN 2 THEN '2-Has A Copy-2'
-        ELSE 'Unknown-New-Value!: ' || zAddAssetAttr.ZDESTINATIONASSETCOPYSTATE || ''
-    END AS 'zAddAssetAttr-Destination Asset Copy State',
-    zSceneP.ZDATA AS 'zSceneP-Data/HEX NSKeyed Plist',
-    zSceneP.ZDUPLICATEMATCHINGDATA AS 'zSceneP-Duplicate Matching Data/HEX NSKeyed Plist',
-    zSceneP.ZDUPLICATEMATCHINGALTERNATEDATA AS 'zSceneP-Duplicate Matching Alternat Data/HEX NSKeyed Plist',
-    zAddAssetAttr.ZSOURCEASSETFORDUPLICATIONSCOPEIDENTIFIER AS 'zAddAssetAttr-Source Asset for Duplication Scope ID',
-    zCldMast.ZSOURCEMASTERFORDUPLICATIONSCOPEIDENTIFIER AS 'zCldMast-Source Master For Duplication Scope ID',
-    zAddAssetAttr.ZSOURCEASSETFORDUPLICATIONIDENTIFIER AS 'zAddAssetAttr-Source Asset For Duplication ID',
-    zCldMast.ZSOURCEMASTERFORDUPLICATIONIDENTIFIER AS 'zCldMast-Source Master for Duplication ID'
+        WHEN 1 THEN '1 [Still Testing Has CldMastAsset]'
+        WHEN 2 THEN '2 [Still Testing Local Asset]'
+        WHEN 3 THEN '3 [Still Testing Muted]'
+        WHEN 4 THEN '4 [Still Testing Unknown]'
+        WHEN 5 THEN '5 [Still Testing Unknown]'
+        ELSE 'Unknown New Value: ' || CMzCldMastMedData.Z_OPT || ''
+    END AS 'CMzCldMastMedData.Z_OPT',
 
-FROM ZASSET zAsset
-    LEFT JOIN ZADDITIONALASSETATTRIBUTES zAddAssetAttr ON zAddAssetAttr.Z_PK = zAsset.ZADDITIONALATTRIBUTES
-    LEFT JOIN ZEXTENDEDATTRIBUTES zExtAttr ON zExtAttr.Z_PK = zAsset.ZEXTENDEDATTRIBUTES
-    LEFT JOIN ZINTERNALRESOURCE zIntResou ON zIntResou.ZASSET = zAsset.Z_PK
-    LEFT JOIN ZSCENEPRINT zSceneP ON zSceneP.Z_PK = zAddAssetAttr.ZSCENEPRINT
-    LEFT JOIN Z_28ASSETS z28Assets ON z28Assets.Z_3ASSETS = zAsset.Z_PK
-    LEFT JOIN ZGENERICALBUM zGenAlbum ON zGenAlbum.Z_PK = z28Assets.Z_28ALBUMS
-    LEFT JOIN ZUNMANAGEDADJUSTMENT zUnmAdj ON zAddAssetAttr.ZUNMANAGEDADJUSTMENT = zUnmAdj.Z_PK
-    LEFT JOIN Z_27ALBUMLISTS z27AlbumLists ON z27AlbumLists.Z_27ALBUMS = zGenAlbum.Z_PK
-    LEFT JOIN ZALBUMLIST zAlbumList ON zAlbumList.Z_PK = z27AlbumLists.Z_2ALBUMLISTS
+    ZCLOUDMASTER.ZMEDIAMETADATATYPE AS 'ZCLOUDMASTER.ZMEDIAMETADATATYPE',
+    --hex(CMzCldMastMedData.ZDATA) AS 'CMzCldMastMedData.ZDATA(HEX)',
+
+    CASE ZASSET.ZSEARCHINDEXREBUILDSTATE
+        WHEN 0 THEN '0 [Still Testing]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZSEARCHINDEXREBUILDSTATE || ''
+    END AS 'ZASSET.ZSEARCHINDEXREBUILDSTATE',
+
+    CASE ZASSET.ZORIENTATION
+        WHEN 1 THEN '1 [Video Default/Adjustment/Horizontal Camera (left)]'
+        WHEN 2 THEN '2 [Horizontal Camera (right)]'
+        WHEN 3 THEN '3 [Horizontal Camera (right)]'
+        WHEN 4 THEN '4 [Horizontal Camera (left)]'
+        WHEN 5 THEN '5 [Vertical Camera (top)]'
+        WHEN 6 THEN '6 [Vertical Camera (top)]'
+        WHEN 7 THEN '7 [Vertical Camera (bottom)]'
+        WHEN 8 THEN '8 [Vertical Camera (bottom)]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZORIENTATION || ''
+    END AS 'ZASSET.ZORIENTATION',
+
+    CASE ZADDASSETATTR.ZORIGINALORIENTATION
+        WHEN 1 THEN '1 [Video Default/Adjustment/Horizontal Camera (left)]'
+        WHEN 2 THEN '2 [Horizontal Camera (right)]'
+        WHEN 3 THEN '3 [Horizontal Camera (right)]'
+        WHEN 4 THEN '4 [Horizontal Camera (left)]'
+        WHEN 5 THEN '5 [Vertical Camera (top)]'
+        WHEN 6 THEN '6 [Vertical Camera (top)]'
+        WHEN 7 THEN '7 [Vertical Camera (bottom)]'
+        WHEN 8 THEN '8 [Vertical Camera (bottom)]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZORIENTATION || ''
+    END AS 'ZADDASSETATTR.ZORIGINALORIENTATION',
+
+    CASE ZINTERNALRESOURCE.ZORIENTATION
+        WHEN 0 THEN '0 [NA]'
+        WHEN 1 THEN '1 [Video Default/Adjustment/Horizontal Camera (left)]'
+        WHEN 2 THEN '2 [Horizontal Camera (right)]'
+        WHEN 3 THEN '3 [Horizontal Camera (right)]'
+        WHEN 4 THEN '4 [Horizontal Camera (left)]'
+        WHEN 5 THEN '5 [Vertical Camera (top)]'
+        WHEN 6 THEN '6 [Vertical Camera (top)]'
+        WHEN 7 THEN '7 [Vertical Camera (bottom)]'
+        WHEN 8 THEN '8 [Vertical Camera (bottom)]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZORIENTATION || ''
+    END AS 'ZINTERNALRESOURCE.ZORIENTATION',
+
+    CASE ZASSET.ZKIND
+        WHEN 0 THEN '0 [Photo]'
+        WHEN 1 THEN '1 [Video]'
+    END AS 'ZASSET.ZKIND',
+
+    CASE ZASSET.ZKINDSUBTYPE
+        WHEN 0 THEN '0 [Still Photo]'
+        WHEN 2 THEN '2 [Live Photo]'
+        WHEN 10 THEN '10 [SpringBoard Screenshot]'
+        WHEN 100 THEN '100 [Video]'
+        WHEN 101 THEN '101 [Slow Mo Video]'
+        WHEN 102 THEN '102 [Time lapse Video]'
+        WHEN 103 THEN '103 [Replay Screen Recording]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZKINDSUBTYPE || ''
+    END AS 'ZASSET.ZKINDSUBTYPE',
+
+    CASE ZADDASSETATTR.ZCLOUDKINDSUBTYPE
+        WHEN 0 THEN '0 [Still Photo]'
+        WHEN 1 THEN '1 [Still Testing]'
+        WHEN 2 THEN '2 [Live Photo]'
+        WHEN 3 THEN '3 [Screenshot]'
+        WHEN 10 THEN '10 [SpringBoard Screenshot]'
+        WHEN 100 THEN '100 [Video]'
+        WHEN 101 THEN '101 [Slow Mo Video]'
+        WHEN 102 THEN '102 [Time lapse Video]'
+        WHEN 103 THEN '103 [Replay Screen Recording]'
+        ELSE 'Unknown New Value: ' || ZADDASSETATTR.ZCLOUDKINDSUBTYPE || ''
+    END AS 'ZADDASSETATTR.ZCLOUDKINDSUBTYPE',
+
+    CASE ZASSET.ZPLAYBACKSTYLE
+        WHEN 1 THEN '1 [Image]'
+        WHEN 2 THEN '2 [Image Animated]'
+        WHEN 3 THEN '3 [Live Photo]'
+        WHEN 4 THEN '4 [Video]'
+        WHEN 5 THEN '5 [Video Looping]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZPLAYBACKSTYLE || ''
+    END AS 'ZASSET.ZPLAYBACKSTYLE',
+
+    ZASSET.ZPLAYBACKVARIATION AS 'ZASSET.ZPLAYBACKVARIATION',
+    ZASSET.ZDURATION AS 'ZASSET.ZDURATION',
+    ZEXTATTR.ZDURATION AS 'ZEXTATTR.ZDURATION',
+    ZASSET.ZVIDEOCPDURATIONVALUE AS 'ZASSET.ZVIDEOCPDURATIONVALUE',
+    ZADDASSETATTR.ZVIDEOCPDURATIONTIMESCALE AS 'ZADDASSETATTR.ZVIDEOCPDURATIONTIMESCALE',
+    ZASSET.ZVIDEOCPVISIBILITYSTATE AS 'ZASSET.ZVIDEOCPVISIBILITYSTATE',
+    ZADDASSETATTR.ZVIDEOCPDISPLAYVALUE AS 'ZADDASSETATTR.ZVIDEOCPDISPLAYVALUE',
+    ZADDASSETATTR.ZVIDEOCPDISPLAYTIMESCALE AS 'ZADDASSETATTR.ZVIDEOCPDISPLAYTIMESCALE',
+    --[ZINTERNALRESOURCE.ZASSET = ZASSET.zPK]
+    ZINTERNALRESOURCE.ZASSET AS 'ZINTERNALRESOURCE.ZASSET',
+    ZINTERNALRESOURCE.Z_PK AS 'ZINTERNALRESOURCE.Z_PK',
+    ZINTERNALRESOURCE.Z_ENT AS 'ZINTERNALRESOURCE.Z_ENT',
+    ZINTERNALRESOURCE.Z_OPT AS 'ZINTERNALRESOURCE.Z_OPT',
+    ZINTERNALRESOURCE.ZQUALITYSORTVALUE AS 'ZINTERNALRESOURCE.ZQUALITYSORTVALUE',
+
+    CASE ZINTERNALRESOURCE.ZDATASTORECLASSID
+        WHEN 0 THEN '0 [LPL Asset CPL Asset]'
+        WHEN 1 THEN '1 [Still Testing]'
+        WHEN 2 THEN '2 [Photo Cloud Sharing Asset]'
+        WHEN 3 THEN '3 [SWY Syndication Asset]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZDATASTORECLASSID || ''
+    END AS 'ZINTERNALRESOURCE.ZDATASTORECLASSID',
+
+    CASE ZASSET.ZCLOUDPLACEHOLDERKIND
+        WHEN 0 THEN '0 [Local&CloudMaster Asset]'
+        WHEN 1 THEN '1 [Still Testing]'
+        WHEN 2 THEN '2 [Still Testing]'
+        WHEN 3 THEN '3 [JPG Asset Only PhotoData/Thumb/V2]'
+        WHEN 4 THEN '4 [LPL JPG Asset CPL Asset HEIC JPG JPEG MOV PNG]'
+        WHEN 5 THEN '5 [Asset synced via iCloud Photos 2 Device]'
+        WHEN 6 THEN '6 [Still Testing]'
+        WHEN 7 THEN '7 [LPL poster JPG Asset CPL Asset MP4]'
+        WHEN 8 THEN '8 [LPL JPG Asset CPL Asset LivePhoto MOV]'
+        WHEN 9 THEN '9 [CPL MP4 Asset Saved 2 LPL]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZCLOUDPLACEHOLDERKIND || ''
+    END AS 'ZASSET.ZCLOUDPLACEHOLDERKIND',
+
+    CASE ZINTERNALRESOURCE.ZLOCALAVAILABILITY
+        WHEN -1 THEN '(-1) [IR Asset Not Available Local Device]'
+        WHEN 1 THEN '1 [IR Asset Available Local Device]'
+        WHEN -32768 THEN '(-32768) [IR Asset SWY Linked Asset]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZLOCALAVAILABILITY || ''
+    END AS 'ZINTERNALRESOURCE.ZLOCALAVAILABILITY',
+
+    CASE ZINTERNALRESOURCE.ZLOCALAVAILABILITYTARGET
+        WHEN 0 THEN '0 [Still Testing]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZLOCALAVAILABILITYTARGET || ''
+    END AS 'ZINTERNALRESOURCE.ZLOCALAVAILABILITYTARGET',
+
+    CASE ZINTERNALRESOURCE.ZCLOUDLOCALSTATE
+        WHEN 0 THEN '0 [IR Asset Not Synced No IR CldMast Date Created]'
+        WHEN 1 THEN '1 [IR Asset Pening Upload]'
+        WHEN 2 THEN '2 [IR Asset Photo Cloud Share Asset On Local Device]'
+        WHEN 3 THEN '3 [IR Asset Synced iCloud]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZCLOUDLOCALSTATE || ''
+    END AS 'ZINTERNALRESOURCE.ZCLOUDLOCALSTATE',
+
+    CASE ZINTERNALRESOURCE.ZREMOTEAVAILABILITY
+        WHEN 0 THEN '0 [IR Asset Not Available Remotely]'
+        WHEN 1 THEN '1 [IR Asset Available Remotely]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZREMOTEAVAILABILITY || ''
+    END AS 'ZINTERNALRESOURCE.ZREMOTEAVAILABILITY',
+
+    CASE ZINTERNALRESOURCE.ZREMOTEAVAILABILITYTARGET
+        WHEN 0 THEN '0 [Still Testing]'
+        WHEN 1 THEN '1 [Still Testing]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZREMOTEAVAILABILITYTARGET || ''
+    END AS 'ZINTERNALRESOURCE.ZREMOTEAVAILABILITYTARGET',
+
+    ZINTERNALRESOURCE.ZTRANSIENTCLOUDMASTER AS 'ZINTERNALRESOURCE.ZTRANSIENTCLOUDMASTER',
+    ZINTERNALRESOURCE.ZSIDECARINDEX AS 'ZINTERNALRESOURCE.ZSIDECARINDEX',
+    ZINTERNALRESOURCE.ZFILEID AS 'ZINTERNALRESOURCE.ZFILEID',
+
+    CASE ZINTERNALRESOURCE.ZVERSION
+        WHEN 0 THEN '0 [IR Asset Standard]'
+        WHEN 1 THEN '1 [Still Testing]'
+        WHEN 2 THEN '2 [IR Asset Adjustments Mutation]'
+        WHEN 3 THEN '3 [IR Asset No IR CldMastDateCreated]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZVERSION || ''
+    END AS 'ZINTERNALRESOURCE.ZVERSION',
+
+    ZADDASSETATTR.ZORIGINALFILESIZE AS 'ZADDASSETATTR.ZORIGINALFILESIZE',
+
+    CASE ZINTERNALRESOURCE.ZRESOURCETYPE
+        WHEN 0 THEN '0 [Photo]'
+        WHEN 1 THEN '1 [Video]'
+        WHEN 3 THEN '3 [Live Photo]'
+        WHEN 5 THEN '5 [Adjustement Data]'
+        WHEN 6 THEN '6 [Screenshot]'
+        WHEN 9 THEN '9 [Alternate Photo 3rdPartyApp Still Testing]'
+        WHEN 13 THEN '13 [Movie]'
+        WHEN 14 THEN '14 [Wallpaper]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZRESOURCETYPE || ''
+    END AS 'ZINTERNALRESOURCE.ZRESOURCETYPE',
+
+    hex(ZINTERNALRESOURCE.ZDATASTOREKEYDATA) AS 'ZINTERNALRESOURCE.ZDATASTOREKEYDATA',
+
+    CASE ZINTERNALRESOURCE.ZDATASTORESUBTYPE
+        WHEN 0 THEN '0 [No Cloud Inter Resource]'
+        WHEN 1 THEN '1 [Main Asset Orig Size]'
+        WHEN 2 THEN '2 [Photo with Adjustments]'
+        WHEN 3 THEN '3 [JPG Large Thumb]'
+        WHEN 4 THEN '4 [JPG Med Thumb]'
+        WHEN 5 THEN '5 [JPG Small Thumb]'
+        WHEN 6 THEN '6 [Video Med Data]'
+        WHEN 7 THEN '7 [Video Small Data]'
+        WHEN 8 THEN '8 [MP4 Cloud Share]'
+        WHEN 9 THEN '9 [Still Testing]'
+        WHEN 10 THEN '10 [3rdPartyApp thumb Still Testing]'
+        WHEN 11 THEN '11 [Still Test]'
+        WHEN 12 THEN '12 [Still Test]'
+        WHEN 13 THEN '13 [PNG Optimized CPLAsset]'
+        WHEN 14 THEN '14 [Wallpaper]'
+        WHEN 15 THEN '15 [Has Markup and Adjustments]'
+        WHEN 16 THEN '16 [Video with Adjustments]'
+        WHEN 17 THEN '17 [RAW Photo]'
+        WHEN 18 THEN '18 [Live Photo Video Optimized CPLAsset]'
+        WHEN 19 THEN '19 [Live Photo with Adjustments]'
+        WHEN 20 THEN '20 [Still Test]'
+        WHEN 21 THEN '21 [Still Test]'
+        WHEN 22 THEN '22 [Adjust Mutation AAE Asset]'
+        WHEN 23 THEN '23 [Still Test]'
+        WHEN 24 THEN '24 [Still Test]'
+        WHEN 25 THEN '25 [Still Test]'
+        WHEN 26 THEN '26 [MOV Optimized CPLAsset]'
+        WHEN 27 THEN '27 [Still Test]'
+        WHEN 28 THEN '28 [MOV Med hdr Data]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZDATASTORESUBTYPE || ''
+    END AS 'ZINTERNALRESOURCE.ZDATASTORESUBTYPE',
+
+    CASE ZINTERNALRESOURCE.ZCLOUDSOURCETYPE
+        WHEN 0 THEN '0 [NA]'
+        WHEN 1 THEN '1 [Main Asset Orig Size]'
+        WHEN 2 THEN '2 [Photo with Adjustments]'
+        WHEN 3 THEN '3 [JPG Large Thumb]'
+        WHEN 4 THEN '4 [JPG Med Thumb]'
+        WHEN 5 THEN '5 [JPG Small Thumb]'
+        WHEN 6 THEN '6 [Video Med Data]'
+        WHEN 7 THEN '7 [Video Small Data]'
+        WHEN 8 THEN '8 [MP4 Cloud Share]'
+        WHEN 9 THEN '9 [Still Testing]'
+        WHEN 10 THEN '10 [3rdPartyApp thumb Still Testing]'
+        WHEN 11 THEN '11 [Still Test]'
+        WHEN 12 THEN '12 [Still Test]'
+        WHEN 13 THEN '13 [PNG Optimized CPLAsset]'
+        WHEN 14 THEN '14 [Wallpaper]'
+        WHEN 15 THEN '15 [Has-Markup and Adjustments]'
+        WHEN 16 THEN '16 [Video with Adjustments]'
+        WHEN 17 THEN '17 [RAW_Photo]'
+        WHEN 18 THEN '18 [Live Photo Video Optimized CPLAsset]'
+        WHEN 19 THEN '19 [Live Photo with Adjustments]'
+        WHEN 20 THEN '20 [Still Test]'
+        WHEN 21 THEN '21 [Still Test]'
+        WHEN 22 THEN '22 [Adjust Mutation AAE Asset]'
+        WHEN 23 THEN '23 [Still Test]'
+        WHEN 24 THEN '24 [Still Test]'
+        WHEN 25 THEN '25 [Still Test]'
+        WHEN 26 THEN '26 [MOV Optimized CPLAsset]'
+        WHEN 27 THEN '27 [Still Test]'
+        WHEN 28 THEN '28 [MOV-Med-hdr-Data]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZCLOUDSOURCETYPE || ''
+    END AS 'ZINTERNALRESOURCE.ZCLOUDSOURCETYPE',
+
+    ZINTERNALRESOURCE.ZDATALENGTH AS 'ZINTERNALRESOURCE.ZDATALENGTH',
+
+    CASE ZINTERNALRESOURCE.ZRECIPEID
+        WHEN 0 THEN '0 [OrigFileSize match DataLength or Optimized]'
+        WHEN 65739 THEN '65739 [JPG Large Thumb]'
+        WHEN 65741 THEN '65741 [Various Asset Types or Thumbs]'
+        WHEN 65743 THEN '65743 [ResouType Photo 5003 or 5005 JPG Thumb]'
+        WHEN 65749 THEN '65749 [LocalVideoKeyFrame JPG Thumb]'
+        WHEN 65938 THEN '65938 [FullSizeRender Photo or plist]'
+        WHEN 131072 THEN '131072 [FullSizeRender Video or plist]'
+        WHEN 131079 THEN '131079 [medium MP4 Adj Mutation Asset]'
+        WHEN 131081 THEN '131081 [ResouType Video 5003 or 5005 JPG Thumb]'
+        WHEN 131272 THEN '131272 [FullSizeRender Video LivePhoto Adj Mutation]'
+        WHEN 131275 THEN '131275 [medium MOV LivePhoto]'
+        WHEN 131277 THEN '131277 [No IR Asset LivePhoto iCloud Sync Asset]'
+        WHEN 131475 THEN '131475 [medium hdr MOV]'
+        WHEN 327683 THEN '327683 [JPG Thumb for 3rdParty Still Testing]'
+        WHEN 327687 THEN '627687 [Wallpape  Compute Resource]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZRECIPEID || ''
+    END AS 'ZINTERNALRESOURCE.ZRECIPEID',
+
+    CASE ZINTERNALRESOURCE.ZCLOUDLASTPREFETCHDATE
+        WHEN 0 THEN '0 [N/A]'
+        ELSE datetime(ZINTERNALRESOURCE.ZCLOUDLASTPREFETCHDATE + 978307200, 'UNIXEPOCH')
+    END AS 'ZINTERNALRESOURCE.ZCLOUDLASTPREFETCHDATE(UTC)',
+
+    ZINTERNALRESOURCE.ZCLOUDPREFETCHCOUNT AS 'ZINTERNALRESOURCE.ZCLOUDPREFETCHCOUNT',
+
+    datetime(ZINTERNALRESOURCE.ZCLOUDLASTONDEMANDDOWNLOADDATE + 978307200, 'UNIXEPOCH') AS 'ZINTERNALRESOURCE.ZCLOUDLASTONDEMANDDOWNLOADDATE(UTC)',
+
+    CASE ZINTERNALRESOURCE.ZUTICONFORMANCEHINT
+        WHEN 0 THEN '0 [NA/Doesnt Conform]'
+        WHEN 1 THEN '1 [UT Type Image]'
+        WHEN 2 THEN '2 [Still Testing]'
+        WHEN 3 THEN '3 [UT Type Movie]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZUTICONFORMANCEHINT || ''
+    END AS 'ZINTERNALRESOURCE.ZUTICONFORMANCEHINT',
+
+    CASE ZINTERNALRESOURCE.ZCOMPACTUTI
+        WHEN 1 THEN '1 [jpeg/thm]'
+        WHEN 3 THEN '3 [heic]'
+        WHEN 6 THEN '6 [png]'
+        WHEN 7 THEN '7 [Still Testing]'
+        WHEN 23 THEN '23 [jpeg/heic/quicktime mov]'
+        WHEN 24 THEN '24 [mpeg4]'
+        WHEN 36 THEN '36 [Wallpaper]'
+        WHEN 37 THEN '37 [Adj/Mutation Data]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZCOMPACTUTI || ''
+    END AS 'ZINTERNALRESOURCE.ZCOMPACTUTI',
+
+    ZASSET.ZUNIFORMTYPEIDENTIFIER AS 'ZASSET.ZUNIFORMTYPEIDENTIFIER',
+    ZASSET.ZORIGINALCOLORSPACE AS 'ZASSET.ZORIGINALCOLORSPACE',
+    ZCLOUDMASTER.ZUNIFORMTYPEIDENTIFIER AS 'ZCLOUDMASTER.ZUNIFORMTYPEIDENTIFIER',
+
+    CASE ZCLOUDMASTER.ZFULLSIZEJPEGSOURCE
+        WHEN 0 THEN '0 [CldMast JPEG Source Video]'
+        WHEN 1 THEN '1 [CldMast JPEG Source Other]'
+        ELSE 'Unknown New Value: ' || ZCLOUDMASTER.ZFULLSIZEJPEGSOURCE || ''
+    END AS 'ZCLOUDMASTER.ZFULLSIZEJPEGSOURCE',
+
+    ZASSET.ZHDRGAIN AS 'ZASSET.ZHDRGAIN',
+
+    CASE ZASSET.ZHDRTYPE
+        WHEN 0 THEN '0 [No HDR]'
+        WHEN 3 THEN '3 [HDR Photo]'
+        WHEN 4 THEN '4 [Non-HDR Version]'
+        WHEN 5 THEN '5 [HEVC Movie]'
+        WHEN 6 THEN '6 [Panorama]'
+        WHEN 10 THEN '10 [HDR Gain]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZHDRTYPE || ''
+    END AS 'ZASSET.ZHDRTYPE',
+
+    ZEXTATTR.ZCODEC AS 'ZEXTATTR.ZCODEC',
+    ZINTERNALRESOURCE.ZCODECFOURCHARCODENAME AS 'ZINTERNALRESOURCE.ZCODECFOURCHARCODENAME',
+    ZCLOUDMASTER.ZCODECNAME AS 'ZCLOUDMASTER.ZCODECNAME',
+    ZCLOUDMASTER.ZVIDEOFRAMERATE AS 'ZCLOUDMASTER.ZVIDEOFRAMERATE',
+    ZCLOUDMASTER.ZPLACEHOLDERSTATE AS 'ZCLOUDMASTER.ZPLACEHOLDERSTATE',
+
+    CASE ZASSET.ZDEPTHTYPE
+        WHEN 0 THEN '0 [Not Portrait]'
+        ELSE 'Portrait: ' || ZASSET.ZDEPTHTYPE || ''
+    END AS 'ZASSET.ZDEPTHTYPE',
+
+    ZASSET.ZAVALANCHEUUID AS 'ZASSET.ZAVALANCHEUUID',
+
+    CASE ZASSET.ZMONOSKITYPE
+        WHEN 0 THEN '0 [Still Testing No-Monoski]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZMONOSKITYPE || ''
+    END AS 'ZASSET.ZMONOSKITYPE',
+
+    CASE ZASSET.ZAVALANCHEPICKTYPE
+        WHEN 0 THEN '0 [NA/Single Asset Burst UUID]'
+        WHEN 2 THEN '2 [Burst Asset Not Selected]'
+        WHEN 4 THEN '4 [Burst Asset PhotosApp Picked KeyImage]'
+        WHEN 8 THEN '8 [Burst Asset Selected for LPL]'
+        WHEN 16 THEN '16 [Top Burst Asset in Stack KeyImage]'
+        WHEN 32 THEN '32 [Still Testing]'
+        WHEN 52 THEN '52 [Burst Asset Visible LPL]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZAVALANCHEPICKTYPE || ''
+    END AS 'ZASSET.ZAVALANCHEPICKTYPE',
+
+    CASE ZADDASSETATTR.ZCLOUDAVALANCHEPICKTYPE
+        WHEN 0 THEN '0 [NA/Single Asset Burst UUID]'
+        WHEN 2 THEN '2 [Burst Asset Not Selected]'
+        WHEN 4 THEN '4 [Burst Asset PhotosApp Picked KeyImage]'
+        WHEN 8 THEN '8 [Burst Asset Selected for LPL]'
+        WHEN 16 THEN '16 [Top Burst Asset in Stack KeyImage]'
+        WHEN 32 THEN '32 [Still Testing]'
+        WHEN 52 THEN '52 [Burst Asset Visible LPL]'
+        ELSE 'Unknown New Value: ' || ZADDASSETATTR.ZCLOUDAVALANCHEPICKTYPE || ''
+    END AS 'ZADDASSETATTR.ZCLOUDAVALANCHEPICKTYPE',
+
+    CASE ZADDASSETATTR.ZCLOUDRECOVERYSTATE
+        WHEN 0 THEN '0 [Still Testing]'
+        WHEN 1 THEN '1 [Still Testing]'
+        ELSE 'Unknown New Value: ' || ZADDASSETATTR.ZCLOUDRECOVERYSTATE || ''
+    END AS 'ZADDASSETATTR.ZCLOUDRECOVERYSTATE',
+
+    ZADDASSETATTR.ZCLOUDSTATERECOVERYATTEMPTSCOUNT AS 'ZADDASSETATTR.ZCLOUDSTATERECOVERYATTEMPTSCOUNT',
+    ZASSET.ZDEFERREDPROCESSINGNEEDED AS 'ZASSET.ZDEFERREDPROCESSINGNEEDED',
+    ZASSET.ZVIDEODEFERREDPROCESSINGNEEDED AS 'ZASSET.ZVIDEODEFERREDPROCESSINGNEEDED',
+    ZADDASSETATTR.ZDEFERREDPHOTOIDENTIFIER AS 'ZADDASSETATTR.ZDEFERREDPHOTOIDENTIFIER',
+    ZADDASSETATTR.ZDEFERREDPROCESSINGCANDIDATEOPTIONS AS 'ZADDASSETATTR.ZDEFERREDPROCESSINGCANDIDATEOPTIONS',
+
+    CASE ZASSET.ZHASADJUSTMENTS
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZHASADJUSTMENTS || ''
+    END AS 'ZASSET.ZHASADJUSTMENTS',
+
+    --[ZUNMANAGEDADJUSTMENT.ZASSETATTRIBUTES = ZADDASSETATTR.Z_PK]
+    ZUNMANAGEDADJUSTMENT.ZASSETATTRIBUTES AS 'ZUNMANAGEDADJUSTMENT.ZASSETATTRIBUTES',
+    --[ZADDASSETATTR.ZUNMANAGEDADJUSTMENT = ZUNMANAGEDADJUSTMENT.Z_PK]
+    ZADDASSETATTR.ZUNMANAGEDADJUSTMENT AS 'ZADDASSETATTR.ZUNMANAGEDADJUSTMENT',
+    --[ZUNMANAGEDADJUSTMENT.Z_PK = ZADDASSETATTR.ZUnmanAdj]
+    ZUNMANAGEDADJUSTMENT.Z_PK AS 'ZUNMANAGEDADJUSTMENT.Z_PK',
+    ZUNMANAGEDADJUSTMENT.ZUUID AS 'ZUNMANAGEDADJUSTMENT.ZUUID',
+
+    datetime(ZASSET.ZADJUSTMENTTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'ZASSET.ZADJUSTMENTTIMESTAMP(UTC)',
+    datetime(ZUNMANAGEDADJUSTMENT.ZADJUSTMENTTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'ZUNMANAGEDADJUSTMENT.ZADJUSTMENTTIMESTAMP(UTC)',
+
+    ZADDASSETATTR.ZEDITORBUNDLEID AS 'ZADDASSETATTR.ZEDITORBUNDLEID',
+    ZUNMANAGEDADJUSTMENT.ZEDITORLOCALIZEDNAME AS 'ZUNMANAGEDADJUSTMENT.ZEDITORLOCALIZEDNAME',
+    ZUNMANAGEDADJUSTMENT.ZADJUSTMENTFORMATIDENTIFIER AS 'ZUNMANAGEDADJUSTMENT.ZADJUSTMENTFORMATIDENTIFIER',
+    ZADDASSETATTR.ZMONTAGE AS 'ZADDASSETATTR.ZMONTAGE',
+
+    CASE ZUNMANAGEDADJUSTMENT.ZADJUSTMENTRENDERTYPES
+        WHEN 0 THEN '0 [Standard or Portrait with erros]'
+        WHEN 1 THEN '1 [Still Testing]'
+        WHEN 2 THEN '2 [Portrait]'
+        WHEN 3 THEN '3 [Still Testing]'
+        WHEN 4 THEN '4 [Still Testing]'
+        ELSE 'Unknown New Value: ' || ZUNMANAGEDADJUSTMENT.ZADJUSTMENTRENDERTYPES || ''
+    END AS 'ZUNMANAGEDADJUSTMENT.ZADJUSTMENTRENDERTYPES',
+
+    CASE ZUNMANAGEDADJUSTMENT.ZADJUSTMENTFORMATVERSION
+        WHEN 1.0 THEN '1.0 [Markup]'
+        WHEN 1.1 THEN '1.1 [Slow-Mo]'
+        WHEN 1.2 THEN '1.2 [Still Testing]'
+        WHEN 1.3 THEN '1.3 [Still Testing]'
+        WHEN 1.4 THEN '1.4 [Filter]'
+        WHEN 1.5 THEN '1.5 [Adjust]'
+        WHEN 1.6 THEN '1.6 [Video Trim]'
+        WHEN 1.7 THEN '1.7 [Still Testing]'
+        WHEN 1.8 THEN '1.8 [Still Testing]'
+        WHEN 1.9 THEN '1.9 [Still Testing]'
+        WHEN 2.0 THEN '2.0 [Screenshot Services]'
+        ELSE 'Unknown New Value: ' || ZUNMANAGEDADJUSTMENT.ZADJUSTMENTFORMATVERSION || ''
+    END AS 'ZUNMANAGEDADJUSTMENT.ZADJUSTMENTFORMATVERSION',
+
+    ZUNMANAGEDADJUSTMENT.ZADJUSTMENTBASEIMAGEFORMAT AS 'ZUNMANAGEDADJUSTMENT.ZADJUSTMENTBASEIMAGEFORMAT',
+
+    CASE ZASSET.ZFAVORITE
+        WHEN 0 THEN '0 [Asset Not Favorite]'
+        WHEN 1 THEN '1 [Asset Favorite]'
+    END AS 'ZASSET.ZFAVORITE',
+
+    CASE ZASSET.ZHIDDEN
+        WHEN 0 THEN '0 [Asset Not Hidden]'
+        WHEN 1 THEN '1 [Asset Hidden]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZHIDDEN || ''
+    END AS 'ZASSET.ZHIDDEN',
+
+    CASE ZASSET.ZTRASHEDSTATE
+        WHEN 0 THEN '0 [Asset Not In Trash]'
+        WHEN 1 THEN '1 [Asset In Trash]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZTRASHEDSTATE || ''
+    END AS 'ZASSET.ZTRASHEDSTATE',
+
+    datetime(ZASSET.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'ZASSET.ZTRASHEDDATE(UTC)',
+
+    CASE ZASSET.ZDELETEREASON
+        WHEN 1 THEN '1 [Still Testing]'
+        WHEN 2 THEN '2 [Still Testing]'
+        WHEN 3 THEN '3 [Still Testing]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZDELETEREASON || ''
+    END AS 'ZASSET.ZDELETEREASON',
+
+    CASE ZASSET.ZTRASHEDBYPARTICIPANT
+        WHEN 1 THEN '1 [Asset Trashed by Participant]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZTRASHEDBYPARTICIPANT || ''
+    END AS 'ZASSET.ZTRASHEDBYPARTICIPANT',
+
+    CASE ZINTERNALRESOURCE.ZTRASHEDSTATE
+        WHEN 0 THEN '0 [Not In Trash]'
+        WHEN 1 THEN '1 [In Trash]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZTRASHEDSTATE || ''
+    END AS 'ZINTERNALRESOURCE.ZTRASHEDSTATE',
+
+    datetime(ZINTERNALRESOURCE.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'ZINTERNALRESOURCE.ZTRASHEDDATE(UTC)',
+
+    CASE ZASSET.ZCLOUDDELETESTATE
+        WHEN 0 THEN '0 [Cloud Asset Not Deleted]'
+        WHEN 1 THEN '1 [Cloud Asset Deleted]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZCLOUDDELETESTATE || ''
+    END AS 'ZASSET.ZCLOUDDELETESTATE',
+
+    CASE ZINTERNALRESOURCE.ZCLOUDDELETESTATE
+        WHEN 0 THEN '0 [Cloud IntResou Not Deleted]'
+        WHEN 1 THEN '1 [Cloud IntResou Deleted]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZCLOUDDELETESTATE || ''
+    END AS 'ZINTERNALRESOURCE.ZCLOUDDELETESTATE',
+
+    CASE ZADDASSETATTR.ZPTPTRASHEDSTATE
+        WHEN 0 THEN '0 [PTP Not in Trash]'
+        WHEN 1 THEN '1 [PTP In Trash]'
+        ELSE 'Unknown New Value: ' || ZADDASSETATTR.ZPTPTRASHEDSTATE || ''
+    END AS 'ZADDASSETATTR.ZPTPTRASHEDSTATE',
+
+    CASE ZINTERNALRESOURCE.ZPTPTRASHEDSTATE
+        WHEN 0 THEN '0 [PTP IntResou Not in Trash]'
+        WHEN 1 THEN '1 [PTP IntResou In Trash]'
+        ELSE 'Unknown New Value: ' || ZINTERNALRESOURCE.ZPTPTRASHEDSTATE || ''
+    END AS 'ZINTERNALRESOURCE.ZPTPTRASHEDSTATE',
+
+    ZINTERNALRESOURCE.ZCLOUDDELETEASSETUUIDWITHRESOURCETYPE AS 'ZINTERNALRESOURCE.ZCLOUDDELETEASSETUUIDWITHRESOURCETYPE',
+
+    datetime(zMedAnlyAstAttr.ZMEDIAANALYSISTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'zMedAnlyAstAttr.ZMEDIAANALYSISTIMESTAMP(UTC)',
+    datetime(ZASSET.ZANALYSISSTATEMODIFICATIONDATE + 978307200, 'UNIXEPOCH') AS 'ZASSET.ZANALYSISSTATEMODIFICATIONDATE(UTC)',
+
+    ZADDASSETATTR.ZPENDINGVIEWCOUNT AS 'ZADDASSETATTR.ZPENDINGVIEWCOUNT',
+    ZADDASSETATTR.ZVIEWCOUNT AS 'ZADDASSETATTR.ZVIEWCOUNT',
+    ZADDASSETATTR.ZPENDINGPLAYCOUNT AS 'ZADDASSETATTR.ZPENDINGPLAYCOUNT',
+    ZADDASSETATTR.ZPLAYCOUNT AS 'ZADDASSETATTR.ZPLAYCOUNT',
+    ZADDASSETATTR.ZPENDINGSHARECOUNT AS 'ZADDASSETATTR.ZPENDINGSHARECOUNT',
+    ZADDASSETATTR.ZSHARECOUNT AS 'ZADDASSETATTR.ZSHARECOUNT',
+
+    datetime(ZASSET.ZLASTSHAREDDATE + 978307200, 'UNIXEPOCH') AS 'ZASSET.ZLASTSHAREDDATE(UTC)',
+
+    ZADDASSETATTR.ZSHAREORIGINATOR AS 'ZADDASSETATTR.ZSHAREORIGINATOR',
+
+    CASE ZADDASSETATTR.ZALLOWEDFORANALYSIS
+        WHEN 0 THEN '0 [Asset Not Allowed For Analysis]'
+        WHEN 1 THEN '1 [Asset Allowed for Analysis]'
+        ELSE 'Unknown New Value: ' || ZADDASSETATTR.ZALLOWEDFORANALYSIS || ''
+    END AS 'ZADDASSETATTR.ZALLOWEDFORANALYSIS',
+
+    ZADDASSETATTR.ZSCENEANALYSISVERSION AS 'ZADDASSETATTR.ZSCENEANALYSISVERSION',
+
+    CASE ZADDASSETATTR.ZSCENEANALYSISISFROMPREVIEW
+        WHEN 0 THEN '0 [No]'
+        ELSE 'Unknown New Value: ' || ZADDASSETATTR.ZSCENEANALYSISISFROMPREVIEW || ''
+    END AS 'ZADDASSETATTR.ZSCENEANALYSISISFROMPREVIEW',
+
+    datetime(ZADDASSETATTR.ZSCENEANALYSISTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'ZADDASSETATTR.ZSCENEANALYSISTIMESTAMP(UTC)',
+
+    CASE ZASSET.ZDUPLICATEASSETVISIBILITYSTATE
+        WHEN 0 THEN '0 [No Duplicates]'
+        WHEN 1 THEN '1 [Has Duplicate]'
+        WHEN 2 THEN '2 [Is a Duplicate]'
+        ELSE 'Unknown New Value: ' || ZASSET.ZDUPLICATEASSETVISIBILITYSTATE || ''
+    END AS 'ZASSET.ZDUPLICATEASSETVISIBILITYSTATE',
+
+    CASE ZADDASSETATTR.ZDESTINATIONASSETCOPYSTATE
+        WHEN 0 THEN '0 [No Copy]'
+        WHEN 1 THEN '1 [Has A Copy]'
+        WHEN 2 THEN '2 [Has A Copy]'
+        ELSE 'Unknown New Value: ' || ZADDASSETATTR.ZDESTINATIONASSETCOPYSTATE || ''
+    END AS 'ZADDASSETATTR.ZDESTINATIONASSETCOPYSTATE',
+
+    --hex(ZSCENEPRINT.ZDATA) AS 'ZSCENEPRINT.ZDATA(HEX NSKeyed .plist)',
+    --hex(ZSCENEPRINT.ZDUPLICATEMATCHINGDATA) AS 'ZSCENEPRINT.ZDUPLICATEMATCHINGDATA(HEX NSKeyed .plist)',
+    --hex(ZSCENEPRINT.ZDUPLICATEMATCHINGALTERNATEDATA) AS 'ZSCENEPRINT.ZDUPLICATEMATCHINGALTERNATEDATA(HEX NSKeyed .plist)',
+    ZADDASSETATTR.ZSOURCEASSETFORDUPLICATIONSCOPEIDENTIFIER AS 'ZADDASSETATTR.ZSOURCEASSETFORDUPLICATIONSCOPEIDENTIFIER',
+    ZCLOUDMASTER.ZSOURCEMASTERFORDUPLICATIONSCOPEIDENTIFIER AS 'ZCLOUDMASTER.ZSOURCEMASTERFORDUPLICATIONSCOPEIDENTIFIER',
+    ZADDASSETATTR.ZSOURCEASSETFORDUPLICATIONIDENTIFIER AS 'ZADDASSETATTR.ZSOURCEASSETFORDUPLICATIONIDENTIFIER',
+    ZCLOUDMASTER.ZSOURCEMASTERFORDUPLICATIONIDENTIFIER AS 'ZCLOUDMASTER.ZSOURCEMASTERFORDUPLICATIONIDENTIFIER'
+
+
+FROM ZASSET
+    LEFT JOIN ZADDITIONALASSETATTRIBUTES ZADDASSETATTR ON ZADDASSETATTR.Z_PK = ZASSET.ZADDITIONALATTRIBUTES
+    LEFT JOIN ZEXTENDEDATTRIBUTES ZEXTATTR ON ZEXTATTR.Z_PK = ZASSET.ZEXTENDEDATTRIBUTES
+    LEFT JOIN ZINTERNALRESOURCE ON ZINTERNALRESOURCE.ZASSET = ZASSET.Z_PK
+    LEFT JOIN ZSCENEPRINT ON ZSCENEPRINT.Z_PK = ZADDASSETATTR.ZSCENEPRINT
+    LEFT JOIN Z_28ASSETS ON Z_28ASSETS.Z_3ASSETS = ZASSET.Z_PK
+    LEFT JOIN ZGENERICALBUM zGenAlbum ON zGenAlbum.Z_PK = Z_28ASSETS.Z_28ALBUMS
+    LEFT JOIN ZUNMANAGEDADJUSTMENT ON ZADDASSETATTR.ZUNMANAGEDADJUSTMENT = ZUNMANAGEDADJUSTMENT.Z_PK
+    LEFT JOIN Z_27ALBUMLISTS ON Z_27ALBUMLISTS.Z_27ALBUMS = zGenAlbum.Z_PK
+    LEFT JOIN ZALBUMLIST ON ZALBUMLIST.Z_PK = Z_27ALBUMLISTS.Z_2ALBUMLISTS
     LEFT JOIN ZGENERICALBUM ParentzGenAlbum ON ParentzGenAlbum.Z_PK = zGenAlbum.ZPARENTFOLDER
-    LEFT JOIN ZCLOUDMASTER zCldMast ON zAsset.ZMASTER = zCldMast.Z_PK
-    LEFT JOIN ZCLOUDMASTERMEDIAMETADATA AAAzCldMastMedData ON AAAzCldMastMedData.Z_PK = zAddAssetAttr.ZMEDIAMETADATA
-    LEFT JOIN ZCLOUDMASTERMEDIAMETADATA CMzCldMastMedData ON CMzCldMastMedData.Z_PK = zCldMast.ZMEDIAMETADATA
-    LEFT JOIN ZMEDIAANALYSISASSETATTRIBUTES zMedAnlyAstAttr ON zAsset.ZMEDIAANALYSISATTRIBUTES = zMedAnlyAstAttr.Z_PK
-    LEFT JOIN ZSHARE zShare ON zShare.Z_PK = zAsset.ZMOMENTSHARE
+    LEFT JOIN ZCLOUDMASTER ON ZASSET.ZMASTER = ZCLOUDMASTER.Z_PK
+    LEFT JOIN ZCLOUDMASTERMEDIAMETADATA AAAzCldMastMedData ON AAAzCldMastMedData.Z_PK = ZADDASSETATTR.ZMEDIAMETADATA
+    LEFT JOIN ZCLOUDMASTERMEDIAMETADATA CMzCldMastMedData ON CMzCldMastMedData.Z_PK = ZCLOUDMASTER.ZMEDIAMETADATA
+    LEFT JOIN ZMEDIAANALYSISASSETATTRIBUTES zMedAnlyAstAttr ON ZASSET.ZMEDIAANALYSISATTRIBUTES = zMedAnlyAstAttr.Z_PK
+    LEFT JOIN ZSHARE ON ZSHARE.Z_PK = ZASSET.ZMOMENTSHARE
 
-ORDER BY zAsset.ZADDEDDATE
+
+ORDER BY ZASSET.ZADDEDDATE
