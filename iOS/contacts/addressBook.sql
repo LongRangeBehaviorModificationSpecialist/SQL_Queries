@@ -3,7 +3,7 @@
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RecordNo.',
+    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
     ABPerson.ROWID AS 'ABPerson.ROWID',
     ABPerson.First AS 'ABPerson.First',
     ABPerson.Middle AS 'ABPerson.Middle',

@@ -1,8 +1,9 @@
 SELECT
     /* Add a row number at the beggining of each row */
-    ROW_NUMBER() OVER() AS 'Row #',
-    messages._id AS 'Message ID',
-    messages.conversation_id AS 'Conversation ID',
+    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
+    messages._id AS 'messages._id',
+    messages.conversation_id AS 'messages.conversation_id',
+
     /* ID of recipient of the message */
     /* Removes unnecessary text at the start of the string to leave just the 10-digit phone number */
     /* Formats string as a U.S. phone number, i.e. (###) ###-#### */
@@ -12,63 +13,76 @@ SELECT
         WHEN LENGTH(messages.recipients) = 10 THEN '(' || SUBSTR(messages.recipients,1,3) || ') ' || SUBSTR(messages.recipients,4,3) || '-' || SUBSTR(messages.recipients,7,4)
         WHEN messages.recipients IS NULL THEN 'n/a'
         ELSE messages.recipients
-    END AS 'Recipients',
+    END AS 'messages.recipients',
+
     /* Name of recipient (if documented) */
     CASE
         WHEN recipients.cache_name IS NULL THEN 'n/a'
         ELSE recipients.cache_name
-    END AS 'Recipient Name',
+    END AS 'recipients.cache_name',
+
     /* Message direction (incoming/outgoing) */
-    CASE
-        WHEN messages.message_box_type IS 102 THEN 'Outgoing'
-        WHEN messages.message_box_type IS 100 THEN 'Incoming'
+    CASE messages.message_box_type
+        WHEN 102 THEN '102  [Outgoing]'
+        WHEN 100 THEN '100  [Incoming]'
         ELSE messages.message_box_type
-    END AS 'Direction',
+    END AS 'messages.message_box_type',
+
     /* Date/Time the message was created in UTC */
-    strftime('%Y-%m-%d %H:%M:%S', messages.created_timestamp / 1000, 'UNIXEPOCH') AS 'Time Created (UTC)',
+    strftime('%Y-%m-%d %H:%M:%S', messages.created_timestamp / 1000, 'UNIXEPOCH') AS 'messages.created_timestamp(UTC)',
+
     /* Date/Time the message was sent in UTC */
     CASE
         WHEN messages.sent_timestamp IS 0 THEN 'n/a'
         ELSE strftime('%Y-%m-%d %H:%M:%S', messages.sent_timestamp / 1000, 'UNIXEPOCH')
-    END AS 'Time Sent (UTC)',
-    messages.remote_message_uri AS 'Message URI',
+    END AS 'messages.sent_timestamp(UTC)',
+
+    messages.remote_message_uri AS 'messages.remote_message_uri',
+
     /* Message content */
     CASE
         WHEN parts.text IS NULL THEN 'n/a'
         ELSE parts.text
-    END AS 'Message Text',
+    END AS 'parts.text',
+
     CASE
         WHEN parts.content_uri IS NULL THEN 'n/a'
         ELSE parts.content_uri
-    END AS 'Content URI',
-    parts.content_type AS 'Content Type',
-    messages.message_type AS 'Message Type',
+    END AS 'parts.content_uri',
+
+    parts.content_type AS 'parts.content_type',
+    messages.message_type AS 'messages.message_type',
+
     /* If the message had an attachment, returns the file name */
     CASE
         WHEN parts.file_name IS NULL THEN 'n/a'
         ELSE parts.file_name
-    END AS 'File Name',
+    END AS 'parts.file_name',
+
     /* Output the attached file size formatted with commas as needed */
-    printf("%,d", parts.size) AS 'File Size (bytes)',
+    printf("%,d", parts.size) AS 'parts.size(bytes)',
     /* Output the message size formatted with commas as needed */
-    printf("%,d", messages.message_size) AS 'Message Size (bytes)',
+    printf("%,d", messages.message_size) AS ' messages.message_size(bytes)',
     /* Was the message read */
-    messages.is_read AS 'Is Read?',
+    messages.is_read AS 'messages.is_read?',
+
     /* Date/Time the message was updated (if any) in UTC */
     CASE
         WHEN messages.updated_timestamp IS 0 THEN 'n/a'
         ELSE strftime('%Y-%m-%d %H:%M:%S', messages.updated_timestamp / 1000, 'UNIXEPOCH')
-    END AS 'Time Updated (UTC)',
-    messages.creator AS 'Creator',
-    messages.remote_creator AS 'Remote Creator',
-    messages.req_app_id AS 'Req App ID',
+    END AS 'messages.updated_timestamp',
+
+    messages.creator AS 'messages.creator',
+    messages.remote_creator AS 'messages.remote_creator',
+    messages.req_app_id AS 'messages.req_app_id',
+
     /* Source for each line of data */
-    'File: \data\data\com.samsung.android.messaging\databases\message_content.db; Table: messages(_id: ' || messages._id || ')' AS 'Data Source'
+    'File: \data\data\com.samsung.android.messaging\databases\message_content.db; Table: messages(_id: ' || messages._id || ')' AS 'DATA_SOURCE'
+
 
 FROM messages
-    LEFT OUTER JOIN
-        parts ON messages._id = parts.message_id
-    LEFT OUTER JOIN
-        recipients ON messages.conversation_id = recipients._id
+    LEFT OUTER JOIN parts ON messages._id = parts.message_id
+    LEFT OUTER JOIN recipients ON messages.conversation_id = recipients._id
+
 
 ORDER BY messages._id ASC

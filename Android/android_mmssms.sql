@@ -4,75 +4,92 @@ This query is for MMS messages from the mmssms.db
 
 SELECT
     /* Add a row number at the beggining of each row */
-    ROW_NUMBER() OVER() AS 'Row #',
-    pdu._id AS 'MMS_ID',
-    pdu.thread_id AS 'Thread ID',
+    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
+    pdu._id AS 'pdu._id',
+    pdu.thread_id AS 'pdu.thread_id',
+
     /* Date/Time of the message in UTC */
-    CASE 
+    CASE
         WHEN pdu.date > 0 THEN strftime('%Y-%m-%d %H:%M:%S', pdu.date, 'UNIXEPOCH')
         ELSE 'n/a'
-    END AS 'Date (UTC)',
+    END AS 'pdu.date',
+
     /* Date/Time the message was sent in UTC */
     CASE
         WHEN pdu.date_sent > 0 THEN strftime('%Y-%m-%d %H:%M:%S', pdu.date_sent, 'UNIXEPOCH')
         ELSE 'n/a'
-    END as 'Date Sent (UTC)',
+    END as 'pdu.date_sent(UTC)',
+
     /* Message direction (incoming/outgoing) */
-    CASE
-        WHEN pdu.msg_box = 1 THEN 'Incoming'
-        WHEN pdu.msg_box = 2 THEN 'Outgoing'
+    CASE pdu.msg_box
+        WHEN 1 THEN '1  [Incoming]'
+        WHEN 2 THEN '2  [Outgoing]'
         ELSE pdu.msg_box
     END AS 'Direction',
+
     /* Was the message read */
-    pdu.read AS 'Read',
+    pdu.read AS 'pdu.read',
+
     /* Phone number of the message sender */
     /* Removes unnecessary text at the start of the string to leave just the 10-digit phone number */
     CASE
-        WHEN (SELECT SUBSTR(address,3) FROM addr WHERE pdu._id=addr.msg_id AND addr.type=137 AND addr.address LIKE '%+1%') IS NULL THEN (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=137)
+        WHEN (SELECT SUBSTR(address,3) FROM addr WHERE pdu._id=addr.msg_id AND addr.type=137 AND addr.address LIKE '%+1%') IS NULL THEN (
+            SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=137)
         ELSE (SELECT SUBSTR(address,3) FROM addr WHERE pdu._id=addr.msg_id AND addr.type=137 AND addr.address LIKE '%+1%')
     END AS 'FROM',
+
     /* Phone number of the message recipient */
     /* Removes unnecessary text at the start of the string to leave just the 10-digit phone number */
     CASE
-        WHEN (SELECT SUBSTR(address,3) FROM addr WHERE pdu._id=addr.msg_id AND addr.type=151 AND addr.address LIKE '%+1%') IS NULL THEN (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=151)
+        WHEN (SELECT SUBSTR(address,3) FROM addr WHERE pdu._id=addr.msg_id AND addr.type=151 AND addr.address LIKE '%+1%') IS NULL THEN (
+            SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=151)
         ELSE (SELECT SUBSTR(address,3) FROM addr WHERE pdu._id=addr.msg_id AND addr.type=151 AND addr.address LIKE '%+1%')
     END AS 'TO',
+
     /* If the message was CCed to anyone, it will be listed here */
     CASE
         WHEN (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=130) IS NULL THEN 'n/a'
         ELSE (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=130)
     END AS 'CC',
+
     /* If the message was BCCed to anyone, it will be listed here */
     CASE
-    WHEN (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=129) IS NULL THEN 'n/a'
+        WHEN (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=129) IS NULL THEN 'n/a'
         ELSE (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=129)
     END AS 'BCC',
-    part._id AS 'part_id',
+
+    part._id AS 'part._id',
     part.seq,
-    part.ct AS 'Data Type',
+    part.ct AS 'part.ct',
+
     /* File name of the attached file (if any) */
     CASE
         WHEN part.cl IS NULL THEN 'n/a'
         ELSE part.cl
-    END AS 'File Name',
+    END AS 'part.cl',
+
     /* File path of the attached file (if any) */
-    part._data AS 'File Path',
+    part._data AS 'part._data',
     /* Message content */
-    part.text  AS 'Message',
-    pdu.creator AS 'Creator',
-    pdu.sim_imsi AS 'SIM IMSI',
-    pdu.correlation_tag AS 'Correlation Tag',
-    pdu.ct_l AS 'URI',
+    part.text  AS 'part.text',
+    pdu.creator AS 'pdu.creator',
+    pdu.sim_imsi AS 'pdu.sim_imsi',
+    pdu.correlation_tag AS 'pdu.correlation_tag',
+    pdu.ct_l AS 'pdu.ct_l(URI)',
+
     /* Source for each line of data */
-    'File: \data\data\com.android.providers.telephony\databases\mmssms.db; Table: pdu(_id: ' || pdu._id || ')' AS 'Data Source'
+    'File: \data\data\com.android.providers.telephony\databases\mmssms.db; Table: pdu(_id: ' || pdu._id || ')' AS 'DATA_SOURCE'
+
 
 FROM pdu
     LEFT JOIN part ON part.mid=pdu._id
+
 
 /* Groups the messages first by the `_id` value, then by `date` and then by `part_id` */
 ORDER BY pdu._id, pdu.date, part_id
 
 
+------------------------------------------------------
 /*
 Query for just SMS messages from the mmssms.db
 */
