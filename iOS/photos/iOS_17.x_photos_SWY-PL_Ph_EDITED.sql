@@ -1,8 +1,8 @@
 /*
-  [DLU]
+[DLU]
     2024-10-04
 
-  [NOTES]
+[NOTES]
     Parts of query copied from:  https://github.com/ScottKjr3347/iOS_SWY_PL_Photos.sqlite_Queries/blob/main/iOS17/iOS17_SWY-PL_Phsql_LargeReference.txt
 
     Blog Link:  https://theforensicscooter.com/2022/09/16/shared-with-you-syndication-photo-library-message-attachments-linked-assets/#_Toc114172924
@@ -10,7 +10,7 @@
     This query is for the Shared With You (SWY) Syndication Photo Library (PL) Photos.sqlite database.
 
     Database location:
-      /private/var/mobile/Library/Photos/Libraries/Syndication.photoslibrary/database/Photos.sqlite
+        /private/var/mobile/Library/Photos/Libraries/Syndication.photoslibrary/database/Photos.sqlite
 */
 
 SELECT
