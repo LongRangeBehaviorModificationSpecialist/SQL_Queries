@@ -2,32 +2,32 @@
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RecordNo.',
-    ZWACHATSESSION.ZPARTNERNAME AS 'FriendName',
-    ZWAMESSAGE.ZISFROMME AS 'IsFromMe',
+    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
+    ZWACHATSESSION.ZPARTNERNAME AS 'ZWACHATSESSION.ZPARTNERNAME',
 
     CASE ZWAMESSAGE.ZISFROMME
         WHEN 0 THEN ZWAMESSAGE.ZFROMJID
         ELSE ZWAMESSAGE.ZTOJID
-    END AS 'FriendNumber',
+    END AS 'ZWAMESSAGE.ZISFROMME',
 
     CASE ZWAMESSAGE.ZMESSAGETYPE
-        WHEN 0 THEN 'Text'
-        WHEN 1 THEN 'Image'
-        WHEN 2 THEN 'Video'
-        WHEN 3 THEN 'VoiceMessage'
-        WHEN 4 THEN 'Gif'
-        WHEN 5 THEN 'Location'
-        WHEN 6 THEN 'GroupEvent'
-        WHEN 7 THEN 'Hyperlink'
-        WHEN 8 THEN 'Document'
-        WHEN 14 THEN 'DeletedMessage'
-        WHEN 15 THEN 'Sticker'
+        WHEN 0 THEN '0  [Text]'
+        WHEN 1 THEN '1  [Image]'
+        WHEN 2 THEN '2  [Video]'
+        WHEN 3 THEN '3  [Voice Message]'
+        WHEN 4 THEN '4  [Gif]'
+        WHEN 5 THEN '5  [Location]'
+        WHEN 6 THEN '6  [Group Event]'
+        WHEN 7 THEN '7  [Hyperlink]'
+        WHEN 8 THEN '8  [Document]'
+        WHEN 14 THEN '14  [Deleted Message]'
+        WHEN 15 THEN '15  [Sticker]'
         ELSE ZWAMESSAGE.ZMESSAGETYPE
-    END AS 'MessageType',
+    END AS 'ZWAMESSAGE.ZMESSAGETYPE',
 
-    datetime(ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'UNIXEPOCH') AS 'MessageDateTime(UTC)',
-    ZWAMESSAGE.ZTEXT AS 'MessageText'
+    datetime(ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'UNIXEPOCH') AS 'ZWAMESSAGE.ZMESSAGEDATE(UTC)',
+
+    ZWAMESSAGE.ZTEXT AS 'ZWAMESSAGE.ZTEXT'
 
 
 FROM ZWACHATSESSION

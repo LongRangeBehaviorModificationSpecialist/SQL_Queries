@@ -5,57 +5,70 @@ This query is slightly different as an examiner would also need the group/conver
 */
 
 SELECT
-	ROW_NUMBER() OVER() AS 'Record #',
-	--ATTACH DATABASE "F:\23-07663_GUYTON\EVIDENCE\ALL_CHAT_MESSAGES\WHATSAPP_DATA\wa_database\wa.db" AS 'whatsapp_db';
-	message._id AS 'Message ID',
-	datetime(message.timestamp / 1000, 'UNIXEPOCH') AS 'Message Time (UTC)',
-	CASE
-		WHEN datetime(message.received_timestamp / 1000, 'UNIXEPOCH') = '1970-01-01 00:00:00' THEN 'N/A'
-		ELSE datetime(message.received_timestamp / 1000, 'UNIXEPOCH')
-	END AS 'Time Message Received (UTC)',
-	chat.subject AS 'Conversation Name',
-	CASE
-		WHEN message.from_me = 1 THEN 'Self'
-		ELSE wa_contacts.wa_name
-	END AS 'Sending Party',
-	CASE
-		WHEN message.from_me = 0 THEN 'Incoming'
-		WHEN message.from_me = 1 THEN 'Outgoing'
-	END AS 'Message Direction',
-	CASE message.message_type
-		WHEN 0 THEN 'Text'
-		WHEN 1 THEN 'Picture'
-		WHEN 2 THEN 'Audio'
-		WHEN 3 THEN 'Video'
-		WHEN 5 THEN 'Static Location'
-		WHEN 7 THEN 'System Message'
-		WHEN 9 THEN 'Document'
-		WHEN 16 THEN 'Live Location'
-		ELSE message.message_type
-	END AS 'Message Type',
-	message.text_data AS 'Message',
-	message_media.file_path AS 'Local Path to Media',
-	printf("%,d", message_media.file_size) AS 'Media File Size (bytes)',
-	message_media.width AS 'Media Width',
-	message_media.height AS 'Media Height',
-	CASE
-		WHEN message_location.latitude IS NULL THEN 'n/a'
-		ELSE message_location.latitude
-	END AS 'Shared Latitude/Starting Latitude (Live Location)',
-	message_location.longitude AS 'Shared Longitude/Starting Longitude (Live Location)',
-	message_location.live_location_share_duration AS 'Duration Live Location Shared (Seconds)',
-	message_location.live_location_final_latitude AS 'Final Live Latitude',
-	message_location.live_location_final_longitude AS 'Final Live Longitude',
-	datetime(message_location.live_location_final_timestamp / 1000, 'UNIXEPOCH') AS 'Final Location Timestamp'
+    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
+    --ATTACH DATABASE "[FILE-PATH-TO-DATABASE]" AS 'whatsapp_db';
+    message._id AS 'message._id',
+
+    datetime(message.timestamp / 1000, 'UNIXEPOCH') AS 'message.timestamp(UTC)',
+
+    CASE
+        WHEN datetime(message.received_timestamp / 1000, 'UNIXEPOCH') = '1970-01-01 00:00:00' THEN '[N/A]'
+        ELSE datetime(message.received_timestamp / 1000, 'UNIXEPOCH')
+    END AS 'message.received_timestamp(UTC)',
+
+    chat.subject AS 'chat.subject',
+
+    CASE
+        WHEN message.from_me = 1 THEN 'Self'
+        ELSE wa_contacts.wa_name
+    END AS 'message.from_me',
+
+    CASE
+        WHEN message.from_me = 0 THEN '0  [Incoming]'
+        WHEN message.from_me = 1 THEN '1  [Outgoing]'
+    END AS 'message.from_me',
+
+    CASE message.message_type
+        WHEN 0 THEN '0  [Text]'
+        WHEN 1 THEN '1  [Picture]'
+        WHEN 2 THEN '2  [Audio]'
+        WHEN 3 THEN '3  [Video]'
+        WHEN 5 THEN '5  [Static Location]'
+        WHEN 7 THEN '7  [System Message]'
+        WHEN 9 THEN '9  [Document]'
+        WHEN 16 THEN '16  [Live Location]'
+        ELSE message.message_type
+    END AS 'message.message_type',
+
+    message.text_data AS 'message.text_data',
+    message_media.file_path AS 'message_media.file_path',
+    printf("%,d", message_media.file_size) AS 'message_media.file_size(bytes)',
+    message_media.width AS 'message_media.width',
+    message_media.height AS 'message_media.height',
+
+    CASE
+        WHEN message_location.latitude IS NULL THEN '[N/A]'
+        ELSE message_location.latitude
+    END AS 'message_location.latitude(LiveLocation)',
+
+    message_location.longitude AS 'message_location.longitude(LiveLocation)',
+    message_location.live_location_share_duration AS 'message_location.live_location_share_duration(seconds)',
+    message_location.live_location_final_latitude AS 'message_location.live_location_final_latitude',
+    message_location.live_location_final_longitude AS 'message_location.live_location_final_longitude',
+
+    datetime(message_location.live_location_final_timestamp / 1000, 'UNIXEPOCH') AS 'message_location.live_location_final_timestamp(UTC)'
+
 
 FROM message
-	JOIN chat ON chat._id = message.chat_row_id
-	LEFT JOIN jid ON jid._id = message.sender_jid_row_id
-	LEFT JOIN message_media ON message_media.message_row_id = message._id
-	LEFT JOIN message_location ON message_location.message_row_id = message._id
-	LEFT JOIN wa_contacts ON wa_contacts.jid = jid.raw_string
+    JOIN chat ON chat._id = message.chat_row_id
+    LEFT JOIN jid ON jid._id = message.sender_jid_row_id
+    LEFT JOIN message_media ON message_media.message_row_id = message._id
+    LEFT JOIN message_location ON message_location.message_row_id = message._id
+    LEFT JOIN wa_contacts ON wa_contacts.jid = jid.raw_string
+
 
 /* Will indicate whether the message is a group message */
 WHERE message.recipient_count >= 1
+
 
 ORDER BY message.timestamp ASC

@@ -23,7 +23,7 @@ SELECT
     ZLIVEUSAGE.ZXOUT AS 'ZLIVEUSAGE.ZXOUT',
 
     /* Source for each line of data */
-    'Table: ZLIVEUSAGE(Z_PK: ' || ZLIVEUSAGE.Z_PK || ')' AS 'DATA_SOURCE'
+    'netusage.sqlite; Table: ZLIVEUSAGE(Z_PK: ' || ZLIVEUSAGE.Z_PK || ')' AS 'DATA_SOURCE'
 
 
 FROM ZLIVEUSAGE

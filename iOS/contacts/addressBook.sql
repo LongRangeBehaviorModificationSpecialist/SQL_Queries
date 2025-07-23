@@ -16,10 +16,13 @@ SELECT
 
     (SELECT value FROM ABMultiValue WHERE property = 3 AND record_id = ABPerson.ROWID AND label = (
         SELECT ROWID FROM ABMultiValueLabel WHERE value = '_$!<Work>!$_')) AS 'WorkPhone',
+
     (SELECT value FROM ABMultiValue WHERE property = 3 AND record_id = ABPerson.ROWID AND label = (
         SELECT ROWID FROM ABMultiValueLabel WHERE value = '_$!<Mobile>!$_')) AS 'MobilePhone',
+
     (SELECT value FROM ABMultiValue WHERE property = 3 AND record_id = ABPerson.ROWID AND label = (
         SELECT ROWID FROM ABMultiValueLabel WHERE value = '_$!<Home>!$_')) AS 'HomePhone',
+
     (SELECT value FROM ABMultiValue WHERE property = 3 AND record_id = ABPerson.ROWID AND label IS NULL) AS 'Phone(Other)',
 
     (SELECT group_concat(value, ' | ') FROM ABMultiValue WHERE property = 4 AND record_id = ABPerson.ROWID) AS 'Email',
@@ -27,15 +30,19 @@ SELECT
     (SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
         SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID) AND key = (
             SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER(value) = 'street')) AS 'Address',
+
     (SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
         SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID) AND key = (
             SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER(value) = 'city')) AS 'City',
+
     (SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
         SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID) AND key = (
             SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER(value) = 'state')) AS 'State',
+
     (SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
         SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID) AND key = (
             SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER(value) = 'zip')) AS 'ZipCode',
+
     (SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
         SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID) AND key = (
             SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER(value) = 'country')) AS 'Country',
@@ -43,16 +50,17 @@ SELECT
     (SELECT GROUP_CONCAT(value, '; ') FROM ABMultiValue WHERE property = 22 AND record_id = ABPerson.ROWID) AS 'URL',
 
     CASE
-        WHEN ABPersonFullTextSearch_content.c21RelatedNames IS NULL THEN 'n/a'
+        WHEN ABPersonFullTextSearch_content.c21RelatedNames IS NULL THEN '[N/A]'
         ELSE ABPersonFullTextSearch_content.c21RelatedNames
-    END AS 'FullTextSearch.c21RelatedNames',
+    END AS 'ABPersonFullTextSearch_content.c21RelatedNames',
+
     ABPersonFullTextSearch_content.c19SocialProfile AS 'FullTextSearch.c19SocialProfile',
 
     (SELECT GROUP_CONCAT(
         CASE ABMultiValueEntry.key
-            WHEN 1 THEN 'Service: ' || value
-            WHEN 2 THEN 'Username: ' || value
-            WHEN 3 THEN 'URL: ' || value
+            WHEN 1 THEN '1  [Service: ' || value || ']'
+            WHEN 2 THEN '2  [Username: ' || value || ']'
+            WHEN 3 THEN '3  [URL: ' || value || ']'
             ELSE ABMultiValueEntry.key || ': ' || value
         END, ' | ')
         FROM ABMultiValueEntry WHERE parent_id IN (
@@ -75,7 +83,7 @@ SELECT
     END AS 'ABPerson.ModificationDate(UTC)',
 
     /* Source for each line of data */
-    '/private/var/mobile/Library/AddressBook/AddressBook.sqlitedb; Table: ABPerson(ROWID:' || ABPerson.ROWID || ')' AS 'DATA_SOURCE'
+    'AddressBook.sqlitedb; Table: ABPerson(ROWID:' || ABPerson.ROWID || ')' AS 'DATA_SOURCE'
 
 
 FROM ABPerson

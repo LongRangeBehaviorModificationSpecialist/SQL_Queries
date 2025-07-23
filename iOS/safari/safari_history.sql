@@ -20,12 +20,12 @@ SELECT
 
     history_visits.title AS 'history_visits.title',
     history_items.url AS 'history_items.url',
-    --history_items.visit_count AS 'VisitCount',
+    history_items.visit_count AS 'VisitCount',
     history_visits.redirect_source AS 'history_visits.redirect_source',
     history_visits.redirect_destination AS 'history_visits.redirect_destination',
 
     /* Source for each line of data */
-    '/private/var/mobile/Library/Safari/History.db; Table: history_items(id:' ||  history_items.id || '), Table: history_visits(id:' || history_visits.id || ')' AS 'DATA_SOURCE'
+    'History.db; Table: history_items(id:' ||  history_items.id || '), Table: history_visits(id:' || history_visits.id || ')' AS 'DATA_SOURCE'
 
 
 FROM history_visits

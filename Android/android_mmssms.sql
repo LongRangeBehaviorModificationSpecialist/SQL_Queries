@@ -11,13 +11,13 @@ SELECT
     /* Date/Time of the message in UTC */
     CASE
         WHEN pdu.date > 0 THEN strftime('%Y-%m-%d %H:%M:%S', pdu.date, 'UNIXEPOCH')
-        ELSE 'n/a'
+        ELSE '[N/A]'
     END AS 'pdu.date',
 
     /* Date/Time the message was sent in UTC */
     CASE
         WHEN pdu.date_sent > 0 THEN strftime('%Y-%m-%d %H:%M:%S', pdu.date_sent, 'UNIXEPOCH')
-        ELSE 'n/a'
+        ELSE '[N/A]'
     END as 'pdu.date_sent(UTC)',
 
     /* Message direction (incoming/outgoing) */
@@ -48,13 +48,13 @@ SELECT
 
     /* If the message was CCed to anyone, it will be listed here */
     CASE
-        WHEN (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=130) IS NULL THEN 'n/a'
+        WHEN (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=130) IS NULL THEN '[N/A]'
         ELSE (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=130)
     END AS 'CC',
 
     /* If the message was BCCed to anyone, it will be listed here */
     CASE
-        WHEN (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=129) IS NULL THEN 'n/a'
+        WHEN (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=129) IS NULL THEN '[N/A]'
         ELSE (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=129)
     END AS 'BCC',
 
@@ -64,7 +64,7 @@ SELECT
 
     /* File name of the attached file (if any) */
     CASE
-        WHEN part.cl IS NULL THEN 'n/a'
+        WHEN part.cl IS NULL THEN '[N/A]'
         ELSE part.cl
     END AS 'part.cl',
 
@@ -107,13 +107,13 @@ SELECT
         ELSE sms.address
     END AS 'Address',
     CASE
-        WHEN sms.person IS NULL THEN 'n/a'
+        WHEN sms.person IS NULL THEN '[N/A]'
         ELSE sms.person
     END AS 'Person',
     /* Date/Time of the message */
     CASE
         WHEN sms.date > 0 THEN strftime('%Y-%m-%d %H:%M:%S', sms.date / 1000, 'UNIXEPOCH')
-        ELSE 'n/a'
+        ELSE '[N/A]'
     END AS 'Date/Time (UTC)',
     /* Message direction (incoming/outgoing) */
     CASE sms.type
@@ -129,7 +129,7 @@ SELECT
     END AS 'Message Read',
     /* Was a subject listed for the message */
     CASE
-        WHEN sms.subject IS NULL THEN 'n/a'
+        WHEN sms.subject IS NULL THEN '[N/A]'
         ELSE sms.subject
     END AS 'Subject',
     /* Message content */
@@ -137,7 +137,7 @@ SELECT
     /* Removes unnecessary text at the start of the string to leave just the 10-digit phone number */
     /* Formats string as a U.S. phone number, i.e. (###) ###-#### */
      CASE
-        WHEN sms.service_center IS NULL THEN 'n/a'
+        WHEN sms.service_center IS NULL THEN '[N/A]'
         WHEN LENGTH(sms.service_center) = 12 AND sms.service_center LIKE '%+1%' THEN '(' || SUBSTR(sms.service_center,3,3) || ') ' || SUBSTR(sms.service_center,6,3) || '-' || SUBSTR(sms.service_center,9,4)
         ELSE sms.service_center
     END AS 'Service Center',

@@ -4,14 +4,14 @@ CREATE view group_messages AS
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RecordNo.',
-    ZWACHATSESSION.ZPARTNERNAME AS 'GroupName',
+    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
+    ZWACHATSESSION.ZPARTNERNAME AS 'ZWACHATSESSION.ZPARTNERNAME',
 
     CASE ZWAMESSAGE.ZISFROMME
-        WHEN 0 THEN 'Incoming'
-        WHEN 1 THEN 'Outgoing'
+        WHEN 0 THEN '0  [Incoming]'
+        WHEN 1 THEN '1  [Outgoing]'
         ELSE ZWAMESSAGE.ZISFROMME
-    END AS 'MessageDirection',
+    END AS 'ZWAMESSAGE.ZISFROMME',
 
     CASE ZWAMESSAGE.ZISFROMME
         WHEN 0 THEN ZWAMESSAGE.ZFROMJID
@@ -33,11 +33,11 @@ SELECT
         ELSE 'unknown'
     END AS 'MessageType',
 
-    datetime(ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'unixepoch') AS 'MessageDateTIme(UTC)',
-    datetime(ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'unixepoch', 'localtime') AS 'MessageDateTime(Local)',
-    ZWAMESSAGE.ZTEXT AS 'MessageText',
-    friend_chat_session.ZPARTNERNAME AS 'FriendName',
-    ZWAGROUPMEMBER.ZMEMBERJID AS 'FriendID'
+    datetime(ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'unixepoch') AS 'ZWAMESSAGE.ZMESSAGEDATE(UTC)',
+
+    ZWAMESSAGE.ZTEXT AS 'ZWAMESSAGE.ZTEXT',
+    friend_chat_session.ZPARTNERNAME AS 'friend_chat_session.ZPARTNERNAME',
+    ZWAGROUPMEMBER.ZMEMBERJID AS 'ZWAGROUPMEMBER.ZMEMBERJID'
 
 
 FROM ZWACHATSESSION

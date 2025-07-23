@@ -13,11 +13,13 @@ SELECT
     datetime ( LAST_MODIFIED, 'UNIXEPOCH' ) AS 'Last Modified',
     SERVICE AS 'Service',
     CLIENT AS 'Client',
+
     CASE ALLOWED
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
         ELSE 'Contact Examiner for Further'
     END AS 'Allowed',
+
     CLIENT_TYPE AS 'Client Type',
     PROMPT_COUNT AS 'Prompt Count',
     INDIRECT_OBJECT_IDENTIFIER AS 'Indirect Object Identifier'

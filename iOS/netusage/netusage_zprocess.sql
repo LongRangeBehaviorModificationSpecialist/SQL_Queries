@@ -10,7 +10,7 @@ SELECT
     ZPROCESS.ZBUNDLENAME AS 'ZPROCESS.ZBUNDLENAME',
 
     /* Source for each line of data */
-    'Table: ZPROCESS(Z_PK: ' || ZPROCESS.Z_PK || ')' AS 'DATA_SOURCE'
+    'netusage.sqlite; Table: ZPROCESS(Z_PK: ' || ZPROCESS.Z_PK || ')' AS 'DATA_SOURCE'
 
 
 FROM ZPROCESS
