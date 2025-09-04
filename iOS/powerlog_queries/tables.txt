@@ -1,0 +1,39 @@
+============
+iOS 18
+============
+
+USEFUL URL: https://doubleblak.com/blogPost.php?k=powerlog
+
+
+TIMEZONE OFFSET TABLE -> PLSTORAGEOPERATOR_EVENTFORWARD_TIMEOFFSET
+(NOTE: Use the offset that is closest to the timestamp without going over.)
+
+
+Application Usage -> Table: PLAPPTIMESERVICE_AGGREGATE_APPRUNTIME
+
+Application Deleted -> Table: PLAPPLICATIONAGENT_EVENTNONE_ALLAPPS (Where APPDELETEDDATE > 0)
+
+Application State -> Table: PLApplicationAgent_EventForward_Application
+
+Battery Level -> Table: PLBATTERYAGENT_EVENTBACKWARD_BATTERY
+
+Camera State -> Table: PLCAMERAAGENT_EVENTFORWARD_CAMERA
+
+Cell Data Usage (?) -> Table: PLAppTimeService_Aggregate_CellularCondition
+
+Device Lock State -> Table: PLSPRINGBOARDAGENT_EVENTFORWARD_SBLOCK
+
+Flashlight Usage -> Table: PLCAMERAAGENT_EVENTFORWARD_TORCH
+
+In Call Service -> Table: PLXPCAgent_EventForward_InCallService
+                   Table: PLApplicationAgent_EventNone_AllApps
+
+Lightning Cable Status -> Table: PLBATTERYAGENT_EVENTFORWARD_LIGHTNINGCONNECTORSTATUS
+
+Process Data Usage -> Table: PLPROCESSNETWORKAGENT_EVENTINTERVAL_USAGEDIFF
+
+Screen Autolock -> Table: PLSPRINGBOARDAGENT_EVENTPOINT_SBAUTOLOCK
+
+Timezone Information -> Table: PLLOCALEAGENT_EVENTFORWARD_TIMEZONE
+
+Usage (Overall) -> Table: PLAppTimeService_Aggregate_UsageTime

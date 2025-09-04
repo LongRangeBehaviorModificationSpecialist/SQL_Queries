@@ -1,5 +1,8 @@
 /*
-  DLU = 01-Aug-2025
+    [DLU]
+        01-Aug-2025
+    [DATABASE PATH]
+        \private\var\mobile\Media\PhotoData\Photos.sqlite
 */
 
 SELECT

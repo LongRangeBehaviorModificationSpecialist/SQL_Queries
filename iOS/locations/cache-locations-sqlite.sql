@@ -1,6 +1,10 @@
 /*
-File Location in iOS: /private/var/mobile/Library/Caches/com.apple.routined/Cache.sqlite
-iOS version: 16
+    [DLU]
+        04-Sep-2025
+    [DATABASE PATH]
+        /private/var/mobile/Library/Caches/com.apple.routined/Cache.sqlite
+    [VERSION]
+        iOS 16
 */
 
 SELECT

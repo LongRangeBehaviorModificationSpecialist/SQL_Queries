@@ -1,3 +1,11 @@
+/*
+    [DLU]
+        03-Sep-2025
+    [OS Version]
+        Android 16
+*/
+
+
 SELECT
 
     chat_messages.message_id AS 'MessageID',
