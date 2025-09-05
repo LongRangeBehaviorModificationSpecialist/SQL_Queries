@@ -1,41 +1,42 @@
 /*
-    [DLU]
-        2023-10-20
-    [DATABASE PATH]
-        /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db
+[DLU]
+    05-Sep-2025
+[DATABASE PATH]
+    /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db
 */
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'Record No.',
+    ROW_NUMBER() OVER() AS 'ROW_NUMBER',
     ZOBJECT.Z_PK AS 'ZOBJECT.Z_PK',
-    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'EntryCreationDateTime(UTC)',
-    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'StartDateTime(UTC)',
-    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'EndDateTime(UTC)',
-    (ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE) AS 'Usage(Seconds)',
-    (ZOBJECT.ZSECONDSFROMGMT / 3600) AS 'GMTOffset',
+
+    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'ZOBJECT.ZCREATIONDATE(UTC)',
+    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'ZOBJECT.ZSTARTDATE(UTC)',
+    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'ZOBJECT.ZENDDATE(UTC)',
+    (ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE) AS 'USAGE(Seconds)',
+    (ZOBJECT.ZSECONDSFROMGMT / 3600) AS 'GMTOFFSET',
 
     CASE ZOBJECT.ZSTARTDAYOFWEEK
-        WHEN '1' THEN 'Sunday'
-        WHEN '2' THEN 'Monday'
-        WHEN '3' THEN 'Tuesday'
-        WHEN '4' THEN 'Wednesday'
-        WHEN '5' THEN 'Thursday'
-        WHEN '6' THEN 'Friday'
-        WHEN '7' THEN 'Saturday'
+        WHEN '1' THEN '1 [Sunday]'
+        WHEN '2' THEN '2 [Monday]'
+        WHEN '3' THEN '3 [Tuesday]'
+        WHEN '4' THEN '4 [Wednesday]'
+        WHEN '5' THEN '5 [Thursday]'
+        WHEN '6' THEN '6 [Friday]'
+        WHEN '7' THEN '7 [Saturday]'
         ELSE ZOBJECT.ZSTARTDAYOFWEEK
-    END AS 'DayOfWeek',
+    END AS 'ZOBJECT.ZSTARTDAYOFWEEK',
 
-    ZOBJECT.ZSTREAMNAME AS 'StreamName',
+    ZOBJECT.ZSTREAMNAME AS 'ZOBJECT.ZSTREAMNAME',
 
     CASE ZOBJECT.ZVALUEINTEGER
-        WHEN '0.0' THEN 'NotLit'
-        WHEN '1.0' THEN 'Backlit'
+        WHEN '0.0' THEN '0.0 [Not Lit]'
+        WHEN '1.0' THEN '1.0 [Backlit]'
         ELSE ZOBJECT.ZVALUEINTEGER
-    END AS 'BacklitActive',
+    END AS 'ZOBJECT.ZVALUEINTEGER',
 
     /* Source for each line of data */
-    '/private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS 'DataSource'
+    'knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS 'DATA_SOURCE'
 
 
 FROM ZOBJECT

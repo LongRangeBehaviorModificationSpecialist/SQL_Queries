@@ -1,5 +1,6 @@
 /*
-DLU = 22-Jul-2025
+[DLU]
+    05-Sep-2025
 */
 
 SELECT
@@ -18,30 +19,31 @@ SELECT
     ZASSET.ZUUID AS 'ZASSET.ZUUID',
 
     CASE ZASSET.ZKIND
-        WHEN 0 THEN '0  [Photo]'
-        WHEN 1 THEN '1  [Video]'
+        WHEN 0 THEN '0 [Photo]'
+        WHEN 1 THEN '1 [Video]'
+        ELSE 'Unknown Value: ' || ZASSET.ZKIND
     END AS 'ZASSET.ZKIND',
 
     CASE ZASSET.ZKINDSUBTYPE
-        WHEN 0 THEN '0  [Still Photo]'
-        WHEN 1 THEN '1  [Still Testing]'
-        WHEN 2 THEN '2  [Live Photo]'
-        WHEN 3 THEN '3  [Screenshot]'
-        WHEN 10 THEN '10  [SpringBoard Screenshot]'
-        WHEN 100 THEN '100  [Video]'
-        WHEN 101 THEN '101  [Slow Mo Video]'
-        WHEN 102 THEN '102  [Time lapse Video]'
-        WHEN 103 THEN '103  [Replay Screen Recording]'
-        ELSE 'Unknown Value: ' || ZASSET.ZKINDSUBTYPE || ''
+        WHEN 0 THEN '0 [Still Photo]'
+        WHEN 1 THEN '1 [Still Testing]'
+        WHEN 2 THEN '2 [Live Photo]'
+        WHEN 3 THEN '3 [Screenshot]'
+        WHEN 10 THEN '10 [SpringBoard Screenshot]'
+        WHEN 100 THEN '100 [Video]'
+        WHEN 101 THEN '101 [Slow Mo Video]'
+        WHEN 102 THEN '102 [Time lapse Video]'
+        WHEN 103 THEN '103 [Replay Screen Recording]'
+        ELSE 'Unknown Value: ' || ZASSET.ZKINDSUBTYPE
     END AS 'ZASSET.ZKINDSUBTYPE',
 
     CASE ZASSET.ZPLAYBACKSTYLE
-        WHEN 1 THEN '1  [Image]'
-        WHEN 2 THEN '2  [Image Animated]'
-        WHEN 3 THEN '3  [Live Photo]'
-        WHEN 4 THEN '4  [Video]'
-        WHEN 5 THEN '5  [Video Looping]'
-        ELSE 'Unknown Value: ' || ZASSET.ZPLAYBACKSTYLE || ''
+        WHEN 1 THEN '1 [Image]'
+        WHEN 2 THEN '2 [Image Animated]'
+        WHEN 3 THEN '3 [Live Photo]'
+        WHEN 4 THEN '4 [Video]'
+        WHEN 5 THEN '5 [Video Looping]'
+        ELSE 'Unknown Value: ' || ZASSET.ZPLAYBACKSTYLE
     END AS 'ZASSET.ZPLAYBACKSTYLE',
 
     ZEXTENDEDATTRIBUTES.ZCAMERAMAKE AS 'ZEXTENDEDATTRIBUTES.ZCAMERAMAKE',
@@ -50,7 +52,7 @@ SELECT
     ZEXTENDEDATTRIBUTES.ZLENSMODEL AS 'ZEXTENDEDATTRIBUTES.ZLENSMODEL',
 
     CASE ZASSET.ZDURATION
-        WHEN 0 THEN '0  [N/A]'
+        WHEN 0 THEN '0 [N/A]'
         ELSE ZASSET.ZDURATION
     END AS 'ZASSET.ZDURATION',
 
@@ -83,15 +85,15 @@ SELECT
     ZADDITIONALASSETATTRIBUTES.ZSYNDICATIONIDENTIFIER AS 'ZADDITIONALASSETATTRIBUTES.ZSYNDICATIONIDENTIFIER',
 
     CASE ZASSET.ZFAVORITE
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
-        ELSE ZASSET.ZFAVORITE
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
+        ELSE 'Unknown Value: ' || ZASSET.ZFAVORITE
     END AS 'ZASSET.ZFAVORITE',
 
     CASE ZASSET.ZHIDDEN
-        WHEN 0 THEN '0  [Not Hidden]'
-        WHEN 1 THEN '1  [Hidden]'
-        ELSE ZASSET.ZHIDDEN
+        WHEN 0 THEN '0 [Not Hidden]'
+        WHEN 1 THEN '1 [Hidden]'
+        ELSE 'Unknown Value: ' || ZASSET.ZHIDDEN
     END AS 'ZASSET.ZHIDDEN',
 
     ZADDITIONALASSETATTRIBUTES.ZPENDINGVIEWCOUNT AS 'ZADDITIONALASSETATTRIBUTES.ZPENDINGVIEWCOUNT',
@@ -104,9 +106,9 @@ SELECT
     ZADDITIONALASSETATTRIBUTES.ZUPLOADATTEMPTS AS 'ZADDITIONALASSETATTRIBUTES.ZUPLOADATTEMPTS',
 
     CASE ZASSET.ZTRASHEDSTATE
-        WHEN 1 THEN '1  [In Trash]'
-        WHEN 0 THEN '0  [Not In Trash]'
-        ELSE ZASSET.ZTRASHEDSTATE
+        WHEN 0 THEN '0 [Not In Trash]'
+        WHEN 1 THEN '1 [In Trash]'
+        ELSE 'Unknown Value: ' || ZASSET.ZTRASHEDSTATE
     END AS 'ZASSET.ZTRASHEDSTATE',
 
     CASE
@@ -133,20 +135,20 @@ SELECT
     ZMOMENT.ZUUID AS 'ZMOMENT.UUID',
 
     CASE ZMOMENT.ZAPPROXIMATELATITUDE
-        WHEN -180.0 THEN '[N/A]'
+        WHEN -180.0 THEN '[-180.0]'
         ELSE ZMOMENT.ZAPPROXIMATELATITUDE
     END AS 'ZMOMENT.ZAPPROXIMATELATITUDE',
 
     CASE ZMOMENT.ZAPPROXIMATELONGITUDE
-        WHEN -180.0 THEN '[N/A]'
+        WHEN -180.0 THEN '[-180.0]'
         ELSE ZMOMENT.ZAPPROXIMATELONGITUDE
     END AS 'ZMOMENT.ZAPPROXIMATELONGITUDE',
 
     CASE ZINTERNALRESOURCE.ZLOCALAVAILABILITY
-        WHEN -1 THEN '(-1)  [IR Asset Not Available Local Device]'
-        WHEN 1 THEN '1  [IR Asset Available Local Device]'
-        WHEN -32768 THEN '(-32768)  [IR Asset SWY Linked Asset]'
-        ELSE 'Unknown Value: ' || ZINTERNALRESOURCE.ZLOCALAVAILABILITY || ''
+        WHEN -1 THEN '(-1) [IR Asset Not Available Local Device]'
+        WHEN 1 THEN '1 [IR Asset Available Local Device]'
+        WHEN -32768 THEN '(-32768) [IR Asset SWY Linked Asset]'
+        ELSE 'Unknown Value: ' || ZINTERNALRESOURCE.ZLOCALAVAILABILITY
     END AS 'ZINTERNALRESOURCE.ZLOCALAVAILABILITY',
 
     datetime(ZASSET.ZCLOUDSERVERPUBLISHDATE + 978307200, 'UNIXEPOCH') AS 'ZASSET.ZCLOUDSERVERPUBLISHDATE(UTC)',
@@ -155,22 +157,23 @@ SELECT
     ZASSET.ZCLOUDBATCHID AS 'ZASSET.ZCLOUDBATCHID',
 
     CASE ZASSET.ZCLOUDPLACEHOLDERKIND
-        WHEN 0 THEN '0  [Local&CloudMaster Asset]'
-        WHEN 1 THEN '1  [Still Testing]'
-        WHEN 2 THEN '2  [Still Testing]'
-        WHEN 3 THEN '3  [JPG Asset Only PhotoData/Thumb/V2]'
-        WHEN 4 THEN '4  [LPL JPG Asset CPL Asset HEIC JPG JPEG MOV PNG]'
-        WHEN 5 THEN '5  [Asset synced via iCloud Photos 2 Device]'
-        WHEN 6 THEN '6  [Still Testing]'
-        WHEN 7 THEN '7  [LPL poster JPG Asset CPL Asset MP4]'
-        WHEN 8 THEN '8  [LPL JPG Asset CPL Asset LivePhoto MOV]'
-        WHEN 9 THEN '9  [CPL MP4 Asset Saved 2 LPL]'
-        ELSE 'Unknown Value: ' || ZASSET.ZCLOUDPLACEHOLDERKIND || ''
+        WHEN 0 THEN '0 [Local&CloudMaster Asset]'
+        WHEN 1 THEN '1 [Still Testing]'
+        WHEN 2 THEN '2 [Still Testing]'
+        WHEN 3 THEN '3 [JPG Asset Only PhotoData/Thumb/V2]'
+        WHEN 4 THEN '4 [LPL JPG Asset CPL Asset HEIC JPG JPEG MOV PNG]'
+        WHEN 5 THEN '5 [Asset synced via iCloud Photos 2 Device]'
+        WHEN 6 THEN '6 [Still Testing]'
+        WHEN 7 THEN '7 [LPL poster JPG Asset CPL Asset MP4]'
+        WHEN 8 THEN '8 [LPL JPG Asset CPL Asset LivePhoto MOV]'
+        WHEN 9 THEN '9 [CPL MP4 Asset Saved 2 LPL]'
+        ELSE 'Unknown Value: ' || ZASSET.ZCLOUDPLACEHOLDERKIND
     END AS 'ZASSET.ZCLOUDPLACEHOLDERKIND',
 
     ZASSET.ZCLOUDDOWNLOADREQUESTS AS 'ZASSET.ZCLOUDDOWNLOADREQUESTS',
 
     /* Source for each line of data */
+    -- /LOCAL PHOTO LIBRARY/
     '/private/var/mobile/Media/PhotoData/Photos.sqlite; ZASSET(Z_PK:' || ZASSET.Z_PK || ')' AS 'DATA_SOURCE'
 
 

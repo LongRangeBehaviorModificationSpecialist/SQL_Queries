@@ -1,410 +1,420 @@
 SELECT
 
-    ParentzGenAlbum.ZUUID AS 'ParentzGenAlbum-UUID',
-    ParentzGenAlbum.ZCLOUDGUID AS 'ParentzGenAlbum-Cloud GUID',
-    ParentzGenAlbum.Z_PK AS 'ParentzGenAlbum-zPK',
+    /* Add a row number at the beggining of each row */
+    ROW_NUMBER() OVER() AS 'ROW_NUMBER',
+    ParentzGenAlbum.ZUUID AS 'ParentzGenAlbum.ZUUID',
+    ParentzGenAlbum.ZCLOUDGUID AS 'ParentzGenAlbum.ZCLOUDGUID',
+    ParentzGenAlbum.Z_PK AS 'ParentzGenAlbum.Z_PK',
 
     CASE ParentzGenAlbum.ZKIND
-        WHEN 2 THEN '2-Local Device-iCloud Photos Album-2'
-        WHEN 1505 THEN '1505-Shared Album-1505'
-        WHEN 1506 THEN '1506-Import_Session_AssetsImportedatSameTime-1506_RT'
-        WHEN 1508 THEN '1508-My_Projects_Album_CalendarCardEct_RT'
-        WHEN 1510 THEN '1510-Duplicate_Album-Pending_Merge-1510'
-        WHEN 1552 THEN '1552-StillTesting'
-        WHEN 1600 THEN '1600-StillTesting'
-        WHEN 1602 THEN '1602-StillTesting'
-        WHEN 1605 THEN '1605-StillTesting'
-        WHEN 1606 THEN '1606-StillTesting'
-        WHEN 1607 THEN '1607-StillTesting'
-        WHEN 1608 THEN '1608-StillTesting'
-        WHEN 1609 THEN '1609-StillTesting'
-        WHEN 1610 THEN '1610-StillTesting'
-        WHEN 1611 THEN '1611-StillTesting'
-        WHEN 1612 THEN '1612-StillTesting'
-        WHEN 1613 THEN '1613-StillTesting'
-        WHEN 1614 THEN '1614-StillTesting'
-        WHEN 1615 THEN '1615-StillTesting'
-        WHEN 1616 THEN '1616-StillTesting'
-        WHEN 1617 THEN '1617-StillTesting'
-        WHEN 1618 THEN '1618-StillTesting'
-        WHEN 1619 THEN '1619-StillTesting'
-        WHEN 1620 THEN '1620-StillTesting'
-        WHEN 1621 THEN '1621-StillTesting'
-        WHEN 1622 THEN '1622-StillTesting'
-        WHEN 1623 THEN '1623-StillTesting'
-        WHEN 1624 THEN '1624-StillTesting'
-        WHEN 1625 THEN '1625-StillTesting'
-        WHEN 1626 THEN '1626-StillTesting'
-        WHEN 1627 THEN '1627-StillTesting'
-        WHEN 1628 THEN '1628-StillTesting'
-        WHEN 1630 THEN '1630-StillTesting'
-        WHEN 3571 THEN '3571-Progress-Sync-3571'
-        WHEN 3572 THEN '3572-Progress-OTA-Restore-3572'
-        WHEN 3573 THEN '3573-Progress-FS-Import-3573'
-        WHEN 3998 THEN '3998-Project Root Folder-3998'
-        WHEN 3999 THEN '3999-Parent_Folder_for_Generic_Album-3999'
-        WHEN 4000 THEN '4000-Parent_is_Folder_on_Local_Device-4000'
-        WHEN 4001 THEN '4001-StillTesting'
-        WHEN 4002 THEN '4002-StillTesting'
-        WHEN 4003 THEN '4003-StillTesting'
-        ELSE 'Unknown-New-Value!: ' || ParentzGenAlbum.ZKIND || ''
-    END AS 'ParentzGenAlbum-Kind',
+        WHEN 2 THEN '2 [Local Device iCloud Photos Album]'
+        WHEN 1505 THEN '1505 [Shared Album]'
+        WHEN 1506 THEN '1506 [Import Session AssetsImportedAtSameTime]'
+        WHEN 1508 THEN '1508 [My_Projects_Album_CalendarCardEct_RT]'
+        WHEN 1510 THEN '1510 [Duplicate Album Pending Merge]'
+        WHEN 1552 THEN '1552 [Still Testing]'
+        WHEN 1600 THEN '1600 [Still Testing]'
+        WHEN 1602 THEN '1602 [Still Testing]'
+        WHEN 1605 THEN '1605 [Still Testing]'
+        WHEN 1606 THEN '1606 [Still Testing]'
+        WHEN 1607 THEN '1607 [Still Testing]'
+        WHEN 1608 THEN '1608 [Still Testing]'
+        WHEN 1609 THEN '1609 [Still Testing]'
+        WHEN 1610 THEN '1610 [Still Testing]'
+        WHEN 1611 THEN '1611 [Still Testing]'
+        WHEN 1612 THEN '1612 [Still Testing]'
+        WHEN 1613 THEN '1613 [Still Testing]'
+        WHEN 1614 THEN '1614 [Still Testing]'
+        WHEN 1615 THEN '1615 [Still Testing]'
+        WHEN 1616 THEN '1616 [Still Testing]'
+        WHEN 1617 THEN '1617 [Still Testing]'
+        WHEN 1618 THEN '1618 [Still Testing]'
+        WHEN 1619 THEN '1619 [Still Testing]'
+        WHEN 1620 THEN '1620 [Still Testing]'
+        WHEN 1621 THEN '1621 [Still Testing]'
+        WHEN 1622 THEN '1622 [Still Testing]'
+        WHEN 1623 THEN '1623 [Still Testing]'
+        WHEN 1624 THEN '1624 [Still Testing]'
+        WHEN 1625 THEN '1625 [Still Testing]'
+        WHEN 1626 THEN '1626 [Still Testing]'
+        WHEN 1627 THEN '1627 [Still Testing]'
+        WHEN 1628 THEN '1628 [Still Testing]'
+        WHEN 1630 THEN '1630 [Still Testing]'
+        WHEN 3571 THEN '3571 [Progress-Sync]'
+        WHEN 3572 THEN '3572 [Progress-OTA-Restore]'
+        WHEN 3573 THEN '3573 [Progress-FS-Import]'
+        WHEN 3998 THEN '3998 [Project Root Folder]'
+        WHEN 3999 THEN '3999 [Parent_Folder_for_Generic_Album]'
+        WHEN 4000 THEN '4000 [Parent_is_Folder_on_Local_Device]'
+        WHEN 4001 THEN '4001 [Still Testing]'
+        WHEN 4002 THEN '4002 [Still Testing]'
+        WHEN 4003 THEN '4003 [Still Testing]'
+        ELSE 'Unknown Value: ' || ParentzGenAlbum.ZKIND || ''
+    END AS 'ParentzGenAlbum.ZKIND',
 
     CASE ParentzGenAlbum.ZCLOUDLOCALSTATE
-        WHEN 0 THEN '0-iCldPhotos-ON=Asset_In_Shared/Other_Album/iCldPhotos-OFF=Generic_Album-0'
-        WHEN 1 THEN '1-iCldPhotos-ON=Asset_In_Generic_Album-1'
-        ELSE 'Unknown-New-Value!: ' || ParentzGenAlbum.ZCLOUDLOCALSTATE || ''
-    END AS 'ParentzGenAlbum-Cloud-Local-State',
+        WHEN 0 THEN '0 [iCloud Photos ON=Asset_In_Shared/Other_Album/iCloud Photos-OFF=Generic_Album]'
+        WHEN 1 THEN '1 [iCloud Photos ON=Asset_In_Generic_Album]'
+        ELSE 'Unknown Value: ' || ParentzGenAlbum.ZCLOUDLOCALSTATE || ''
+    END AS 'ParentzGenAlbum.ZCLOUDLOCALSTATE',
 
-    ParentzGenAlbum.ZTITLE AS 'ParentzGenAlbum-Title',
+    ParentzGenAlbum.ZTITLE AS 'ParentzGenAlbum.ZTITLE',
 
-    datetime(ParentzGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'ParentzGenAlbum-Creation Date',
-    ParentzGenAlbum.ZPENDINGITEMSCOUNT AS 'ParentzGenAlbum-Pending Items Count',
+    datetime(ParentzGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'ParentzGenAlbum.ZCREATIONDATE(UTC)',
+
+    ParentzGenAlbum.ZPENDINGITEMSCOUNT AS 'ParentzGenAlbum.ZPENDINGITEMSCOUNT',
 
     CASE ParentzGenAlbum.ZPENDINGITEMSTYPE
-        WHEN 1 THEN 'No-1'
-        WHEN 24 THEN '24-StillTesting'
-        ELSE 'Unknown-New-Value!: ' || ParentzGenAlbum.ZPENDINGITEMSTYPE || ''
-    END AS 'ParentzGenAlbum-Pending Items Type',
+        WHEN 1 THEN '1 [No]'
+        WHEN 24 THEN '24 [Still Testing]'
+        ELSE 'Unknown Value: ' || ParentzGenAlbum.ZPENDINGITEMSTYPE || ''
+    END AS 'ParentzGenAlbum.ZPENDINGITEMSTYPE',
 
-    ParentzGenAlbum.ZSYNCEVENTORDERKEY AS 'ParentzGenAlbum-Sync Event Order Key',
+    ParentzGenAlbum.ZSYNCEVENTORDERKEY AS 'ParentzGenAlbum.ZSYNCEVENTORDERKEY',
 
     CASE ParentzGenAlbum.ZISPINNED
-        WHEN 0 THEN '0-ParentzGenAlbum Not Pinned-0'
-        WHEN 1 THEN '1-ParentzGenAlbum Pinned-1'
-        ELSE 'Unknown-New-Value!: ' || ParentzGenAlbum.ZISPINNED || ''
-    END AS 'ParentzGenAlbum-Pinned',
+        WHEN 0 THEN '0 [ParentzGenAlbum Not Pinned]'
+        WHEN 1 THEN '1 [ParentzGenAlbum Pinned]'
+        ELSE 'Unknown Value: ' || ParentzGenAlbum.ZISPINNED || ''
+    END AS 'ParentzGenAlbum.ZISPINNED',
 
     CASE ParentzGenAlbum.ZCUSTOMSORTKEY
-        WHEN 0 THEN '0-zGenAlbum-Sorted_Manually-0_RT'
-        WHEN 1 THEN '1-zGenAlbum-CusSrtAsc0=Sorted_Newest_First/CusSrtAsc1=Sorted_Oldest_First-1-RT'
-        WHEN 5 THEN '5-zGenAlbum-Sorted_by_Title-5_RT'
-        ELSE 'Unknown-New-Value!: ' || ParentzGenAlbum.ZCUSTOMSORTKEY || ''
-    END AS 'ParentzGenAlbum-Custom Sort Key',
+        WHEN 0 THEN '0 [zGenAlbum-Sorted_Manually]'
+        WHEN 1 THEN '1 [zGenAlbum-CusSrtAsc0=Sorted_Newest_First/CusSrtAsc1=Sorted_Oldest_First]'
+        WHEN 5 THEN '5 [zGenAlbum-Sorted_by_Title]'
+        ELSE 'Unknown Value: ' || ParentzGenAlbum.ZCUSTOMSORTKEY || ''
+    END AS 'ParentzGenAlbum.ZCUSTOMSORTKEY',
 
     CASE ParentzGenAlbum.ZCUSTOMSORTASCENDING
-        WHEN 0 THEN '0-zGenAlbum-Sorted_Newest_First-0'
-        WHEN 1 THEN '1-zGenAlbum-Sorted_Oldest_First-1'
-        ELSE 'Unknown-New-Value!: ' || ParentzGenAlbum.ZCUSTOMSORTASCENDING || ''
-    END AS 'ParentzGenAlbum-Custom Sort Ascending',
+        WHEN 0 THEN '0 [zGenAlbum-Sorted_Newest_First]'
+        WHEN 1 THEN '1 [zGenAlbum-Sorted_Oldest_First]'
+        ELSE 'Unknown Value: ' || ParentzGenAlbum.ZCUSTOMSORTASCENDING || ''
+    END AS 'ParentzGenAlbum.ZCUSTOMSORTASCENDING',
 
     CASE ParentzGenAlbum.ZISPROTOTYPE
-        WHEN 0 THEN '0-ParentzGenAlbum Not Prototype-0'
-        WHEN 1 THEN '1-ParentzGenAlbum Prototype-1'
-        ELSE 'Unknown-New-Value!: ' || ParentzGenAlbum.ZISPROTOTYPE || ''
-    END AS 'ParentzGenAlbum-Is Prototype',
+        WHEN 0 THEN '0 [ParentzGenAlbum Not Prototype]'
+        WHEN 1 THEN '1 [ParentzGenAlbum Prototype]'
+        ELSE 'Unknown Value: ' || ParentzGenAlbum.ZISPROTOTYPE || ''
+    END AS 'ParentzGenAlbum.ZISPROTOTYPE',
 
     CASE ParentzGenAlbum.ZTRASHEDSTATE
-        WHEN 0 THEN '0-ParentzGenAlbum Not In Trash-0'
-        WHEN 1 THEN '1-ParentzGenAlbum Album In Trash-1'
-        ELSE 'Unknown-New-Value!: ' || ParentzGenAlbum.ZTRASHEDSTATE || ''
-    END AS 'ParentzGenAlbum-Trashed State',
+        WHEN 0 THEN '0 [Not In Trash]'
+        WHEN 1 THEN '1 [Album In Trash]'
+        ELSE 'Unknown Value: ' || ParentzGenAlbum.ZTRASHEDSTATE || ''
+    END AS 'ParentzGenAlbum.ZTRASHEDSTATE',
 
-    datetime(ParentzGenAlbum.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'ParentzGenAlbum-Trash Date',
+    datetime(ParentzGenAlbum.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'ParentzGenAlbum.ZTRASHEDDATE',
 
     CASE ParentzGenAlbum.ZCLOUDDELETESTATE
-        WHEN 0 THEN '0-ParentzGenAlbum Cloud Not Deleted-0'
-        WHEN 1 THEN '1-ParentzGenAlbum Cloud Album Deleted-1'
-        ELSE 'Unknown-New-Value!: ' || ParentzGenAlbum.ZCLOUDDELETESTATE || ''
-    END AS 'ParentzGenAlbum-Cloud Delete State',
+        WHEN 0 THEN '0 [ParentzGenAlbum Cloud Not Deleted]'
+        WHEN 1 THEN '1 [ParentzGenAlbum Cloud Album Deleted]'
+        ELSE 'Unknown Value: ' || ParentzGenAlbum.ZCLOUDDELETESTATE || ''
+    END AS 'ParentzGenAlbum.ZCLOUDDELETESTATE',
 
-    zGenAlbum.ZCLOUDGUID AS 'zGenAlbum-Cloud_GUID = store.cloudphotodb',
-    z28AlbumLists.Z_28ALBUMS AS 'z27AlbumList-27Albums=zGenAlbum-zPK',
-    zGenAlbum.Z_PK AS 'zGenAlbum-zPK=26AlbumLists=26Albums',
-    zGenAlbum.Z_ENT AS 'zGenAlbum-zEnt',
-    zGenAlbum.Z_OPT AS 'zGenAlbum-zOpt',
-    zGenAlbum.ZSYNDICATE AS 'zGenAlbum-zSyndicate',
-    zGenAlbum.ZPARENTFOLDER AS 'zGenAlbum-Parent Folder Key=zGenAlbum-zPK',
-    zGenAlbum.Z_FOK_PARENTFOLDER AS 'zGenAlbum-FOK Parent Folder',
-    zGenAlbum.ZIMPORTSESSIONID AS 'zGenAlbum-Import Session ID',
-    zCldShareAlbumInvRec.ZUUID AS 'zCldShareAlbumInvRec-zUUID',
+    -- zGenAlbum.ZCLOUDGUID = store.cloudphotodb
+    zGenAlbum.ZCLOUDGUID AS 'zGenAlbum.ZCLOUDGUID',
+    -- z28AlbumLists.Z_28ALBUMS=zGenAlbum-zPK
+    z28AlbumLists.Z_28ALBUMS AS 'z28AlbumLists.Z_28ALBUMS',
+    -- zGenAlbum.Z_PK=26AlbumLists=26Albums
+    zGenAlbum.Z_PK AS 'zGenAlbum.Z_PK',
+    zGenAlbum.Z_ENT AS 'zGenAlbum.Z_ENT',
+    zGenAlbum.Z_OPT AS 'zGenAlbum.Z_OPT',
+    zGenAlbum.ZSYNDICATE AS 'zGenAlbum.ZSYNDICATE',
+    -- zGenAlbum.ZPARENTFOLDER=zGenAlbum.Z_PK
+    zGenAlbum.ZPARENTFOLDER AS 'zGenAlbum.ZPARENTFOLDER',
+    zGenAlbum.Z_FOK_PARENTFOLDER AS 'zGenAlbum.Z_FOK_PARENTFOLDER',
+    zGenAlbum.ZIMPORTSESSIONID AS 'zGenAlbum.ZIMPORTSESSIONID',
+    zCldShareAlbumInvRec.ZUUID AS 'zCldShareAlbumInvRec.ZUUID',
 
     CASE zGenAlbum.ZKIND
-        WHEN 2 THEN '2-Local Device-iCloud Photos Album-2'
-        WHEN 1505 THEN '1505-Shared Album-1505'
-        WHEN 1506 THEN '1506-Import_Session_AssetsImportedatSameTime-1506_RT'
-        WHEN 1508 THEN '1508-My_Projects_Album_CalendarCardEct_RT'
-        WHEN 1510 THEN '1510-Duplicate_Album-Pending_Merge-1510'
-        WHEN 1552 THEN '1552-StillTesting'
-        WHEN 1600 THEN '1600-StillTesting'
-        WHEN 1602 THEN '1602-StillTesting'
-        WHEN 1605 THEN '1605-StillTesting'
-        WHEN 1606 THEN '1606-StillTesting'
-        WHEN 1607 THEN '1607-StillTesting'
-        WHEN 1608 THEN '1608-StillTesting'
-        WHEN 1609 THEN '1609-StillTesting'
-        WHEN 1610 THEN '1610-StillTesting'
-        WHEN 1611 THEN '1611-StillTesting'
-        WHEN 1612 THEN '1612-StillTesting'
-        WHEN 1613 THEN '1613-StillTesting'
-        WHEN 1614 THEN '1614-StillTesting'
-        WHEN 1615 THEN '1615-StillTesting'
-        WHEN 1616 THEN '1616-StillTesting'
-        WHEN 1617 THEN '1617-StillTesting'
-        WHEN 1618 THEN '1618-StillTesting'
-        WHEN 1619 THEN '1619-StillTesting'
-        WHEN 1620 THEN '1620-StillTesting'
-        WHEN 1621 THEN '1621-StillTesting'
-        WHEN 1622 THEN '1622-StillTesting'
-        WHEN 1623 THEN '1623-StillTesting'
-        WHEN 1624 THEN '1624-StillTesting'
-        WHEN 1625 THEN '1625-StillTesting'
-        WHEN 1626 THEN '1626-StillTesting'
-        WHEN 1627 THEN '1627-StillTesting'
-        WHEN 1628 THEN '1628-StillTesting'
-        WHEN 1630 THEN '1630-StillTesting'
-        WHEN 3571 THEN '3571-Progress-Sync-3571'
-        WHEN 3572 THEN '3572-Progress-OTA-Restore-3572'
-        WHEN 3573 THEN '3573-Progress-FS-Import-3573'
-        WHEN 3998 THEN '3998-Project Root Folder-3998'
-        WHEN 3999 THEN '3999-Parent_is_Root_containing_Generic_Album_on_Local_Device-3999'
-        WHEN 4000 THEN '4000-Parent_is_Sub-Folder_containing_Generic_Album_on_Local_Device-4000'
-        WHEN 4001 THEN '4001-StillTesting'
-        WHEN 4002 THEN '4002-StillTesting'
-        WHEN 4003 THEN '4003-StillTesting'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZKIND || ''
-    END AS 'zGenAlbum-Album Kind',
+        WHEN 2 THEN '2 [Local Device-iCloud Photos Album]'
+        WHEN 1505 THEN '1505 [Shared Album]'
+        WHEN 1506 THEN '1506 [Import_Session_AssetsImportedatSameTime]'
+        WHEN 1508 THEN '1508 [My_Projects_Album_CalendarCardEct_RT]'
+        WHEN 1510 THEN '1510 [Duplicate Album Pending Merge]'
+        WHEN 1552 THEN '1552 [Still Testing]'
+        WHEN 1600 THEN '1600 [Still Testing]'
+        WHEN 1602 THEN '1602 [Still Testing]'
+        WHEN 1605 THEN '1605 [Still Testing]'
+        WHEN 1606 THEN '1606 [Still Testing]'
+        WHEN 1607 THEN '1607 [Still Testing]'
+        WHEN 1608 THEN '1608 [Still Testing]'
+        WHEN 1609 THEN '1609 [Still Testing]'
+        WHEN 1610 THEN '1610 [Still Testing]'
+        WHEN 1611 THEN '1611 [Still Testing]'
+        WHEN 1612 THEN '1612 [Still Testing]'
+        WHEN 1613 THEN '1613 [Still Testing]'
+        WHEN 1614 THEN '1614 [Still Testing]'
+        WHEN 1615 THEN '1615 [Still Testing]'
+        WHEN 1616 THEN '1616 [Still Testing]'
+        WHEN 1617 THEN '1617 [Still Testing]'
+        WHEN 1618 THEN '1618 [Still Testing]'
+        WHEN 1619 THEN '1619 [Still Testing]'
+        WHEN 1620 THEN '1620 [Still Testing]'
+        WHEN 1621 THEN '1621 [Still Testing]'
+        WHEN 1622 THEN '1622 [Still Testing]'
+        WHEN 1623 THEN '1623 [Still Testing]'
+        WHEN 1624 THEN '1624 [Still Testing]'
+        WHEN 1625 THEN '1625 [Still Testing]'
+        WHEN 1626 THEN '1626 [Still Testing]'
+        WHEN 1627 THEN '1627 [Still Testing]'
+        WHEN 1628 THEN '1628 [Still Testing]'
+        WHEN 1630 THEN '1630 [Still Testing]'
+        WHEN 3571 THEN '3571 [Progress-Sync]'
+        WHEN 3572 THEN '3572 [Progress-OTA-Restore]'
+        WHEN 3573 THEN '3573 [Progress-FS-Import]'
+        WHEN 3998 THEN '3998 [Project Root Folder]'
+        WHEN 3999 THEN '3999 [Parent_is_Root_containing_Generic_Album_on_Local_Device]'
+        WHEN 4000 THEN '4000 [Parent_is_Sub-Folder_containing_Generic_Album_on_Local_Device]'
+        WHEN 4001 THEN '4001 [Still Testing]'
+        WHEN 4002 THEN '4002 [Still Testing]'
+        WHEN 4003 THEN '4003 [Still Testing]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZKIND || ''
+    END AS 'zGenAlbum.ZKIND',
 
     CASE zGenAlbum.ZCLOUDLOCALSTATE
-        WHEN 0 THEN '0-iCldPhotos-ON=Asset_In_Shared/Other-Album/iCldPhotos-OFF=Generic_Album-0'
-        WHEN 1 THEN '1-iCldPhotos-ON=Asset_In_Generic_Album-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDLOCALSTATE || ''
-    END AS 'zGenAlbum-Cloud_Local_State',
+        WHEN 0 THEN '0 [iCloud Photos-ON=Asset_In_Shared/Other-Album/iCloud Photos-OFF=Generic_Album]'
+        WHEN 1 THEN '1 [iCloud Photos-ON=Asset_In_Generic_Album]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCLOUDLOCALSTATE || ''
+    END AS 'zGenAlbum.ZCLOUDLOCALSTATE',
 
-    zGenAlbum.ZIMPORTEDBYBUNDLEIDENTIFIER AS 'zGenAlbum-Imported by Bundle Identifier',
-    zGenAlbum.ZTITLE AS 'zGenAlbum-Title/User&System Applied',
-    datetime(zGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Creation Date',
-    datetime(zGenAlbum.ZCLOUDCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Cloud Creation Date',
-    datetime(zGenAlbum.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Start Date',
-    datetime(zGenAlbum.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-End Date',
-    datetime(zGenAlbum.ZCLOUDSUBSCRIPTIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Cloud Subscription Date',
-    zGenAlbum.ZCLOUDMETADATA AS 'zGenAlbum-Cloud Metadata/HEX NSKeyed Plist',
-    zGenAlbum.ZPENDINGITEMSCOUNT AS 'zGenAlbum-Pending Items Count',
+    zGenAlbum.ZIMPORTEDBYBUNDLEIDENTIFIER AS 'zGenAlbum.ZIMPORTEDBYBUNDLEIDENTIFIER',
+    zGenAlbum.ZTITLE AS 'zGenAlbum.ZTITLE',
+
+    datetime(zGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZCREATIONDATE(UTC)',
+    datetime(zGenAlbum.ZCLOUDCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZCLOUDCREATIONDATE(UTC)',
+    datetime(zGenAlbum.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZSTARTDATE(UTC)',
+    datetime(zGenAlbum.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZENDDATE(UTC)',
+    datetime(zGenAlbum.ZCLOUDSUBSCRIPTIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZCLOUDSUBSCRIPTIONDATE(UTC)',
+
+    zGenAlbum.ZCLOUDMETADATA AS 'zGenAlbum.ZCLOUDMETADATA(HEX NSKeyed Plist)',
+    zGenAlbum.ZPENDINGITEMSCOUNT AS 'zGenAlbum.ZPENDINGITEMSCOUNT',
 
     CASE zGenAlbum.ZPENDINGITEMSTYPE
-        WHEN 1 THEN 'No-1'
-        WHEN 24 THEN '24-StillTesting'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZPENDINGITEMSTYPE || ''
-    END AS 'zGenAlbum-Pending Items Type',
+        WHEN 1 THEN '1 [No]'
+        WHEN 24 THEN '24 [Still Testing]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZPENDINGITEMSTYPE || ''
+    END AS 'zGenAlbum.ZPENDINGITEMSTYPE',
 
-    zGenAlbum.ZCACHEDPHOTOSCOUNT AS 'zGenAlbum-Cached Photos Count',
-    zGenAlbum.ZCACHEDVIDEOSCOUNT AS 'zGenAlbum-Cached Videos Count',
-    zGenAlbum.ZCACHEDCOUNT AS 'zGenAlbum-Cached Count',
-    zGenAlbum.ZUUID AS 'zGenAlbum-UUID',
-    zGenAlbum.ZCLOUDGUID AS 'zGenAlbum-Cloud GUID',
-    zCldShareAlbumInvRec.ZALBUMGUID AS 'zCldShareAlbumInvRec-Album GUID',
-    zCldShareAlbumInvRec.ZCLOUDGUID AS 'zCldShareAlbumInvRec-Cloud GUID',
-    zGenAlbum.ZPROJECTRENDERUUID AS 'zGenAlbum-Project Render UUID',
-    zGenAlbum.ZSYNCEVENTORDERKEY AS 'zGenAlbum-Sync Event Order Key',
+    zGenAlbum.ZCACHEDPHOTOSCOUNT AS 'zGenAlbum.ZCACHEDPHOTOSCOUNT',
+    zGenAlbum.ZCACHEDVIDEOSCOUNT AS 'zGenAlbum.ZCACHEDVIDEOSCOUNT',
+    zGenAlbum.ZCACHEDCOUNT AS 'zGenAlbum.ZCACHEDCOUNT',
+    zGenAlbum.ZUUID AS 'zGenAlbum.ZUUID',
+    zGenAlbum.ZCLOUDGUID AS 'zGenAlbum.ZCLOUDGUID',
+    zCldShareAlbumInvRec.ZALBUMGUID AS 'zCldShareAlbumInvRec.ZALBUMGUID',
+    zCldShareAlbumInvRec.ZCLOUDGUID AS 'zCldShareAlbumInvRec.ZCLOUDGUID',
+    zGenAlbum.ZPROJECTRENDERUUID AS 'zGenAlbum.ZPROJECTRENDERUUID',
+    zGenAlbum.ZSYNCEVENTORDERKEY AS 'zGenAlbum.ZSYNCEVENTORDERKEY',
 
     CASE zGenAlbum.ZHASUNSEENCONTENT
-        WHEN 0 THEN 'zGenAlbum Has No Unseen Content-0'
-        WHEN 1 THEN 'zGenAlbum Has Unseen Content-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZHASUNSEENCONTENT || ''
-    END AS 'zGenAlbum-Has Unseen Content',
+        WHEN 0 THEN '0 [Has No Unseen Content]'
+        WHEN 1 THEN '1 [Has Unseen Content]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZHASUNSEENCONTENT || ''
+    END AS 'zGenAlbum.ZHASUNSEENCONTENT',
 
-    zGenAlbum.ZUNSEENASSETSCOUNT AS 'zGenAlbum-Unseen Asset Count',
+    zGenAlbum.ZUNSEENASSETSCOUNT AS 'zGenAlbum.ZUNSEENASSETSCOUNT',
 
     CASE zGenAlbum.ZISOWNED
-        WHEN 0 THEN 'zGenAlbum-Not Owned by Device Apple Acnt-0'
-        WHEN 1 THEN 'zGenAlbum-Owned by Device Apple Acnt-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZISOWNED || ''
-    END AS 'zGenAlbum-is Owned',
+        WHEN 0 THEN '0 [zGenAlbum Not Owned by Device Apple Account]'
+        WHEN 1 THEN '1 [zGenAlbum Owned by Device Apple Account]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZISOWNED || ''
+    END AS 'zGenAlbum.ZISOWNED',
 
     CASE zGenAlbum.ZCLOUDRELATIONSHIPSTATE
-        WHEN 0 THEN 'zGenAlbum-Cloud Album Owned by Device Apple Acnt-0'
-        WHEN 2 THEN 'zGenAlbum-Cloud Album Not Owned by Device Apple Acnt-2'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDRELATIONSHIPSTATE || ''
-    END AS 'zGenAlbum-Cloud Relationship State',
+        WHEN 0 THEN '0 [zGenAlbum-Cloud Album Owned by Device Apple Acnt]'
+        WHEN 2 THEN '2 [zGenAlbum-Cloud Album Not Owned by Device Apple Acnt]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCLOUDRELATIONSHIPSTATE || ''
+    END AS 'zGenAlbum.ZCLOUDRELATIONSHIPSTATE',
 
     CASE zGenAlbum.ZCLOUDRELATIONSHIPSTATELOCAL
-        WHEN 0 THEN 'zGenAlbum-Shared Album Accessible Local Device-0'
-        WHEN 1 THEN '1-StillTesting'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDRELATIONSHIPSTATELOCAL || ''
-    END AS 'zGenAlbum-Cloud Relationship State Local',
+        WHEN 0 THEN '0 [zGenAlbum-Shared Album Accessible Local Device]'
+        WHEN 1 THEN '1 [Still Testing]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCLOUDRELATIONSHIPSTATELOCAL || ''
+    END AS 'zGenAlbum.ZCLOUDRELATIONSHIPSTATELOCAL',
 
-    zGenAlbum.ZCLOUDOWNEREMAILKEY AS 'zGenAlbum-Cloud Owner Mail Key',
-    zGenAlbum.ZCLOUDOWNERFIRSTNAME AS 'zGenAlbum-Cloud Owner Frist Name',
-    zGenAlbum.ZCLOUDOWNERLASTNAME AS 'zGenAlbum-Cloud Owner Last Name',
-    zGenAlbum.ZCLOUDOWNERFULLNAME AS 'zGenAlbum-Cloud Owner Full Name',
-    zGenAlbum.ZCLOUDPERSONID AS 'zGenAlbum-Cloud Person ID',
-    zGenAlbum.ZCLOUDOWNERHASHEDPERSONID AS 'zGenAlbum-Cloud Owner Hashed Person ID',
+    zGenAlbum.ZCLOUDOWNEREMAILKEY AS 'zGenAlbum.ZCLOUDOWNEREMAILKEY',
+    zGenAlbum.ZCLOUDOWNERFIRSTNAME AS 'zGenAlbum.ZCLOUDOWNERFIRSTNAME',
+    zGenAlbum.ZCLOUDOWNERLASTNAME AS 'zGenAlbum.ZCLOUDOWNERLASTNAME',
+    zGenAlbum.ZCLOUDOWNERFULLNAME AS 'zGenAlbum.ZCLOUDOWNERFULLNAME',
+    zGenAlbum.ZCLOUDPERSONID AS 'zGenAlbum.ZCLOUDPERSONID',
+    zGenAlbum.ZCLOUDOWNERHASHEDPERSONID AS 'zGenAlbum.ZCLOUDOWNERHASHEDPERSONID',
 
     CASE zGenAlbum.ZCLOUDMULTIPLECONTRIBUTORSENABLEDLOCAL
-        WHEN 0 THEN 'zGenAlbum-Local Cloud Single Contributor Enabled-0'
-        WHEN 1 THEN 'zGenAlbum-Local Cloud Multi-Contributors Enabled-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDMULTIPLECONTRIBUTORSENABLEDLOCAL || ''
-    END AS 'zGenAlbum-Local Cloud Multi-Contributors Enabled',
+        WHEN 0 THEN '0 [zGenAlbum-Local Cloud Single Contributor Enabled]'
+        WHEN 1 THEN '1 [zGenAlbum-Local Cloud Multi-Contributors Enabled]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCLOUDMULTIPLECONTRIBUTORSENABLEDLOCAL || ''
+    END AS 'zGenAlbum.ZCLOUDMULTIPLECONTRIBUTORSENABLEDLOCAL',
 
     CASE zGenAlbum.ZCLOUDMULTIPLECONTRIBUTORSENABLED
-        WHEN 0 THEN 'zGenAlbum-Cloud Single Contributor Enabled-0'
-        WHEN 1 THEN 'zGenAlbum-Cloud Multi-Contributors Enabled-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDMULTIPLECONTRIBUTORSENABLED || ''
-    END AS 'zGenAlbum-Cloud Multi-Contributors Enabled',
+        WHEN 0 THEN '0 [zGenAlbum-Cloud Single Contributor Enabled]'
+        WHEN 1 THEN '1 [zGenAlbum-Cloud Multi-Contributors Enabled]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCLOUDMULTIPLECONTRIBUTORSENABLED || ''
+    END AS 'zGenAlbum.ZCLOUDMULTIPLECONTRIBUTORSENABLED',
 
     CASE zGenAlbum.ZCLOUDALBUMSUBTYPE
-        WHEN 0 THEN 'zGenAlbum Multi-Contributor-0'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDALBUMSUBTYPE || ''
-    END AS 'zGenAlbum-Cloud Album Sub Type',
+        WHEN 0 THEN '0 [zGenAlbum Multi-Contributor]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCLOUDALBUMSUBTYPE || ''
+    END AS 'zGenAlbum.ZCLOUDALBUMSUBTYPE',
 
-    datetime(zGenAlbum.ZCLOUDLASTCONTRIBUTIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Cloud Contribution Date',
-    datetime(zGenAlbum.ZCLOUDLASTINTERESTINGCHANGEDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Cloud Last Interesting Change Date',
+    datetime(zGenAlbum.ZCLOUDLASTCONTRIBUTIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZCLOUDLASTCONTRIBUTIONDATE(UTC)',
+    datetime(zGenAlbum.ZCLOUDLASTINTERESTINGCHANGEDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZCLOUDLASTINTERESTINGCHANGEDATE(UTC)',
 
     CASE zGenAlbum.ZCLOUDNOTIFICATIONSENABLED
-        WHEN 0 THEN 'zGenAlbum-Cloud Notifications Disabled-0'
-        WHEN 1 THEN 'zGenAlbum-Cloud Notifications Enabled-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDNOTIFICATIONSENABLED || ''
-    END AS 'zGenAlbum-Cloud Notification Enabled',
+        WHEN 0 THEN '0 [zGenAlbum-Cloud Notifications Disabled]'
+        WHEN 1 THEN '1 [zGenAlbum-Cloud Notifications Enabled]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCLOUDNOTIFICATIONSENABLED || ''
+    END AS 'zGenAlbum.ZCLOUDNOTIFICATIONSENABLED',
 
     CASE zGenAlbum.ZISPINNED
-        WHEN 0 THEN 'zGenAlbum-Local Not Pinned-0'
-        WHEN 1 THEN 'zGenAlbum-Local Pinned-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZISPINNED || ''
-    END AS 'zGenAlbum-Pinned',
+        WHEN 0 THEN '0 [zGenAlbum-Local Not Pinned]'
+        WHEN 1 THEN '1 [zGenAlbum-Local Pinned]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZISPINNED || ''
+    END AS 'zGenAlbum.ZISPINNED',
 
     CASE zGenAlbum.ZCUSTOMSORTKEY
-        WHEN 0 THEN '0-zGenAlbum-Sorted_Manually-0_RT'
-        WHEN 1 THEN '1-zGenAlbum-CusSrtAsc0=Sorted_Newest_First/CusSrtAsc1=Sorted_Oldest_First-1-RT'
-        WHEN 5 THEN '5-zGenAlbum-Sorted_by_Title-5_RT'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCUSTOMSORTKEY || ''
-    END AS 'zGenAlbum-Custom Sort Key',
+        WHEN 0 THEN '0 [zGenAlbum-Sorted_Manually]'
+        WHEN 1 THEN '1 [zGenAlbum-CusSrtAsc0=Sorted_Newest_First/CusSrtAsc1=Sorted_Oldest_First]'
+        WHEN 5 THEN '5 [zGenAlbum-Sorted_by_Title]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCUSTOMSORTKEY || ''
+    END AS 'zGenAlbum.ZCUSTOMSORTKEY',
 
     CASE zGenAlbum.ZCUSTOMSORTASCENDING
-        WHEN 0 THEN '0-zGenAlbum-Sorted_Newest_First-0'
-        WHEN 1 THEN '1-zGenAlbum-Sorted_Oldest_First-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCUSTOMSORTASCENDING || ''
-    END AS 'zGenAlbum-Custom Sort Ascending',
+        WHEN 0 THEN '0 [zGenAlbum-Sorted_Newest_First]'
+        WHEN 1 THEN '1 [zGenAlbum-Sorted_Oldest_First]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCUSTOMSORTASCENDING || ''
+    END AS 'zGenAlbum.ZCUSTOMSORTASCENDING',
 
     CASE zGenAlbum.ZISPROTOTYPE
-        WHEN 0 THEN 'zGenAlbum-Not Prototype-0'
-        WHEN 1 THEN 'zGenAlbum-Prototype-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZISPROTOTYPE || ''
-    END AS 'zGenAlbum-Is Prototype',
+        WHEN 0 THEN '0 [zGenAlbum Not Prototype]'
+        WHEN 1 THEN '1 [zGenAlbum Prototype]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZISPROTOTYPE || ''
+    END AS 'zGenAlbum.ZISPROTOTYPE',
 
     CASE zGenAlbum.ZPROJECTDOCUMENTTYPE
-        WHEN 0 THEN '0-StillTesting'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZPROJECTDOCUMENTTYPE || ''
-    END AS 'zGenAlbum-Project Document Type',
+        WHEN 0 THEN '0 [Still Testing]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZPROJECTDOCUMENTTYPE || ''
+    END AS 'zGenAlbum.ZPROJECTDOCUMENTTYPE',
 
     CASE zGenAlbum.ZCUSTOMQUERYTYPE
-        WHEN 0 THEN '0-StillTesting'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCUSTOMQUERYTYPE || ''
-    END AS 'zGenAlbum-Custom Query Type',
+        WHEN 0 THEN '0 [Still Testing]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCUSTOMQUERYTYPE || ''
+    END AS 'zGenAlbum.ZCUSTOMQUERYTYPE',
 
     CASE zGenAlbum.ZTRASHEDSTATE
-        WHEN 0 THEN 'zGenAlbum Not In Trash-0'
-        WHEN 1 THEN 'zGenAlbum Album In Trash-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZTRASHEDSTATE || ''
-    END AS 'zGenAlbum-Trashed State',
+        WHEN 0 THEN '0 [zGenAlbum Not In Trash]'
+        WHEN 1 THEN '1 [zGenAlbum Album In Trash]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZTRASHEDSTATE || ''
+    END AS 'zGenAlbum.ZTRASHEDSTATE',
 
-    datetime(zGenAlbum.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Trash Date',
+    datetime(zGenAlbum.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZTRASHEDDATE(UTC)',
 
     CASE zGenAlbum.ZCLOUDDELETESTATE
-        WHEN 0 THEN 'zGenAlbum Cloud Not Deleted-0'
-        WHEN 1 THEN 'zGenAlbum Cloud Album Deleted-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDDELETESTATE || ''
-    END AS 'zGenAlbum-Cloud Delete State',
+        WHEN 0 THEN '0 [zGenAlbum Cloud Not Deleted]'
+        WHEN 1 THEN '1 [zGenAlbum Cloud Album Deleted]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCLOUDDELETESTATE || ''
+    END AS 'zGenAlbum.ZCLOUDDELETESTATE',
 
     CASE zGenAlbum.ZCLOUDOWNERISWHITELISTED
-        WHEN 0 THEN 'zGenAlbum Cloud Owner Not Whitelisted-0'
-        WHEN 1 THEN 'zGenAlbum Cloud Owner Whitelisted-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDOWNERISWHITELISTED || ''
-    END AS 'zGenAlbum-Cloud Owner Whitelisted',
+        WHEN 0 THEN '0 [zGenAlbum Cloud Owner Not Whitelisted]'
+        WHEN 1 THEN '1 [zGenAlbum Cloud Owner Whitelisted]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCLOUDOWNERISWHITELISTED || ''
+    END AS 'zGenAlbum.ZCLOUDOWNERISWHITELISTED',
 
     CASE zGenAlbum.ZCLOUDPUBLICURLENABLEDLOCAL
-        WHEN 0 THEN 'zGenAlbum Cloud Local Public URL Disabled-0'
-        WHEN 1 THEN 'zGenAlbum Cloud Local has Public URL Enabled-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDPUBLICURLENABLEDLOCAL || ''
-    END AS 'zGenAlbum-Cloud Local Public URL Enabled',
+        WHEN 0 THEN '0 [zGenAlbum Cloud Local Public URL Disabled]'
+        WHEN 1 THEN '1 [zGenAlbum Cloud Local has Public URL Enabled]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCLOUDPUBLICURLENABLEDLOCAL || ''
+    END AS 'zGenAlbum.ZCLOUDPUBLICURLENABLEDLOCAL',
 
     CASE zGenAlbum.ZCLOUDPUBLICURLENABLED
-        WHEN 0 THEN 'zGenAlbum Cloud Public URL Disabled-0'
-        WHEN 1 THEN 'zGenAlbum Cloud Public URL Enabled-1'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDPUBLICURLENABLED || ''
-    END AS 'zGenAlbum-Cloud Public URL Enabled',
+        WHEN 0 THEN '0 [zGenAlbum Cloud Public URL Disabled]'
+        WHEN 1 THEN '1 [zGenAlbum Cloud Public URL Enabled]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZCLOUDPUBLICURLENABLED || ''
+    END AS 'zGenAlbum.ZCLOUDPUBLICURLENABLED',
 
-    zGenAlbum.ZPUBLICURL AS 'zGenAlbum-Public URL',
-    zGenAlbum.ZKEYASSETFACETHUMBNAILINDEX AS 'zGenAlbum-Key Asset Face Thumb Index',
-    zGenAlbum.ZPROJECTEXTENSIONIDENTIFIER AS 'zGenAlbum-Project Text Extension ID',
-    zGenAlbum.ZUSERQUERYDATA AS 'zGenAlbum-User Query Data',
-    zGenAlbum.ZCUSTOMQUERYPARAMETERS AS 'zGenAlbum-Custom Query Parameters',
-    zGenAlbum.ZPROJECTDATA AS 'zGenAlbum-Project Data',
+    zGenAlbum.ZPUBLICURL AS 'zGenAlbum.ZPUBLICURL',
+    zGenAlbum.ZKEYASSETFACETHUMBNAILINDEX AS 'zGenAlbum.ZKEYASSETFACETHUMBNAILINDEX',
+    zGenAlbum.ZPROJECTEXTENSIONIDENTIFIER AS 'zGenAlbum.ZPROJECTEXTENSIONIDENTIFIER',
+    zGenAlbum.ZUSERQUERYDATA AS 'zGenAlbum.ZUSERQUERYDATA',
+    zGenAlbum.ZCUSTOMQUERYPARAMETERS AS 'zGenAlbum.ZCUSTOMQUERYPARAMETERS',
+    zGenAlbum.ZPROJECTDATA AS 'zGenAlbum.ZPROJECTDATA',
 
     CASE zGenAlbum.ZSEARCHINDEXREBUILDSTATE
-        WHEN 0 THEN '0-StillTesting GenAlbm-Search Index State-0'
-        WHEN 1 THEN '1-StillTesting GenAlbm-Search Index State-1'
-        WHEN 2 THEN '2-StillTesting GenAlbm-Search Index State-2'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZSEARCHINDEXREBUILDSTATE || ''
-    END AS 'zGenAlbum-Search Index Rebuild State',
-
+        WHEN 0 THEN '0 [Still Testing GenAlbm-Search Index State]'
+        WHEN 1 THEN '1 [Still Testing GenAlbm-Search Index State]'
+        WHEN 2 THEN '2 [Still Testing GenAlbm-Search Index State]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZSEARCHINDEXREBUILDSTATE || ''
+    END AS 'zGenAlbum.ZSEARCHINDEXREBUILDSTATE',
+A
     CASE zGenAlbum.ZDUPLICATETYPE
-        WHEN 0 THEN '0-StillTesting GenAlbumDuplicateType-0'
-        WHEN 1 THEN 'Duplicate Asset_Pending-Merge-1'
-        WHEN 2 THEN '2-StillTesting GenAlbumDuplicateType-2'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZDUPLICATETYPE || ''
-    END AS 'zGenAlbum-Duplicate Type',
+        WHEN 0 THEN '0 [Still Testing GenAlbumDuplicateType]'
+        WHEN 1 THEN '1 [Duplicate Asset Pending Merge]'
+        WHEN 2 THEN '2 [Still Testing GenAlbumDuplicateType]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZDUPLICATETYPE || ''
+    END AS 'zGenAlbum.ZDUPLICATETYPE',
 
     CASE zGenAlbum.ZPRIVACYSTATE
-        WHEN 0 THEN '0-StillTesting GenAlbm-Privacy State-0'
-        WHEN 1 THEN '1-StillTesting GenAlbm-Privacy State-1'
-        WHEN 2 THEN '2-StillTesting GenAlbm-Privacy State-2'
-        ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZPRIVACYSTATE || ''
-    END AS 'zGenAlbum-Privacy State',
+        WHEN 0 THEN '0 [Still Testing GenAlbm Privacy State]'
+        WHEN 1 THEN '1 [Still Testing GenAlbm Privacy State]'
+        WHEN 2 THEN '2 [Still Testing GenAlbm Privacy State]'
+        ELSE 'Unknown Value: ' || zGenAlbum.ZPRIVACYSTATE || ''
+    END AS 'zGenAlbum.ZPRIVACYSTATE',
 
-    zAlbumList.ZUUID AS 'zAlbumList-UUID',
-    z28AlbumLists.Z_2ALBUMLISTS AS 'z27AlbumList-Album List Key',
-    z28AlbumLists.Z_FOK_28ALBUMS AS 'z27AlbumList-FOK27Albums Key',
-    zAlbumList.Z_PK AS 'zAlbumList-zPK/Album List Key',
-    zAlbumList.Z_ENT AS 'zAlbumList-zENT',
-    zAlbumList.Z_OPT AS 'zAlbumList-zOPT',
-    zAlbumList.ZIDENTIFIER AS 'zAlbumList-ID Key',
+    zAlbumList.ZUUID AS 'zAlbumList.ZUUID',
+    z28AlbumLists.Z_2ALBUMLISTS AS 'z28AlbumLists.Z_2ALBUMLISTS',
+    z28AlbumLists.Z_FOK_28ALBUMS AS 'z28AlbumLists.Z_FOK_28ALBUMS',
+    zAlbumList.Z_PK AS 'zAlbumList.Z_PK',
+    zAlbumList.Z_ENT AS 'zAlbumList.Z_ENT',
+    zAlbumList.Z_OPT AS 'zAlbumList.Z_OPT',
+    zAlbumList.ZIDENTIFIER AS 'zAlbumList.ZIDENTIFIER',
 
     CASE zAlbumList.ZNEEDSREORDERINGNUMBER
-        WHEN 1 THEN '1-Yes-1'
-        ELSE 'Unknown-New-Value!: ' || zAlbumList.ZNEEDSREORDERINGNUMBER || ''
-    END AS 'zAlbumList-Needs Reordering Number',
+        WHEN 1 THEN '1 [Yes]'
+        ELSE 'Unknown Value: ' || zAlbumList.ZNEEDSREORDERINGNUMBER || ''
+    END AS 'zAlbumList.ZNEEDSREORDERINGNUMBER',
 
-    zCldShareAlbumInvRec.ZALBUM AS 'zCldShareAlbumInvRec-Album Key',
-    zCldShareAlbumInvRec.Z_PK AS 'zCldShareAlbumInvRec-zPK',
-    zCldShareAlbumInvRec.Z_ENT AS 'zCldShareAlbumInvRec-zEnt',
-    zCldShareAlbumInvRec.Z_OPT AS 'zCldShareAlbumInvRec-zOpt',
-    zCldShareAlbumInvRec.Z_FOK_ALBUM AS 'zCldShareAlbumInvRec-FOK Album Key',
+    zCldShareAlbumInvRec.ZALBUM AS 'zCldShareAlbumInvRec.ZALBUM',
+    zCldShareAlbumInvRec.Z_PK AS 'zCldShareAlbumInvRec.Z_PK',
+    zCldShareAlbumInvRec.Z_ENT AS 'zCldShareAlbumInvRec.Z_ENT',
+    zCldShareAlbumInvRec.Z_OPT AS 'zCldShareAlbumInvRec.Z_OPT',
+    zCldShareAlbumInvRec.Z_FOK_ALBUM AS 'zCldShareAlbumInvRec.Z_FOK_ALBUM',
 
     CASE zCldShareAlbumInvRec.ZISMINE
-        WHEN 0 THEN 'Not My Invitation-0'
-        WHEN 1 THEN 'My Invitation-1'
-        ELSE 'Unknown-New-Value!: ' || zCldShareAlbumInvRec.ZISMINE || ''
-    END AS 'zCldShareAlbumInvRec-Is My Invitation to Shared Album',
+        WHEN 0 THEN '0 [Not My Invitation]'
+        WHEN 1 THEN '1 [My Invitation]'
+        ELSE 'Unknown Value: ' || zCldShareAlbumInvRec.ZISMINE || ''
+    END AS 'zCldShareAlbumInvRec.ZISMINE',
 
     CASE zCldShareAlbumInvRec.ZINVITATIONSTATELOCAL
-        WHEN 0 THEN '0-StillTesting-0'
-        WHEN 1 THEN '1-StillTesting-1'
-        ELSE 'Unknown-New-Value!: ' || zCldShareAlbumInvRec.ZINVITATIONSTATELOCAL || ''
-    END AS 'zCldShareAlbumInvRec-Invitation State Local',
+        WHEN 0 THEN '0 [Still Testing]'
+        WHEN 1 THEN '1 [Still Testing]'
+        ELSE 'Unknown Value: ' || zCldShareAlbumInvRec.ZINVITATIONSTATELOCAL || ''
+    END AS 'zCldShareAlbumInvRec.ZINVITATIONSTATELOCAL',
 
     CASE zCldShareAlbumInvRec.ZINVITATIONSTATE
-        WHEN 1 THEN 'Shared Album Invitation Pending-1'
-        WHEN 2 THEN 'Shared Album Invitation Accepted-2'
-        WHEN 3 THEN 'Shared Album Invitation Declined-3'
-        WHEN 4 THEN '4-StillTesting'
-        WHEN 5 THEN '5-StillTesting'
-        ELSE 'Unknown-New-Value!: ' || zCldShareAlbumInvRec.ZINVITATIONSTATE || ''
-    END AS 'zCldShareAlbumInvRec-Invitation State/Shared Album Invite Status',
+        WHEN 1 THEN '1 [Shared Album Invitation Pending]'
+        WHEN 2 THEN '2 [Shared Album Invitation Accepted]'
+        WHEN 3 THEN '3 [Shared Album Invitation Declined]'
+        WHEN 4 THEN '4 [Still Testing]'
+        WHEN 5 THEN '5 [Still Testing]'
+        ELSE 'Unknown Value: ' || zCldShareAlbumInvRec.ZINVITATIONSTATE || ''
+    END AS 'zCldShareAlbumInvRec.ZINVITATIONSTATE',
 
-    datetime(zCldShareAlbumInvRec.ZINVITEESUBSCRIPTIONDATE + 978307200, 'UNIXEPOCH') AS 'zCldShareAlbumInvRec-Subscription Date',
-    zCldShareAlbumInvRec.ZINVITEEFIRSTNAME AS 'zCldShareAlbumInvRec-Invitee First Name',
-    zCldShareAlbumInvRec.ZINVITEELASTNAME AS 'zCldShareAlbumInvRec-Invitee Last Name',
-    zCldShareAlbumInvRec.ZINVITEEFULLNAME AS 'zCldShareAlbumInvRec-Invitee Full Name',
-    zCldShareAlbumInvRec.ZINVITEEHASHEDPERSONID AS 'zCldShareAlbumInvRec-Invitee Hashed Person ID',
-    zCldShareAlbumInvRec.ZINVITEEEMAILKEY AS 'zCldShareAlbumInvRec-Invitee Email Key/UnknownData'
+    datetime(zCldShareAlbumInvRec.ZINVITEESUBSCRIPTIONDATE + 978307200, 'UNIXEPOCH') AS 'zCldShareAlbumInvRec.ZINVITEESUBSCRIPTIONDATE(UTC)',
+
+    zCldShareAlbumInvRec.ZINVITEEFIRSTNAME AS 'zCldShareAlbumInvRec.ZINVITEEFIRSTNAME',
+    zCldShareAlbumInvRec.ZINVITEELASTNAME AS 'zCldShareAlbumInvRec.ZINVITEELASTNAME',
+    zCldShareAlbumInvRec.ZINVITEEFULLNAME AS 'zCldShareAlbumInvRec.ZINVITEEFULLNAME',
+    zCldShareAlbumInvRec.ZINVITEEHASHEDPERSONID AS 'zCldShareAlbumInvRec.ZINVITEEHASHEDPERSONID',
+    zCldShareAlbumInvRec.ZINVITEEEMAILKEY AS 'zCldShareAlbumInvRec.ZINVITEEEMAILKEY'
 
 
 FROM ZGENERICALBUM zGenAlbum
 
-  LEFT JOIN Z_28ALBUMLISTS z28AlbumLists ON z28AlbumLists.Z_28ALBUMS = zGenAlbum.Z_PK
-  LEFT JOIN ZALBUMLIST zAlbumList ON zAlbumList.Z_PK = z28AlbumLists.Z_2ALBUMLISTS
-  LEFT JOIN ZGENERICALBUM ParentzGenAlbum ON ParentzGenAlbum.Z_PK = zGenAlbum.ZPARENTFOLDER
-  LEFT JOIN ZCLOUDSHAREDALBUMINVITATIONRECORD zCldShareAlbumInvRec ON zGenAlbum.Z_PK = zCldShareAlbumInvRec.ZALBUM
+    LEFT JOIN Z_28ALBUMLISTS z28AlbumLists ON z28AlbumLists.Z_28ALBUMS = zGenAlbum.Z_PK
+    LEFT JOIN ZALBUMLIST zAlbumList ON zAlbumList.Z_PK = z28AlbumLists.Z_2ALBUMLISTS
+    LEFT JOIN ZGENERICALBUM ParentzGenAlbum ON ParentzGenAlbum.Z_PK = zGenAlbum.ZPARENTFOLDER
+    LEFT JOIN ZCLOUDSHAREDALBUMINVITATIONRECORD zCldShareAlbumInvRec ON zGenAlbum.Z_PK = zCldShareAlbumInvRec.ZALBUM
 
 
 ORDER BY 'zGenAlbum-zPK=26AlbumLists=26Albums'

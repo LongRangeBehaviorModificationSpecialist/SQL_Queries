@@ -1,6 +1,10 @@
 /*
-File Path = \private\var\mobile\Library\Application Support\com.apple.remotemanagementd
-File Names = RMAdminStore-Local.sqlite & RMAdminStore-Cloud.sqlite
+[DLU]
+    05-Sep-2025
+[FILE PATH]
+    \private\var\mobile\Library\Application Support\com.apple.remotemanagementd
+[FILE NAMES]
+    RMAdminStore-Local.sqlite & RMAdminStore-Cloud.sqlite
 */
 
 SELECT
@@ -15,18 +19,18 @@ SELECT
     ZUSAGETIMEDITEM.ZBUNDLEIDENTIFIER AS 'ZUSAGETIMEDITEM.ZBUNDLEIDENTIFIER',
 
     CASE ZUSAGECATEGORY.ZIDENTIFIER
-        WHEN 'DH0011' THEN 'DH0011  [Unspecified 1]'
-        WHEN 'DH0012' THEN 'DH0012  [Unspecified 2]'
-        WHEN 'DH0013' THEN 'DH0013  [Unspecified 3]'
-        WHEN 'DH1001' THEN 'DH1001  [Games]'
-        WHEN 'DH1002' THEN 'DH1002  [Social Networking]'
-        WHEN 'DH1003' THEN 'DH1003  [Entertainment]'
-        WHEN 'DH1004' THEN 'DH1004  [Creativity]'
-        WHEN 'DH1005' THEN 'DH1005  [Productivity]'
-        WHEN 'DH1006' THEN 'DH1006  [Education]'
-        WHEN 'DH1007' THEN 'DH1007  [Reading/Reference]'
-        WHEN 'DH1008' THEN 'DH1008  [Health/Fitness]'
-        WHEN 'DH1009' THEN 'DH1009  [Other]'
+        WHEN 'DH0011' THEN 'DH0011 [Unspecified 1]'
+        WHEN 'DH0012' THEN 'DH0012 [Unspecified 2]'
+        WHEN 'DH0013' THEN 'DH0013 [Unspecified 3]'
+        WHEN 'DH1001' THEN 'DH1001 [Games]'
+        WHEN 'DH1002' THEN 'DH1002 [Social Networking]'
+        WHEN 'DH1003' THEN 'DH1003 [Entertainment]'
+        WHEN 'DH1004' THEN 'DH1004 [Creativity]'
+        WHEN 'DH1005' THEN 'DH1005 [Productivity]'
+        WHEN 'DH1006' THEN 'DH1006 [Education]'
+        WHEN 'DH1007' THEN 'DH1007 [Reading/Reference]'
+        WHEN 'DH1008' THEN 'DH1008 [Health/Fitness]'
+        WHEN 'DH1009' THEN 'DH1009 [Other]'
         ELSE ZUSAGECATEGORY.ZIDENTIFIER
     END AS 'ZUSAGECATEGORY.ZIDENTIFIER',
 
@@ -37,10 +41,10 @@ SELECT
     ZCOREDEVICE.ZIDENTIFIER AS 'ZCOREDEVICE.ZIDENTIFIER',
 
     CASE ZCOREDEVICE.ZPLATFORM
-        WHEN 0 THEN '0  [Unknown]'
-        WHEN 1 THEN '1  [macOS]'
-        WHEN 2 THEN '2  [iOS]'
-        WHEN 4 THEN '4  [Apple Watch]'
+        WHEN 0 THEN '0 [Unknown]'
+        WHEN 1 THEN '1 [macOS]'
+        WHEN 2 THEN '2 [iOS]'
+        WHEN 4 THEN '4 [Apple Watch]'
         ELSE ZCOREDEVICE.ZPLATFORM
     END AS 'ZCOREDEVICE.ZPLATFORM',
 

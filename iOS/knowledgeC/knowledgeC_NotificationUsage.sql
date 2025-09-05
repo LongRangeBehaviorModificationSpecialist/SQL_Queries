@@ -1,63 +1,63 @@
 /*
-    Copied from
-        https://github.com/ScottKjr3347/iOS_KnowledgeC.db_Queries/blob/main/NotificationUsage_SQLiteQuery
-    [DLU]
-        2023-10-20
-    [DATABASE PATH]
-        /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db
+[DLU]
+    05-Sep-2025
+[DATABASE PATH]
+    /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db
+Copied from
+    https://github.com/ScottKjr3347/iOS_KnowledgeC.db_Queries/blob/main/NotificationUsage_SQLiteQuery
 */
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RecordNo.',
-    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'StartDateTime(UTC)',
-    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'EndDateTime(UTC)',
-    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'CreationDateTime(UTC)',
-    ZOBJECT.ZSTREAMNAME AS 'ObjectStreamName',
-    ZOBJECT.ZVALUESTRING AS 'NotificaionType',
-    ZSTRUCTUREDMETADATA.Z_DKNOTIFICATIONUSAGEMETADATAKEY__BUNDLEID AS 'SMDBundleID',
-    ZSTRUCTUREDMETADATA.Z_DKNOTIFICATIONUSAGEMETADATAKEY__IDENTIFIER AS 'SMDID',
+    ROW_NUMBER() OVER() AS 'ROW_NUMBER',
+    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'ZOBJECT.ZSTARTDATE(UTC)',
+    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'ZOBJECT.ZENDDATE(UTC)',
+    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'ZOBJECT.ZCREATIONDATE(UTC)',
+    ZOBJECT.ZSTREAMNAME AS 'ZOBJECT.ZSTREAMNAME',
+    ZOBJECT.ZVALUESTRING AS 'ZOBJECT.ZVALUESTRING',
+    ZSTRUCTUREDMETADATA.Z_DKNOTIFICATIONUSAGEMETADATAKEY__BUNDLEID AS 'BUNDLEID',
+    ZSTRUCTUREDMETADATA.Z_DKNOTIFICATIONUSAGEMETADATAKEY__IDENTIFIER AS 'IDENTIFIER',
 
     CASE ZOBJECT.ZSTARTDAYOFWEEK
-        WHEN '1' THEN 'Sunday'
-        WHEN '2' THEN 'Monday'
-        WHEN '3' THEN 'Tuesday'
-        WHEN '4' THEN 'Wednesday'
-        WHEN '5' THEN 'Thursday'
-        WHEN '6' THEN 'Friday'
-        WHEN '7' THEN 'Saturday'
-    END AS 'StartDayOfWeek',
+        WHEN '1' THEN '1 [Sunday]'
+        WHEN '2' THEN '2 [Monday]'
+        WHEN '3' THEN '3 [Tuesday]'
+        WHEN '4' THEN '4 [Wednesday]'
+        WHEN '5' THEN '5 [Thursday]'
+        WHEN '6' THEN '6 [Friday]'
+        WHEN '7' THEN '7 [Saturday]'
+    END AS 'ZOBJECT.ZSTARTDAYOFWEEK',
 
-    ZOBJECT.ZSTARTSECONDOFDAY AS 'StartSecondOfDay',
+    ZOBJECT.ZSTARTSECONDOFDAY AS 'ZOBJECT.ZSTARTSECONDOFDAY',
 
     CASE ZOBJECT.ZENDDAYOFWEEK
-        WHEN '1' THEN 'Sunday'
-        WHEN '2' THEN 'Monday'
-        WHEN '3' THEN 'Tuesday'
-        WHEN '4' THEN 'Wednesday'
-        WHEN '5' THEN 'Thursday'
-        WHEN '6' THEN 'Friday'
-        WHEN '7' THEN 'Saturday'
-    END AS 'EndDayOfWeek',
+        WHEN '1' THEN '1 [Sunday]'
+        WHEN '2' THEN '2 [Monday]'
+        WHEN '3' THEN '3 [Tuesday]'
+        WHEN '4' THEN '4 [Wednesday]'
+        WHEN '5' THEN '5 [Thursday]'
+        WHEN '6' THEN '6 [Friday]'
+        WHEN '7' THEN '7 [Saturday]'
+    END AS 'EndDayOfZOBJECT.ZENDDAYOFWEEKeek',
 
-    ZOBJECT.ZENDSECONDOFDAY AS 'EndSecondOfDay',
-    ZOBJECT.ZSECONDSFROMGMT/3600 AS 'GMTOffset',
+    ZOBJECT.ZENDSECONDOFDAY AS 'ZOBJECT.ZENDSECONDOFDAY',
+    ZOBJECT.ZSECONDSFROMGMT/3600 AS 'GMTOFFSET(Hours)',
 
     CASE ZOBJECT.ZHASSTRUCTUREDMETADATA
-        WHEN '0' THEN 'No'
-        WHEN '1' THEN 'Yes'
-    END AS 'HasStructuredMetadata',
+        WHEN '0' THEN '0 [No]'
+        WHEN '1' THEN '1 [Yes]'
+    END AS 'ZOBJECT.ZHASSTRUCTUREDMETADATA',
 
-    ZOBJECT.ZSTRUCTUREDMETADATA AS 'SMDZPK',
-    ZOBJECT.Z_PK AS 'ZOBJECTZPK',
-    ZOBJECT.ZVALUEINTEGER AS 'ValueInterger',
-    ZOBJECT.ZVALUETYPECODE AS 'ValueTypeCode',
-    ZOBJECT.ZVALUEDOUBLE AS 'ValueDouble',
-    ZOBJECT.ZUUID AS 'ZOBJECTUUID',
-    ZSTRUCTUREDMETADATA.ZMETADATAHASH AS 'SMDMetadataHash'
+    ZOBJECT.ZSTRUCTUREDMETADATA AS 'ZOBJECT.ZSTRUCTUREDMETADATA',
+    ZOBJECT.Z_PK AS 'ZOZOBJECT.Z_PKJECTZPK',
+    ZOBJECT.ZVALUEINTEGER AS 'ZOBJECT.ZVALUEINTEGER',
+    ZOBJECT.ZVALUETYPECODE AS 'ZOBJECT.ZVALUETYPECODE',
+    ZOBJECT.ZVALUEDOUBLE AS 'ZOBJECT.ZVALUEDOUBLE',
+    ZOBJECT.ZUUID AS 'ZOBJECT.ZUUID',
+    ZSTRUCTUREDMETADATA.ZMETADATAHASH AS 'ZSTRUCTUREDMETADATA.ZMETADATAHASH'
 
     /* Source for each line of data */
-    '/private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS 'DataSource'
+    'knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS 'DATA_SOURCE'
 
 
 FROM ZOBJECT

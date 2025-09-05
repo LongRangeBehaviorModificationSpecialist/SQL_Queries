@@ -1,19 +1,17 @@
 /*
-DLU: 17-Jul-2025
-
+[DLU]
+    05-Sep-2025
 [VERSION]
     Tested on iOS 18
-
 [SMS]
     FILE PATH = /private/var/mobile/Library/SMS/sms.db
-
 [AddressBook]
     FILE PATH = /private/var/mobile/Library/AddressBook/AddressBook.sqlitedb
 */
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RecordNo.',
+    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
     message.ROWID AS 'message.ROWID',
     message.guid AS 'message.guid',
 
@@ -63,48 +61,48 @@ SELECT
 
     CASE
         WHEN chat_message_join.chat_id IS NULL THEN '*DELETED MESSAGE*'
-        ELSE '0  [No]'
+        ELSE '0 [No]'
     END AS 'WasDeleted',
 
     CASE message.is_from_me
-        WHEN 0 THEN '0  [Received]'
-        WHEN 1 THEN '1  [Sent]'
+        WHEN 0 THEN '0 [Received]'
+        WHEN 1 THEN '1 [Sent]'
         ELSE 'Unknown Value : ' || message.is_from_me || ''
     END AS 'message.is_from_me',
 
     CASE message.is_delayed
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value : ' || message.is_delayed || ''
     END AS 'message.is_delayed',
 
     CASE message.is_empty
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value : ' || message.is_empty || ''
     END AS 'message.is_empty',
 
     CASE message.is_archive
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value : ' || message.is_archive || ''
     END AS 'message.is_archive',
 
     CASE message.is_finished
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value : ' || message.is_finished || ''
     END AS 'message.is_finished',
 
     CASE message.is_audio_message
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value : ' || message.is_audio_message || ''
     END AS 'message.is_audio_message',
 
     CASE message.is_played
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value : ' || message.is_played || ''
     END AS 'message.is_played',
 
@@ -116,50 +114,50 @@ SELECT
     END AS 'message.date_played(UTC)',
 
     CASE message.is_emote
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value : ' || message.is_emote || ''
     END AS 'message.is_emote',
 
     CASE message.is_forward
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value : ' || message.is_forward || ''
     END AS 'message.is_forward',
 
     CASE message.is_auto_reply
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value : ' || message.is_auto_reply || ''
     END AS 'message.is_auto_reply',
 
     CASE message.is_system_message
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value : ' || message.is_system_message || ''
     END AS 'message.is_system_message',
 
     CASE message.is_service_message
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value : ' || message.is_service_message || ''
     END AS 'message.is_service_message',
 
     CASE message.is_spam
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value : ' || message.is_spam || ''
     END AS 'message.is_spam',
 
     CASE message.was_data_detected
-        WHEN 1 THEN '1  [Yes]'
-        WHEN 0 THEN '0  [No]'
+        WHEN 1 THEN '1 [Yes]'
+        WHEN 0 THEN '0 [No]'
         ELSE 'Unknown Value: ' || message.was_data_detected || ''
     END AS 'message.was_data_detected',
 
     CASE message.ck_sync_state
-        WHEN 0 THEN '0  [Not Synced]'
-        WHEN 1 THEN '1  [Synced]'
+        WHEN 0 THEN '0 [Not Synced]'
+        WHEN 1 THEN '1 [Synced]'
         ELSE 'Unknown Value: ' || message.ck_sync_state || ''
     END AS 'message.ck_sync_state',
 
@@ -173,20 +171,20 @@ SELECT
     END AS 'handle.id',
 
     CASE chat.style
-        WHEN '43' THEN '43  [GroupChat]'
-        WHEN '45' THEN '45  [P2P]'
+        WHEN '43' THEN '43 [GroupChat]'
+        WHEN '45' THEN '45 [P2P]'
     END AS 'chat.style',
 
     chat_message_join.chat_id AS 'chat_message_join.chat_id',
 
     CASE message.item_type
-        WHEN 0 THEN '0  [Message]'
-        WHEN 1 THEN '1  [GroupParticipantAdded]'
-        WHEN 2 THEN '2  [GroupRenamed]'
-        WHEN 3 THEN '3  [GroupActionType-0=Participant_Leaves/GroupActionType-1=GroupPhotoChanged-3]'
-        WHEN 4 THEN '4  [LocationSharingData]'
-        WHEN 5 THEN '5  [Unknown]'
-        WHEN 6 THEN '6  [Unknown]'
+        WHEN 0 THEN '0 [Message]'
+        WHEN 1 THEN '1 [GroupParticipantAdded]'
+        WHEN 2 THEN '2 [GroupRenamed]'
+        WHEN 3 THEN '3 [GroupActionType-0=Participant_Leaves/GroupActionType-1=GroupPhotoChanged-3]'
+        WHEN 4 THEN '4 [LocationSharingData]'
+        WHEN 5 THEN '5 [Unknown]'
+        WHEN 6 THEN '6 [Unknown]'
         ELSE 'Unknown Value : ' || message.item_type || ''
     END AS 'message.item_type',
 
@@ -206,28 +204,28 @@ SELECT
 
     CASE message.associated_message_type
         WHEN 0 THEN NULL
-        WHEN 2 THEN '2  [Apple Payment Sent]'
-        WHEN 3 THEN '3  [Apple Payment Requested]'
-        WHEN 2000 THEN '2000  [LOVED Reaction]'
-        WHEN 2001 THEN '2001  [LIKED Reaction]'
-        WHEN 2002 THEN '2002  [DISLIKED Reaction]'
-        WHEN 2003 THEN '2003  [LAUGHED Reaction]'
-        WHEN 2004 THEN '2004  [EMPHASIZED Reaction]'
-        WHEN 2005 THEN '2005  [QUESTIONED Reaction]'
-        WHEN 3000 THEN '3000  [Removed LOVED Reaction]'
-        WHEN 3001 THEN '3001  [Removed LIKE Reaction]'
-        WHEN 3002 THEN '3002  [Removed DISLIKE Reaction]'
-        WHEN 3003 THEN '3003  [Removed LAUGH Reaction]'
-        WHEN 3004 THEN '3004  [Removed EXCLAMATION Reaction]'
-        WHEN 3005 THEN '3005  [Removed QUESTION Reaction]'
+        WHEN 2 THEN '2 [Apple Payment Sent]'
+        WHEN 3 THEN '3 [Apple Payment Requested]'
+        WHEN 2000 THEN '2000 [LOVED Reaction]'
+        WHEN 2001 THEN '2001 [LIKED Reaction]'
+        WHEN 2002 THEN '2002 [DISLIKED Reaction]'
+        WHEN 2003 THEN '2003 [LAUGHED Reaction]'
+        WHEN 2004 THEN '2004 [EMPHASIZED Reaction]'
+        WHEN 2005 THEN '2005 [QUESTIONED Reaction]'
+        WHEN 3000 THEN '3000 [Removed LOVED Reaction]'
+        WHEN 3001 THEN '3001 [Removed LIKE Reaction]'
+        WHEN 3002 THEN '3002 [Removed DISLIKE Reaction]'
+        WHEN 3003 THEN '3003 [Removed LAUGH Reaction]'
+        WHEN 3004 THEN '3004 [Removed EXCLAMATION Reaction]'
+        WHEN 3005 THEN '3005 [Removed QUESTION Reaction]'
         ELSE 'Unknown Value : ' || message.associated_message_type || ''
     END AS 'message.associated_message_type',
 
     message.balloon_bundle_id AS 'message.balloon_bundle_id',
 
     CASE message.was_delivered_quietly
-        WHEN '0' THEN '0  [No]'
-        WHEN '1' THEN '1  [Yes]'
+        WHEN '0' THEN '0 [No]'
+        WHEN '1' THEN '1 [Yes]'
         ELSE 'Unknown Value : '  || message.was_delivered_quietly || ''
     END AS 'WasDeliveredQuietly',
 
@@ -248,8 +246,8 @@ SELECT
     END AS 'message.expressive_send_style_id',
 
     CASE message.is_read
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value : ' || message.is_read || ''
     END AS 'message.is_read',
 
@@ -260,8 +258,8 @@ SELECT
     END AS 'message.share_status',
 
     CASE message.share_direction
-        WHEN 0 THEN '0  [Received]'
-        WHEN 1 THEN '1  [Sent]'
+        WHEN 0 THEN '0 [Received]'
+        WHEN 1 THEN '1 [Sent]'
         ELSE message.share_direction
     END AS 'message.share_direction',
 
@@ -271,8 +269,8 @@ SELECT
     END AS 'chat.display_name',
 
     CASE attachment.is_outgoing
-        WHEN 0 THEN '0  [No - Incoming]'
-        WHEN 1 THEN '1  [Yes - Outgoing]'
+        WHEN 0 THEN '0 [No - Incoming]'
+        WHEN 1 THEN '1 [Yes - Outgoing]'
         ELSE 'Unknown Value : ' || attachment.is_outgoing || ''
     END AS 'attachment.is_outgoing',
 
@@ -298,7 +296,7 @@ SELECT
     END AS 'attachment.created_date(UTC)',
 
     -- Source for each line of data
-    '/private/var/mobile/Library/SMS/sms.db; Table: messages(ROWID: ' || message.ROWID || ')' AS 'DATA_SOURCE'
+    'sms.db; Table: messages(ROWID: ' || message.ROWID || ')' AS 'DATA_SOURCE'
 
 
 FROM message

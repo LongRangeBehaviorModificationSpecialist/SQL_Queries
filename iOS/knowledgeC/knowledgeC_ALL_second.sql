@@ -1,10 +1,10 @@
 /*
-    Copied from https://www.mac4n6.com/blog/2018/8/5/knowledge-is-power-using-the-knowledgecdb-database-on-macos-and-ios-to-determine-precise-user-and-application-usage
+Copied from https://www.mac4n6.com/blog/2018/8/5/knowledge-is-power-using-the-knowledgecdb-database-on-macos-and-ios-to-determine-precise-user-and-application-usage
 
-    [DLU]
-        2023-10-20
-    [DATABASE PATH]
-        /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db
+[DLU]
+    05-Sep-2025
+[DATABASE PATH]
+    /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db
 */
 
 
@@ -17,19 +17,19 @@ SELECT
     datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'ZOBJECT.ZCREATIONDATE(UTC)',
 
     CASE ZOBJECT.ZSTARTDAYOFWEEK
-        WHEN 1 THEN '1  [Sunday]'
-        WHEN 2 THEN '2  [Monday]'
-        WHEN 3 THEN '3  [Tuesday]'
-        WHEN 4 THEN '4  [Wednesday]'
-        WHEN 5 THEN '5  [Thursday]'
-        WHEN 6 THEN '6  [Friday]'
-        WHEN 7 THEN '7  [Saturday]'
+        WHEN 1 THEN '1 [Sunday]'
+        WHEN 2 THEN '2 [Monday]'
+        WHEN 3 THEN '3 [Tuesday]'
+        WHEN 4 THEN '4 [Wednesday]'
+        WHEN 5 THEN '5 [Thursday]'
+        WHEN 6 THEN '6 [Friday]'
+        WHEN 7 THEN '7 [Saturday]'
     END 'ZOBJECT.ZSTARTDAYOFWEEK',
 
     datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'ZOBJECT.ZSTARTDATE(UTC)',
     datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'ZOBJECT.ZENDDATE(UTC)',
 
-    (ZOBJECT.ZENDDATE-ZOBJECT.ZSTARTDATE) AS 'USAGE(SEC)',
+    (ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE) AS 'USAGE(SEC)',
     ZSOURCE.ZDEVICEID AS 'ZSOURCE.ZDEVICEID',
     ZOBJECT.ZSTREAMNAME AS 'ZOBJECT.ZSTREAMNAME',
     ZOBJECT.ZVALUESTRING AS 'ZOBJECT.ZVALUESTRING',
@@ -54,10 +54,13 @@ FROM ZOBJECT
 
 
 WHERE
-    ZSTREAMNAME IS '/app/activity' OR
-    ZSTREAMNAME IS '/app/inFocus' OR
-    ZSTREAMNAME IS '/app/intents' AND
-    ZBUNDLEID IS 'com.toyopagroup.picaboo'
+    ZSTREAMNAME IS '/app/activity'
+    OR
+    ZSTREAMNAME IS '/app/inFocus'
+    OR
+    ZSTREAMNAME IS '/app/intents'
+    -- AND
+    -- ZBUNDLEID IS 'com.toyopagroup.picaboo'
 
 
 ORDER BY

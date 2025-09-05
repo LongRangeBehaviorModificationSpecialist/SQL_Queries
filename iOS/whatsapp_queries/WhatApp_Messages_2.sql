@@ -1,4 +1,9 @@
--- Copied from: https://towardsdatAScience.com/analyzing-my-whatsapp-databASe-using-sql-and-redASh-5ef9bd6a0b0
+/*
+[DLU]
+    05-Sep-2025
+Copied from
+    https://towardsdatAScience.com/analyzing-my-whatsapp-databASe-using-sql-and-redASh-5ef9bd6a0b0
+*/
 
 SELECT
 
@@ -11,17 +16,17 @@ SELECT
     END AS 'ZWAMESSAGE.ZISFROMME',
 
     CASE ZWAMESSAGE.ZMESSAGETYPE
-        WHEN 0 THEN '0  [Text]'
-        WHEN 1 THEN '1  [Image]'
-        WHEN 2 THEN '2  [Video]'
-        WHEN 3 THEN '3  [Voice Message]'
-        WHEN 4 THEN '4  [Gif]'
-        WHEN 5 THEN '5  [Location]'
-        WHEN 6 THEN '6  [Group Event]'
-        WHEN 7 THEN '7  [Hyperlink]'
-        WHEN 8 THEN '8  [Document]'
-        WHEN 14 THEN '14  [Deleted Message]'
-        WHEN 15 THEN '15  [Sticker]'
+        WHEN 0 THEN '0 [Text]'
+        WHEN 1 THEN '1 [Image]'
+        WHEN 2 THEN '2 [Video]'
+        WHEN 3 THEN '3 [Voice Message]'
+        WHEN 4 THEN '4 [Gif]'
+        WHEN 5 THEN '5 [Location]'
+        WHEN 6 THEN '6 [Group Event]'
+        WHEN 7 THEN '7 [Hyperlink]'
+        WHEN 8 THEN '8 [Document]'
+        WHEN 14 THEN '14 [Deleted Message]'
+        WHEN 15 THEN '15 [Sticker]'
         ELSE ZWAMESSAGE.ZMESSAGETYPE
     END AS 'ZWAMESSAGE.ZMESSAGETYPE',
 

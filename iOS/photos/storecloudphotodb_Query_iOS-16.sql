@@ -1,9 +1,12 @@
 /*
-Query copied from https://github.com/ScottKjr3347/iOS_store.cloudphotodb_Queries/blob/main/iOS16_storecloudphotodb_Query/iOS16_storecloudphotodb_Query.txt
+[DLU]
+    05-Sep-2025
+Query copied from
+    https://github.com/ScottKjr3347/iOS_store.cloudphotodb_Queries/blob/main/iOS16_storecloudphotodb_Query/iOS16_storecloudphotodb_Query.txt
 */
 
 SELECT
-    ROW_NUMBER() OVER() AS 'Record #',
+    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
 
     datetime(scopes.creationDate + 978307200, 'UNIXEPOCH') AS 'scopes.creationDate',
 
@@ -17,29 +20,29 @@ SELECT
     cloudCache.serializedRecord AS 'cloudCache.serializedRecord',
 
     CASE idMapping.addDirection
-        WHEN 1 THEN '1  [Device2iCloudPhotos]'
-        WHEN 2 THEN '2  [iCloudPhotos2Devcie]'
+        WHEN 1 THEN '1 [Device2iCloudPhotos]'
+        WHEN 2 THEN '2 [iCloudPhotos2Devcie]'
         ELSE 'Unknown Value: ' || idMapping.addDirection || ''
     END AS 'idMapping.addDirection',
 
     CASE downloadQueue.resourceType
-        WHEN 5 THEN '5  [iCloud Photos]'
+        WHEN 5 THEN '5 [iCloud Photos]'
         ELSE 'Unknown Value: ' || downloadQueue.resourceType || ''
     END AS 'downloadQueue.resourceType',
 
     CASE downloadQueue.status
-        WHEN 2 THEN '2  [Synced with Device]'
+        WHEN 2 THEN '2 [Synced with Device]'
         ELSE 'Unknown Value: ' || downloadQueue.status || ''
     END AS 'downloadQueue.status',
 
     CASE idMapping.mappingState
-        WHEN 1 THEN '1  [Successful]'
-        WHEN 2 THEN '2  [Still Testing]'
+        WHEN 1 THEN '1 [Successful]'
+        WHEN 2 THEN '2 [Still Testing]'
         ELSE 'Unknown Value: ' || idMapping.mappingState || ''
     END AS 'idMapping.mappingState',
 
     CASE downloadQueue.intent
-        WHEN 1 THEN '1  [Completed]'
+        WHEN 1 THEN '1 [Completed]'
         ELSE 'Unknown Value: ' || downloadQueue.intent || ''
     END AS 'downloadQueue.intent',
 
@@ -50,13 +53,13 @@ SELECT
     datetime(idMapping.addTimestamp + 978307200, 'UNIXEPOCH') AS 'idMapping.addTimestamp(UTC)',
 
     CASE cloudCache.confirmed
-        WHEN 1 THEN '1  [Yes]'
-        WHEN 2 THEN '2  [Still Testing]'
+        WHEN 1 THEN '1 [Yes]'
+        WHEN 2 THEN '2 [Still Testing]'
         ELSE 'Unknown Value: ' || cloudCache.confirmed || ''
     END AS 'cloudCache.confirmed',
 
     CASE cloudCache.state
-        WHEN 1 THEN 'Active-1'
+        WHEN 1 THEN '1 [Active]'
         ELSE 'Unknown Value: ' || cloudCache.state || ''
     END AS 'cloudCache.state',
 
@@ -66,8 +69,8 @@ SELECT
     datetime(idMapping.deleteTimestamp + 978307200, 'UNIXEPOCH') AS 'idMapping.deleteTimestamp(UTC)',
 
     CASE idMapping.deleteDirection
-        WHEN 1 THEN '1  [Deleted via Recently Deleted via Device Photos App]'
-        WHEN 2 THEN '2  [Still Testing]'
+        WHEN 1 THEN '1 [Deleted via Recently Deleted via Device Photos App]'
+        WHEN 2 THEN '2 [Still Testing]'
         ELSE 'Unknown Value: ' || idMapping.deleteDirection || ''
     END AS 'idMapping.deleteDirection',
 
@@ -105,7 +108,7 @@ SELECT
     scopes.flags AS 'scopes.flags',
 
     CASE scopes.hasFetchedInitialSyncAnchor
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE 'Unknown Value: ' || scopes.hasFetchedInitialSyncAnchor || ''
     END AS 'scopes.hasFetchedInitialSyncAnchor',
 

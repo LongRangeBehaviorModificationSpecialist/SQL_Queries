@@ -1,8 +1,8 @@
 /*
-    [DLU]
-        2023-10-20
-    [DATABASE PATH]
-        /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db
+[DLU]
+    05-Sep-2025
+[DATABASE PATH]
+    /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db
 */
 
 SELECT
@@ -19,13 +19,13 @@ SELECT
     (ZOBJECT.ZSECONDSFROMGMT / 3600) AS 'GMTOFFSET(HOURS)',
 
     CASE ZOBJECT.ZSTARTDAYOFWEEK
-        WHEN 1 THEN '1  [Sunday]'
-        WHEN 2 THEN '2  [Monday]'
-        WHEN 3 THEN '3  [Tuesday]'
-        WHEN 4 THEN '4  [Wednesday]'
-        WHEN 5 THEN '5  [Thursday]'
-        WHEN 6 THEN '6  [Friday]'
-        WHEN 7 THEN '7  [Saturday]'
+        WHEN 1 THEN '1 [Sunday]'
+        WHEN 2 THEN '2 [Monday]'
+        WHEN 3 THEN '3 [Tuesday]'
+        WHEN 4 THEN '4 [Wednesday]'
+        WHEN 5 THEN '5 [Thursday]'
+        WHEN 6 THEN '6 [Friday]'
+        WHEN 7 THEN '7 [Saturday]'
         ELSE ZOBJECT.ZSTARTDAYOFWEEK
     END 'ZOBJECT.ZSTARTDAYOFWEEK',
 

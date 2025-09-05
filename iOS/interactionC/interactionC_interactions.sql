@@ -1,10 +1,10 @@
 /*
-    [DLU]
-        2024-10-17
-    [VERSION]
-        Tested on iOS 18
-    [DATABASE PATH]
-        /private/var/mobile/Library/CoreDuet/People/interactionC.db
+[DLU]
+    2024-10-17
+[VERSION]
+    Tested on iOS 18
+[DATABASE PATH]
+    /private/var/mobile/Library/CoreDuet/People/interactionC.db
 */
 
 
@@ -14,8 +14,8 @@ SELECT
     ZINTERACTIONS.Z_PK AS 'ZINTERACTIONS.Z_PK',
 
     CASE ZINTERACTIONS.ZDIRECTION
-        WHEN 0 THEN '0  [Incoming]'
-        WHEN 1 THEN '1  [Outgoing]'
+        WHEN 0 THEN '0 [Incoming]'
+        WHEN 1 THEN '1 [Outgoing]'
         ELSE ZINTERACTIONS.ZDIRECTION
     END AS 'ZINTERACTIONS.ZDIRECTION',
 

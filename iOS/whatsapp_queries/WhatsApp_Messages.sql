@@ -1,6 +1,9 @@
-
--- IOS11 - WhatsApp messages - \Application Groups\net.whatsapp.WhatsApp.shared\ChatStorage.sqlite
--- net.whatsapp.WhatsApp 2.17.52.40
+/*
+[DLU]
+    05-Sep-2025
+iOS11 - WhatsApp messages
+    \Application Groups\net.whatsapp.WhatsApp.shared\ChatStorage.sqlite
+*/
 
 SELECT
 
@@ -12,9 +15,9 @@ SELECT
     ZWACHATSESSION.ZPARTNERNAME AS 'ZWACHATSESSION.ZPARTNERNAME',
 
     CASE ZWAMESSAGE.ZISFROMME
-        WHEN 0 THEN '0  [Incoming]'
-        WHEN 1 THEN '1  [Outgoing]'
-        ELSE 'Contact Examiner'
+        WHEN 0 THEN '0 [Incoming]'
+        WHEN 1 THEN '1 [Outgoing]'
+        ELSE 'Unknown Value: ' || ZWAMESSAGE.ZISFROMME || ''
     END AS 'ZWAMESSAGE.ZISFROMME',
 
     ZWAMESSAGE.ZFROMJID AS 'ZWAMESSAGE.ZFROMJID',
@@ -23,24 +26,24 @@ SELECT
     datetime(ZWAMESSAGE.ZSENTDATE + 978307200, 'UNIXEPOCH') AS 'ZWAMESSAGE.ZSENTDATE(UTC)',
 
     CASE ZWAMESSAGE.ZMESSAGETYPE
-        WHEN 0 THEN '0  [Text]'
-        WHEN 1 THEN '1  [Image]'
-        WHEN 2 THEN '2  [Video]'
-        WHEN 3 THEN '3  [VoiceMessage]'
-        WHEN 4 THEN '4  [Gif]'
-        WHEN 5 THEN '5  [Location]'
-        WHEN 6 THEN '6  [GroupEvent]'
-        WHEN 7 THEN '7  [Hyperlink]'
-        WHEN 8 THEN '8  [Document]'
-        WHEN 14 THEN '14  [DeletedMessage]'
-        WHEN 15 THEN '15  [Sticker]'
-        ELSE ZWAMESSAGE.ZMESSAGETYPE
+        WHEN 0 THEN '0 [Text]'
+        WHEN 1 THEN '1 [Image]'
+        WHEN 2 THEN '2 [Video]'
+        WHEN 3 THEN '3 [VoiceMessage]'
+        WHEN 4 THEN '4 [Gif]'
+        WHEN 5 THEN '5 [Location]'
+        WHEN 6 THEN '6 [GroupEvent]'
+        WHEN 7 THEN '7 [Hyperlink]'
+        WHEN 8 THEN '8 [Document]'
+        WHEN 14 THEN '14 [DeletedMessage]'
+        WHEN 15 THEN '15 [Sticker]'
+        ELSE 'Unknown Value: ' || ZWAMESSAGE.ZMESSAGETYPE || ''
     END AS 'ZWAMESSAGE.ZMESSAGETYPE',
 
     CASE ZWACHATSESSION.ZHIDDEN
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
-        ELSE 'Contact Examiner'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
+        ELSE 'Unknown Value: ' || ZWACHATSESSION.ZHIDDEN || ''
     END AS 'ZWACHATSESSION.ZHIDDEN',
 
     ZWAMESSAGE.ZMEDIASECTIONID AS 'ZWAMESSAGE.ZMEDIASECTIONID',
@@ -50,7 +53,7 @@ SELECT
     ZWAMESSAGE.ZSTARRED AS 'ZWAMESSAGE.ZSTARRED',
     ZWAMEDIAITEM.ZMEDIAURL AS 'ZWAMEDIAITEM.ZMEDIAURL',
 
-    datetime(ZWAMEDIAITEM.ZMEDIAURLDATE + 978307200, 'UNIXEPOCH') AS 'ZWAMEDIAITEM.ZMEDIAURLDATE',
+    datetime(ZWAMEDIAITEM.ZMEDIAURLDATE + 978307200, 'UNIXEPOCH') AS 'ZWAMEDIAITEM.ZMEDIAURLDATE(UTC)',
 
     ZWAMEDIAITEM.ZTITLE AS 'ZWAMEDIAITEM.ZTITLE',
     ZWAMEDIAITEM.ZLONGITUDE AS 'ZWAMEDIAITEM.ZLONGITUDE',

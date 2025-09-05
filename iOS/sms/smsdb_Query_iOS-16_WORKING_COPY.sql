@@ -1,6 +1,6 @@
 SELECT
 
-    -- ROW_NUMBER() OVER() AS 'record.number',
+    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
     message.ROWID AS 'message.ROWID',
 --     chat.service_name AS 'chat.service name',
 --     handle.service AS 'handle.service',
@@ -12,7 +12,7 @@ SELECT
         WHEN 0 THEN 'Message'
         WHEN 1 THEN 'Group_Participant_Added'
         WHEN 2 THEN 'Group_Renamed'
-        WHEN 3 THEN 'GroupActionType-0=Participant_Leaves / GroupActionType-1=GroupPhotoChanged-3'
+        WHEN 3 THEN 'GroupActionType 0=Participant_Leaves / GroupActionType 1=GroupPhotoChanged'
         WHEN 4 THEN 'Location Sharing Data'
         WHEN 5 THEN '5 [Unknown]'
         WHEN 6 THEN '6 [Unknown]'
@@ -37,21 +37,21 @@ SELECT
     CASE message.is_from_me
         WHEN 0 THEN 'Incoming'
         WHEN 1 THEN 'Outgoing'
-        ELSE message.is_from_me
+        ELSE 'Unknown Value: ' || message.is_from_me
     END AS 'message.is_from_me',
 
     CASE message.date
-        WHEN 0 THEN ''
+        WHEN 0 THEN '[N/A]'
         ELSE datetime((message.date / 1000000000) + 978307200, 'UNIXEPOCH')
     END AS 'message.date',
 
     CASE message.date_delivered
-        WHEN 0 THEN ''
+        WHEN 0 THEN '[N/A]'
         ELSE datetime((message.date_delivered / 1000000000) + 978307200, 'UNIXEPOCH')
     END AS 'message.date_delivered',
 
     CASE message.date_read
-        WHEN 0 THEN ''
+        WHEN 0 THEN '[N/A]'
         ELSE datetime((message.date_read / 1000000000) + 978307200, 'UNIXEPOCH')
     END AS 'message.date_read',
 
@@ -75,12 +75,12 @@ SELECT
     END AS 'message.cache_has_attachments',
 
     CASE attachment.created_date
-        WHEN 0 THEN ''
+        WHEN 0 THEN '[N/A]'
         ELSE datetime(attachment.created_date + 978307200, 'UNIXEPOCH')
     END AS 'attachment.created_date',
 
     CASE attachment.start_date
-        WHEN 0 THEN ''
+        WHEN 0 THEN '[N/A]'
         ELSE datetime(attachment.start_date + 978307200, 'UNIXEPOCH')
     END AS 'attachment.start_date',
 
@@ -96,7 +96,7 @@ SELECT
         ELSE '[Unknown Value]: ' || attachment.hide_attachment
     END AS 'attachment.hide_attachment',
 
-    attachment.filename AS 'attachment_filename',
+    attachment.filename AS 'attachment.filename',
     attachment.transfer_name AS 'attachment.transfer_name',
 --     attachment.guid AS 'attachment.guid',
     attachment.original_guid AS 'attachment.original_guid',
@@ -123,7 +123,7 @@ SELECT
     attachment.ck_record_id AS 'attachment.ck_record_id',
     message.syndication_ranges AS 'message.syndication_ranges',
     message.synced_syndication_ranges AS 'message.synced_syndication_ranges',
-    attachment.total_bytes AS 'attachment.total_bytes',
+    printf("%,d", attachment.total_bytes) AS 'attachment.total_bytes',
 --     chat_handle_join.handle_id AS 'chat_handle_join.handle id',
 --     chat.display_name AS 'chat.display name',
 --     chat.group_id AS 'chat.group.id',

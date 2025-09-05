@@ -1,7 +1,10 @@
 # iOS_store.cloudphotodb_Queries
+
+---
+
 Queries to use on the store.cloudphotodb database. Provides you with iCloud Photos Sync directions and other information
 
-2023-9-3 Update - I have updated the queries for store.cloudphotodb based upon a community question. I had limited test store.cloudphotodb databases to use so please let me know if there appears to be any errors in the decoding.
+03-Sep-2023 Update - I have updated the queries for store.cloudphotodb based upon a community question. I had limited test store.cloudphotodb databases to use so please let me know if there appears to be any errors in the decoding.
 
 Based on a small amount of recent testing I have created two new queries to identify more useful data from this database.
 

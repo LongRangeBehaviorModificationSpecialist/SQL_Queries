@@ -1,3 +1,8 @@
+/*
+[DLU]
+    05-Sep-2025
+*/
+
 SELECT
 
     ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
@@ -7,14 +12,14 @@ SELECT
     datetime(history_visits.visit_time + 978307200, 'UNIXEPOCH') AS 'history_visits.visit_time(UTC)',
 
     CASE history_visits.load_successful
-        WHEN 0 THEN '0  [No]'
-        WHEN 1 THEN '1  [Yes]'
+        WHEN 0 THEN '0 [No]'
+        WHEN 1 THEN '1 [Yes]'
         ELSE history_visits.load_successful
     END AS 'history_visits.load_successful',
 
     CASE history_visits.origin
-        WHEN 0 THEN '0  [Viewed On This Device]'
-        WHEN 1 THEN '1  [Synced From iCloud Device]'
+        WHEN 0 THEN '0 [Viewed On This Device]'
+        WHEN 1 THEN '1 [Synced From iCloud Device]'
         ELSE history_visits.origin
     END AS 'history_visits.origin',
 

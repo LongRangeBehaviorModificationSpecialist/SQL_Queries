@@ -1,4 +1,7 @@
---DLU 17-Jul-2025
+/*
+[DLU]
+    17-Jul-2025
+*/
 
 
 SELECT
@@ -58,9 +61,9 @@ SELECT
 
     (SELECT GROUP_CONCAT(
         CASE ABMultiValueEntry.key
-            WHEN 1 THEN '1  [Service: ' || value || ']'
-            WHEN 2 THEN '2  [Username: ' || value || ']'
-            WHEN 3 THEN '3  [URL: ' || value || ']'
+            WHEN 1 THEN '1 [Service: ' || value || ']'
+            WHEN 2 THEN '2 [Username: ' || value || ']'
+            WHEN 3 THEN '3 [URL: ' || value || ']'
             ELSE ABMultiValueEntry.key || ': ' || value
         END, ' | ')
         FROM ABMultiValueEntry WHERE parent_id IN (

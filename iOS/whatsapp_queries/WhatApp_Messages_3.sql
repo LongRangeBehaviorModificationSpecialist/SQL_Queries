@@ -1,4 +1,9 @@
--- Copied from: https://towardsdatascience.com/analyzing-my-whatsapp-database-using-sql-and-redash-5ef9bd6a0b0
+/*
+[DLU]
+    05-Sep-2025
+Copied from
+    https://towardsdatascience.com/analyzing-my-whatsapp-database-using-sql-and-redash-5ef9bd6a0b0
+*/
 
 CREATE view group_messages AS
 
@@ -8,9 +13,9 @@ SELECT
     ZWACHATSESSION.ZPARTNERNAME AS 'ZWACHATSESSION.ZPARTNERNAME',
 
     CASE ZWAMESSAGE.ZISFROMME
-        WHEN 0 THEN '0  [Incoming]'
-        WHEN 1 THEN '1  [Outgoing]'
-        ELSE ZWAMESSAGE.ZISFROMME
+        WHEN 0 THEN '0 [Incoming]'
+        WHEN 1 THEN '1 [Outgoing]'
+        ELSE 'Unknown Value: ' || ZWAMESSAGE.ZISFROMME || ''
     END AS 'ZWAMESSAGE.ZISFROMME',
 
     CASE ZWAMESSAGE.ZISFROMME
@@ -19,19 +24,19 @@ SELECT
     END AS 'GroupID',
 
     CASE ZWAMESSAGE.ZMESSAGETYPE
-        WHEN 0 THEN 'text'
-        WHEN 1 THEN 'image'
-        WHEN 2 THEN 'video'
-        WHEN 3 THEN 'voice_message'
-        WHEN 4 THEN 'gif'
-        WHEN 5 THEN 'location'
-        WHEN 6 THEN 'group_event'
-        WHEN 7 THEN 'hyperlink'
-        WHEN 8 THEN 'document'
-        WHEN 14 THEN 'deleted_message'
-        WHEN 15 THEN 'sticker'
-        ELSE 'unknown'
-    END AS 'MessageType',
+        WHEN 0 THEN '0 [text]'
+        WHEN 1 THEN '1 [image]'
+        WHEN 2 THEN '2 [video]'
+        WHEN 3 THEN '3 [voice_message]'
+        WHEN 4 THEN '4 [gif]'
+        WHEN 5 THEN '5 [location]'
+        WHEN 6 THEN '6 [group_event]'
+        WHEN 7 THEN '7 [hyperlink]'
+        WHEN 8 THEN '8 [document]'
+        WHEN 14 THEN '14 [deleted_message]'
+        WHEN 15 THEN '15 [sticker]'
+        ELSE 'Unknown Value: ' || ZWAMESSAGE.ZMESSAGETYPE || ''
+    END AS 'ZWAMESSAGE.ZMESSAGETYPE',
 
     datetime(ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'unixepoch') AS 'ZWAMESSAGE.ZMESSAGEDATE(UTC)',
 
