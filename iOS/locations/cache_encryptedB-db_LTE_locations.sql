@@ -19,6 +19,8 @@ SELECT
 
     Latitude AS 'Latitude',
     Longitude AS 'Longitude',
+    RTRIM(LTRIM(CONCAT(ROUND(Latitude, 6), ',', ROUND(Longitude, 6)))) AS 'GPS(Merged)',
+
     MCC AS 'MCC',
     MNC AS 'MNC',
     TAC AS 'TAC',
