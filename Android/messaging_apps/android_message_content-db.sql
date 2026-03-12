@@ -4,20 +4,22 @@ SELECT
     messages._id AS 'messages._id',
     messages.conversation_id AS 'messages.conversation_id',
 
-    /* ID of recipient of the message */
-    /* Removes unnecessary text at the start of the string to leave just the 10-digit phone number */
-    /* Formats string as a U.S. phone number, i.e. (###) ###-#### */
+    /*
+    ID of recipient of the message
+    Removes unnecessary text at the start of the string to leave just the 10-digit phone number
+    Formats string as a U.S. phone number, i.e. (###) ###-####
+    */
     CASE
         WHEN LENGTH(messages.recipients) = 12 AND messages.recipients LIKE '+1%' THEN '(' || SUBSTR(messages.recipients,3,3) || ') ' || SUBSTR(messages.recipients,6,3) || '-' || SUBSTR(messages.recipients,9,4)
         WHEN LENGTH(messages.recipients) = 11 AND messages.recipients LIKE '1%' THEN '(' || SUBSTR(messages.recipients,2,3) || ') ' || SUBSTR(messages.recipients,5,3) || '-' || SUBSTR(messages.recipients,8,4)
         WHEN LENGTH(messages.recipients) = 10 THEN '(' || SUBSTR(messages.recipients,1,3) || ') ' || SUBSTR(messages.recipients,4,3) || '-' || SUBSTR(messages.recipients,7,4)
-        WHEN messages.recipients IS NULL THEN 'n/a'
+        WHEN messages.recipients IS NULL THEN '[N/A]'
         ELSE messages.recipients
     END AS 'messages.recipients',
 
     /* Name of recipient (if documented) */
     CASE
-        WHEN recipients.cache_name IS NULL THEN 'n/a'
+        WHEN recipients.cache_name IS NULL THEN '[N/A]'
         ELSE recipients.cache_name
     END AS 'recipients.cache_name',
 
@@ -33,7 +35,7 @@ SELECT
 
     /* Date/Time the message was sent in UTC */
     CASE
-        WHEN messages.sent_timestamp IS 0 THEN 'n/a'
+        WHEN messages.sent_timestamp IS 0 THEN '[N/A]'
         ELSE strftime('%Y-%m-%d %H:%M:%S', messages.sent_timestamp / 1000, 'UNIXEPOCH')
     END AS 'messages.sent_timestamp(UTC)',
 
@@ -41,12 +43,12 @@ SELECT
 
     /* Message content */
     CASE
-        WHEN parts.text IS NULL THEN 'n/a'
+        WHEN parts.text IS NULL THEN '[N/A]'
         ELSE parts.text
     END AS 'parts.text',
 
     CASE
-        WHEN parts.content_uri IS NULL THEN 'n/a'
+        WHEN parts.content_uri IS NULL THEN '[N/A]'
         ELSE parts.content_uri
     END AS 'parts.content_uri',
 
@@ -55,20 +57,22 @@ SELECT
 
     /* If the message had an attachment, returns the file name */
     CASE
-        WHEN parts.file_name IS NULL THEN 'n/a'
+        WHEN parts.file_name IS NULL THEN '[N/A]'
         ELSE parts.file_name
     END AS 'parts.file_name',
 
     /* Output the attached file size formatted with commas as needed */
     printf("%,d", parts.size) AS 'parts.size(bytes)',
+
     /* Output the message size formatted with commas as needed */
     printf("%,d", messages.message_size) AS ' messages.message_size(bytes)',
+
     /* Was the message read */
     messages.is_read AS 'messages.is_read?',
 
     /* Date/Time the message was updated (if any) in UTC */
     CASE
-        WHEN messages.updated_timestamp IS 0 THEN 'n/a'
+        WHEN messages.updated_timestamp IS 0 THEN '[N/A]'
         ELSE strftime('%Y-%m-%d %H:%M:%S', messages.updated_timestamp / 1000, 'UNIXEPOCH')
     END AS 'messages.updated_timestamp',
 

@@ -12,25 +12,25 @@ VERSION=iOS 16.6 (20G75)
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
+    ROW_NUMBER() OVER() AS 'RecordNumber',
 
-    strftime('%Y-%m-%dT%H:%M:%SZ', datetime(timestamp + 978307200, 'UNIXEPOCH')) AS 'Timestamp(UTC)',
-    strftime('%Y-%m-%d %H:%M:%S', datetime(timestamp + 978307200, 'UNIXEPOCH', 'localtime')) AS 'Timestamp(Local)',
+    strftime('%Y-%m-%dT%H:%M:%SZ', datetime(LteCellLocation.timestamp + 978307200, 'UNIXEPOCH')) AS 'Timestamp(UTC)',
+    strftime('%Y-%m-%d %H:%M:%S', datetime(LteCellLocation.timestamp + 978307200, 'UNIXEPOCH', 'localtime')) AS 'Timestamp(Local)',
 
-    Latitude AS 'Latitude',
-    Longitude AS 'Longitude',
-    RTRIM(LTRIM(CONCAT(ROUND(Latitude, 6), ',', ROUND(Longitude, 6)))) AS 'GPS(Merged)',
+    LteCellLocation.Latitude AS 'Latitude',
+    LteCellLocation.Longitude AS 'Longitude',
+    RTRIM(LTRIM(CONCAT(ROUND(LteCellLocation.Latitude, 6), ',', ROUND(LteCellLocation.Longitude, 6)))) AS 'Lat/Long(Merged)',
 
-    MCC AS 'MCC',
-    MNC AS 'MNC',
-    TAC AS 'TAC',
-    CI AS 'CI',
-    HorizontalAccuracy AS 'HorizontalAccuracy',
-    Altitude AS 'Altitude',
-    Confidence AS 'Confidence'
+    LteCellLocation.MCC AS 'MCC',
+    LteCellLocation.MNC AS 'MNC',
+    LteCellLocation.TAC AS 'TAC',
+    LteCellLocation.CI AS 'CI',
+    LteCellLocation.HorizontalAccuracy AS 'HorizontalAccuracy',
+    LteCellLocation.Altitude AS 'Altitude',
+    LteCellLocation.Confidence AS 'Confidence'
 
 
 FROM LteCellLocation
 
 
-ORDER BY timestamp DESC
+ORDER BY LteCellLocation.timestamp DESC

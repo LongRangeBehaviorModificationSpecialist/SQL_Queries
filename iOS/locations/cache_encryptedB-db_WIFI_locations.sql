@@ -12,7 +12,7 @@ VERSION=iOS 16.6 (20G75)
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
+    ROW_NUMBER() OVER() AS 'RecordNumber',
 
     strftime('%Y-%m-%dT%H:%M:%SZ', datetime(timestamp + 978307200, 'UNIXEPOCH')) AS 'Timestamp(UTC)',
     strftime('%Y-%m-%d %H:%M:%S', datetime(timestamp + 978307200, 'UNIXEPOCH', 'localtime')) AS 'Timestamp(Local)',
@@ -36,4 +36,4 @@ SELECT
 FROM WifiLocation
 
 
-ORDER BY timestamp DESC
+ORDER BY WifiLocation.timestamp DESC

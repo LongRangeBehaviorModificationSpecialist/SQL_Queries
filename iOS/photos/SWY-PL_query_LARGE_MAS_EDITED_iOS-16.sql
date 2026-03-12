@@ -6,7 +6,7 @@ Query copied from https://github.com/ScottKjr3347/iOS_SWY_PL_Photos.sqlite_Queri
 */
 
 SELECT
-    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
+    ROW_NUMBER() OVER() AS 'RecordNumber',
     ZASSET.Z_PK AS 'ZASSET.Z_PK ',
     -- ZASSET.ZSORTTOKEN AS 'ZASSET.ZSORTTOKEN',
     -- ZASSET.ZPROMOTIONSCORE AS 'ZASSET.ZPROMOTIONSCORE',
@@ -898,7 +898,7 @@ SELECT
     ZCLOUDMASTER.ZSOURCEMASTERFORDUPLICATIONIDENTIFIER AS 'ZCLOUDMASTER.ZSOURCEMASTERFORDUPLICATIONIDENTIFIER',
 
     /* Source for each line of data */
-    '\private\var\mobile\Library\Photos\Libraries\Syndication.photoslibrary\database\Photos.sqlite; ZASSET(Z_PK:' || ZASSET.Z_PK || ')' AS 'DATA_SOURCE'
+    'private/var/mobile/Library/Photos/Libraries/Syndication.photoslibrary/database/Photos.sqlite; ZASSET(Z_PK:' || ZASSET.Z_PK || ')' AS 'DataSource'
 
 
 FROM ZASSET
