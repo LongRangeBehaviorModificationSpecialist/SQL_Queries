@@ -2,7 +2,7 @@
 Query copied from https://thebinaryhick.blog/2022/06/09/new-msgstore-who-dis-a-look-at-an-updated-whatsapp-on-android/
 */
 
-ATTACH DATABASE 'file:F:\26-03686_ADAMSON\EVIDENCE\EXPORTS\com.whatsapp\msgstore[dot]db\wa.db?mode=ro' AS whatsapp_db;
+ATTACH DATABASE 'file:.\wa.db?mode=ro' AS whatsapp_db;
 
 
 SELECT
@@ -10,8 +10,8 @@ SELECT
     message._id AS 'MessageID',
 
     CASE message.from_me
-        WHEN 0 THEN '0 [Incoming]'
-        WHEN 1 THEN '1 [Outgoing]'
+        WHEN 0 THEN 'Incoming [0]'
+        WHEN 1 THEN 'Outgoing [1]'
     END AS 'MessageFromMe',
 
     datetime(message.timestamp / 1000, 'UNIXEPOCH') AS 'MessageTimestamp(UTC)',
@@ -53,17 +53,17 @@ SELECT
     wa_contacts.display_name AS 'WADisplayUserName',
 
     CASE message.message_type
-        WHEN 0 THEN '0  [Text]'
-        WHEN 1 THEN '1  [Picture]'
-        WHEN 2 THEN '2  [Audio]'
-        WHEN 3 THEN '3  [Video]'
-        WHEN 4 THEN '4  [Gif]'
-        WHEN 5 THEN '5  [Static Location]'
-        WHEN 7 THEN '7  [System Message]'
-        WHEN 9 THEN '9  [Document]'
-        WHEN 14 THEN '14  [Deleted Message]'
-        WHEN 15 THEN '15  [Sticker]'
-        WHEN 16 THEN '16  [Live Location]'
+        WHEN 0 THEN '0 [Text]'
+        WHEN 1 THEN '1 [Picture]'
+        WHEN 2 THEN '2 [Audio]'
+        WHEN 3 THEN '3 [Video]'
+        WHEN 4 THEN '4 [Gif]'
+        WHEN 5 THEN '5 [Static Location]'
+        WHEN 7 THEN '7 [System Message]'
+        WHEN 9 THEN '9 [Document]'
+        WHEN 14 THEN '14 [Deleted Message]'
+        WHEN 15 THEN '15 [Sticker]'
+        WHEN 16 THEN '16 [Live Location]'
         ELSE message.message_type
     END AS 'MessageType',
 
@@ -140,7 +140,7 @@ SELECT
     END AS 'FinalLocationTimestamp',
 
     /* Source for each line of data */
-    'File: /data/data/com.whatsapp/databases/msgstore.db; Table: message(ROWID:' || message._id || ')' AS 'DataSource'
+    'File: /data/data/com.whatsapp/databases/msgstore.db; Table:message(ROWID:' || message._id || ')' AS 'DataSource'
 
 
 FROM message
