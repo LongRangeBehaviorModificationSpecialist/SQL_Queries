@@ -1,6 +1,6 @@
 /*
 [DLU]
-    05-Sep-2025
+    21-Mar-2026
 [VERSION]
     Tested on iOS 18
 [SMS]
@@ -65,8 +65,8 @@ SELECT
     END AS 'WasDeleted',
 
     CASE message.is_from_me
-        WHEN 0 THEN '0 [Received]'
-        WHEN 1 THEN '1 [Sent]'
+        WHEN 0 THEN 'Received [0]'
+        WHEN 1 THEN 'Sent [1]'
         ELSE 'Unknown Value : ' || message.is_from_me || ''
     END AS 'message.is_from_me',
 
@@ -144,20 +144,20 @@ SELECT
     END AS 'message.is_service_message',
 
     CASE message.is_spam
-        WHEN 0 THEN '0 [No]'
-        WHEN 1 THEN '1 [Yes]'
+        WHEN 0 THEN 'No [0]'
+        WHEN 1 THEN 'Yes [1]'
         ELSE 'Unknown Value : ' || message.is_spam || ''
     END AS 'message.is_spam',
 
     CASE message.was_data_detected
-        WHEN 1 THEN '1 [Yes]'
-        WHEN 0 THEN '0 [No]'
+        WHEN 0 THE. 'No [0]'
+        WHEN 1 THEN 'Yes [1]'
         ELSE 'Unknown Value: ' || message.was_data_detected || ''
     END AS 'message.was_data_detected',
 
     CASE message.ck_sync_state
-        WHEN 0 THEN '0 [Not Synced]'
-        WHEN 1 THEN '1 [Synced]'
+        WHEN 0 THEN 'Not Synced [0]'
+        WHEN 1 THEN 'Synced [1]'
         ELSE 'Unknown Value: ' || message.ck_sync_state || ''
     END AS 'message.ck_sync_state',
 
@@ -171,8 +171,9 @@ SELECT
     END AS 'handle.id',
 
     CASE chat.style
-        WHEN '43' THEN '43 [GroupChat]'
-        WHEN '45' THEN '45 [P2P]'
+        WHEN '43' THEN 'GroupChat [43]'
+        WHEN '45' THEN 'P2P [45]'
+        ELSE 'Unknown Value : ' || chat.style || ''
     END AS 'chat.style',
 
     chat_message_join.chat_id AS 'chat_message_join.chat_id',
@@ -224,8 +225,8 @@ SELECT
     message.balloon_bundle_id AS 'message.balloon_bundle_id',
 
     CASE message.was_delivered_quietly
-        WHEN '0' THEN '0 [No]'
-        WHEN '1' THEN '1 [Yes]'
+        WHEN '0' THEN 'No [0]'
+        WHEN '1' THEN 'Yes [1]'
         ELSE 'Unknown Value : '  || message.was_delivered_quietly || ''
     END AS 'WasDeliveredQuietly',
 
@@ -246,20 +247,20 @@ SELECT
     END AS 'message.expressive_send_style_id',
 
     CASE message.is_read
-        WHEN 0 THEN '0 [No]'
-        WHEN 1 THEN '1 [Yes]'
+        WHEN 0 THEN 'No [0]'
+        WHEN 1 THEN 'Yes [1]'
         ELSE 'Unknown Value : ' || message.is_read || ''
     END AS 'message.is_read',
 
     CASE message.share_status
-        WHEN 0 THEN '0 [Not Shared]'
-        WHEN 1 THEN '1 [Shared]'
+        WHEN 0 THEN 'Not Shared [0]'
+        WHEN 1 THEN 'Shared [1]'
         ELSE message.share_status
     END AS 'message.share_status',
 
     CASE message.share_direction
-        WHEN 0 THEN '0 [Received]'
-        WHEN 1 THEN '1 [Sent]'
+        WHEN 0 THEN 'Received [0]'
+        WHEN 1 THEN 'Sent [1]'
         ELSE message.share_direction
     END AS 'message.share_direction',
 
@@ -296,7 +297,7 @@ SELECT
     END AS 'attachment.created_date(UTC)',
 
     -- Source for each line of data
-    'sms.db; Table: messages(ROWID: ' || message.ROWID || ')' AS 'DATA_SOURCE'
+    'sms.db; Table:messages(ROWID:' || message.ROWID || ')' AS 'Data-Source'
 
 
 FROM message
