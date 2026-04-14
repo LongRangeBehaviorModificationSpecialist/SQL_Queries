@@ -1,8 +1,8 @@
 /*
-    [DLU]
-        03-Sep-2025
-    [OS Version]
-        Android 16
+[DLU]
+    03-Sep-2025
+[OS Version]
+    Android 16
 */
 
 

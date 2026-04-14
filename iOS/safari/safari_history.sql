@@ -5,7 +5,7 @@
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
+    ROW_NUMBER() OVER() AS 'record_number',
     history_visits.id AS 'history_visits.id',
     history_items.id AS 'history_items.id',
 

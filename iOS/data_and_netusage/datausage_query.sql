@@ -19,6 +19,9 @@ SELECT
 
     ZPROCESS.ZPROCNAME AS 'PROCESS_NAME',
     ZPROCESS.ZBUNDLENAME AS 'BUNDLE_NAME',
+    /*
+    For iOS 18, comment out the ZLIVEUSAGE.ZWIFIIN & ZWIFIOUT columns -- they do not exist
+    */
     printf("%,d", ZLIVEUSAGE.ZWIFIIN) AS 'wifi_bytes_in',
     printf("%,d", ZLIVEUSAGE.ZWIFIOUT) AS 'wifi_bytes_out',
     printf("%,d", ZLIVEUSAGE.ZWWANIN) AS 'wwan_bytes_in',

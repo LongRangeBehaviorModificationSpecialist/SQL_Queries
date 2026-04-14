@@ -1,15 +1,15 @@
 /*
-    [DLU]
-        04-Sep-2025
-    [DATABASE PATH]
-        /private/var/mobile/Library/Caches/com.apple.routined/Cache.sqlite
-    [VERSION]
-        iOS 16
+[DLU]
+    14-Apr-2026
+[DATABASE PATH]
+    /private/var/mobile/Library/Caches/com.apple.routined/Cache.sqlite
+[VERSION]
+    iOS 16
 */
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RecordNumber',
+    ROW_NUMBER() OVER() AS 'record_number',
 
     /* Primary key of the record */
     ZRTCLLOCATIONMO.Z_PK AS 'Z_PK',

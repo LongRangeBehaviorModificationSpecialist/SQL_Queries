@@ -1,8 +1,8 @@
 /*
-    [DLU]
-        09-Mar-2026
-    [DATABASE FILE]
-        \private\var\networkd\db\netusage.sqlite
+[DLU]
+    09-Mar-2026
+[DATABASE FILE]
+    \private\var\networkd\db\netusage.sqlite
 */
 
 SELECT
