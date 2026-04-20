@@ -10,39 +10,40 @@ CREATE view group_messages AS
 SELECT
 
     ROW_NUMBER() OVER() AS 'record_number',
-    ZWACHATSESSION.ZPARTNERNAME AS 'ZWACHATSESSION.ZPARTNERNAME',
+
+    ZWACHATSESSION.ZPARTNERNAME AS 'ZWACHATSESSION.zpartnername',
 
     CASE ZWAMESSAGE.ZISFROMME
-        WHEN 0 THEN '0 [Incoming]'
-        WHEN 1 THEN '1 [Outgoing]'
+        WHEN 0 THEN 'Incoming [0]'
+        WHEN 1 THEN 'Outgoing [1]'
         ELSE 'Unknown Value: ' || ZWAMESSAGE.ZISFROMME || ''
-    END AS 'ZWAMESSAGE.ZISFROMME',
+    END AS 'ZWAMESSAGE.zisfromme',
 
     CASE ZWAMESSAGE.ZISFROMME
         WHEN 0 THEN ZWAMESSAGE.ZFROMJID
         ELSE ZWAMESSAGE.ZTOJID
-    END AS 'GroupID',
+    END AS 'groupid',
 
     CASE ZWAMESSAGE.ZMESSAGETYPE
-        WHEN 0 THEN '0 [text]'
-        WHEN 1 THEN '1 [image]'
-        WHEN 2 THEN '2 [video]'
-        WHEN 3 THEN '3 [voice_message]'
-        WHEN 4 THEN '4 [gif]'
-        WHEN 5 THEN '5 [location]'
-        WHEN 6 THEN '6 [group_event]'
-        WHEN 7 THEN '7 [hyperlink]'
-        WHEN 8 THEN '8 [document]'
-        WHEN 14 THEN '14 [deleted_message]'
-        WHEN 15 THEN '15 [sticker]'
+        WHEN 0 THEN 'Text [0]'
+        WHEN 1 THEN 'Image [1]'
+        WHEN 2 THEN 'Video [2]'
+        WHEN 3 THEN 'Voice Message [3]'
+        WHEN 4 THEN 'Gif [4]'
+        WHEN 5 THEN 'Location [5]'
+        WHEN 6 THEN 'Group Event [6]'
+        WHEN 7 THEN 'Hyperlink [7]'
+        WHEN 8 THEN 'Document [8]'
+        WHEN 14 THEN 'Deleted Message [14]'
+        WHEN 15 THEN 'Sticker [15]'
         ELSE 'Unknown Value: ' || ZWAMESSAGE.ZMESSAGETYPE || ''
-    END AS 'ZWAMESSAGE.ZMESSAGETYPE',
+    END AS 'ZWAMESSAGE.zmessagetype',
 
-    datetime(ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'unixepoch') AS 'ZWAMESSAGE.ZMESSAGEDATE(UTC)',
+    datetime(ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'unixepoch') AS 'ZWAMESSAGE.zmessagedate(utc)',
 
-    ZWAMESSAGE.ZTEXT AS 'ZWAMESSAGE.ZTEXT',
-    friend_chat_session.ZPARTNERNAME AS 'friend_chat_session.ZPARTNERNAME',
-    ZWAGROUPMEMBER.ZMEMBERJID AS 'ZWAGROUPMEMBER.ZMEMBERJID'
+    ZWAMESSAGE.ZTEXT AS 'ZWAMESSAGE.ztext',
+    friend_chat_session.ZPARTNERNAME AS 'friend_chat_session.zpartnername',
+    ZWAGROUPMEMBER.ZMEMBERJID AS 'ZWAGROUPMEMBER.zmemberjid'
 
 
 FROM ZWACHATSESSION

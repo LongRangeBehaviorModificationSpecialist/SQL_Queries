@@ -17,18 +17,18 @@ SELECT
     zaccount.ZACCOUNTDESCRIPTION AS 'account_description',
 
     CASE zaccount.ZACTIVE
-        WHEN 0 THEN 'No'
-        WHEN 1 THEN 'Yes'
+        WHEN 0 THEN 'No [0]'
+        WHEN 1 THEN 'Yes [1]'
     END AS 'account_active',
 
     CASE zaccount.ZAUTHENTICATED
-        WHEN 0 THEN 'No'
-        WHEN 1 THEN 'Yes'
+        WHEN 0 THEN 'No [0]'
+        WHEN 1 THEN 'Yes [1]'
     END AS 'account_authenticated',
 
     CASE zaccount.ZSUPPORTSAUTHENTICATION
-        WHEN 0 THEN 'No'
-        WHEN 1 THEN 'Yes'
+        WHEN 0 THEN 'No [0]'
+        WHEN 1 THEN 'Yes [1]'
     END AS 'account_supports_auth',
 
     zaccount.ZAUTHENTICATIONTYPE AS 'authentication_type',
@@ -36,8 +36,8 @@ SELECT
     ZACCOUNTPROPERTY.ZKEY AS 'key',
 
     CASE zaccount.ZVISIBLE
-        WHEN 0 THEN 'No'
-        WHEN 1 THEN 'Yes'
+        WHEN 0 THEN 'No [0]'
+        WHEN 1 THEN 'Yes [1]'
     END AS 'account_visible',
 
     zaccount.ZIDENTIFIER AS 'identifier',

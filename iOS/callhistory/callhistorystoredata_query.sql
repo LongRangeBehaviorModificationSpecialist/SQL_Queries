@@ -10,39 +10,40 @@ Use 'DESC' for decending order (most recent date at the top) OR can use 'ASC' fo
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
-    ZCALLRECORD.Z_PK AS 'ZCALLRECORD.Z_PK',
+    ROW_NUMBER() OVER() AS 'record_number',
 
-    datetime(ZCALLRECORD.ZDATE + 978307200, 'UNIXEPOCH') AS 'ZCALLRECORD.ZDATE(UTC)',
-    datetime((ZCALLRECORD.ZDATE + 978307200) + ZCALLRECORD.ZDURATION, 'UNIXEPOCH') AS 'CALL-END-TIME(UTC)',
+    ZCALLRECORD.Z_PK AS 'ZCALLRECORD.z_pk',
 
-    TIME(ZCALLRECORD.ZDURATION, 'UNIXEPOCH') AS 'ZCALLRECORD.ZDURATION(seconds)',
-    ZCALLRECORD.ZADDRESS AS 'ZCALLRECORD.ZADDRESS',
-    ZCALLRECORD.ZLOCATION AS 'ZCALLRECORD.ZLOCATION',
+    datetime(ZCALLRECORD.ZDATE + 978307200, 'UNIXEPOCH') AS 'ZCALLRECORD.zdate_utc',
+    datetime((ZCALLRECORD.ZDATE + 978307200) + ZCALLRECORD.ZDURATION, 'UNIXEPOCH') AS 'call-end-time_utc',
+
+    TIME(ZCALLRECORD.ZDURATION, 'UNIXEPOCH') AS 'ZCALLRECORD.zduration(seconds)',
+    ZCALLRECORD.ZADDRESS AS 'ZCALLRECORD.zaddress',
+    ZCALLRECORD.ZLOCATION AS 'ZCALLRECORD.zlocation',
 
     CASE ZCALLRECORD.ZANSWERED
-        WHEN 0 THEN '0 [NOT Answered]'
-        WHEN 1 THEN '1 [Answered]'
+        WHEN 0 THEN 'NOT Answered [0]'
+        WHEN 1 THEN 'Answered [1]'
         ELSE 'Unknown Value: ' || ZCALLRECORD.ZANSWERED || ''
-    END AS 'ZCALLRECORD.ZANSWERED',
+    END AS 'ZCALLRECORD.zanswered',
 
     CASE ZCALLRECORD.ZORIGINATED
-        WHEN 0 THEN '0 [Incoming]'
-        WHEN 1 THEN '1 [Outgoing]'
+        WHEN 0 THEN 'Incoming [0]'
+        WHEN 1 THEN 'Outgoing [1]'
         ELSE 'Unknown Value: ' || ZCALLRECORD.ZORIGINATED || ''
-    END as 'ZCALLRECORD.ZORIGINATED',
+    END as 'ZCALLRECORD.zoriginated',
 
     CASE ZCALLRECORD.ZCALLTYPE
-        WHEN 1 THEN '1 [Standard]'
-        WHEN 8 THEN '8 [Full AV FaceTime]'
-        WHEN 16 THEN '16 [FaceTime Audio Only]'
+        WHEN 1 THEN 'Standard [1]'
+        WHEN 8 THEN 'Full AV FaceTime [8]'
+        WHEN 16 THEN 'FaceTime Audio Only [16]'
         ELSE 'Unknown Value :' || ZCALLRECORD.ZCALLTYPE || ''
-    END AS 'ZCALLRECORD.ZCALLTYPE',
+    END AS 'ZCALLRECORD.zcalltype',
 
-    ZCALLRECORD.ZSERVICE_PROVIDER AS 'ZCALLRECORD.ZSERVICE_PROVIDER',
+    ZCALLRECORD.ZSERVICE_PROVIDER AS 'ZCALLRECORD.zservice_provider',
 
     /* Source for each line of data */
-    'CallHistory.storedata; Table: ZCALLRECORD(Z_PK:' || ZCALLRECORD.Z_PK || ')' AS 'DATA_SOURCE'
+    'CallHistory.storedata; Table: ZCALLRECORD(Z_PK:' || ZCALLRECORD.Z_PK || ')' AS 'data_source'
 
 
 FROM ZCALLRECORD
