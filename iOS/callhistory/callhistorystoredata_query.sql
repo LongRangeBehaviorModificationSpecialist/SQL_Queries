@@ -10,40 +10,40 @@ Use 'DESC' for decending order (most recent date at the top) OR can use 'ASC' fo
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'record_number',
+    ROW_NUMBER() OVER() AS 'Row No.',
 
-    ZCALLRECORD.Z_PK AS 'ZCALLRECORD.z_pk',
+    ZCALLRECORD.Z_PK AS 'z_pk',
 
-    datetime(ZCALLRECORD.ZDATE + 978307200, 'UNIXEPOCH') AS 'ZCALLRECORD.zdate_utc',
-    datetime((ZCALLRECORD.ZDATE + 978307200) + ZCALLRECORD.ZDURATION, 'UNIXEPOCH') AS 'call-end-time_utc',
+    ZCALLRECORD.ZADDRESS AS 'Partner(s)',
+    ZCALLRECORD.ZLOCATION AS 'ZLOCATION',
 
-    TIME(ZCALLRECORD.ZDURATION, 'UNIXEPOCH') AS 'ZCALLRECORD.zduration(seconds)',
-    ZCALLRECORD.ZADDRESS AS 'ZCALLRECORD.zaddress',
-    ZCALLRECORD.ZLOCATION AS 'ZCALLRECORD.zlocation',
+    datetime(ZCALLRECORD.ZDATE + 978307200, 'UNIXEPOCH') AS 'Call Date/Time (UTC)',
+    datetime((ZCALLRECORD.ZDATE + 978307200) + ZCALLRECORD.ZDURATION, 'UNIXEPOCH') AS 'Call End Date/Time (UTC)',
+    TIME(ZCALLRECORD.ZDURATION, 'UNIXEPOCH') AS 'Call Duration',
 
     CASE ZCALLRECORD.ZANSWERED
-        WHEN 0 THEN 'NOT Answered [0]'
-        WHEN 1 THEN 'Answered [1]'
+        WHEN 0 THEN 'NOT Answered  [0]'
+        WHEN 1 THEN 'Answered  [1]'
         ELSE 'Unknown Value: ' || ZCALLRECORD.ZANSWERED || ''
-    END AS 'ZCALLRECORD.zanswered',
+    END AS 'Call Status',
 
     CASE ZCALLRECORD.ZORIGINATED
-        WHEN 0 THEN 'Incoming [0]'
-        WHEN 1 THEN 'Outgoing [1]'
+        WHEN 0 THEN 'Incoming  [0]'
+        WHEN 1 THEN 'Outgoing  [1]'
         ELSE 'Unknown Value: ' || ZCALLRECORD.ZORIGINATED || ''
-    END as 'ZCALLRECORD.zoriginated',
+    END as 'Call Direction',
 
     CASE ZCALLRECORD.ZCALLTYPE
-        WHEN 1 THEN 'Standard [1]'
-        WHEN 8 THEN 'Full AV FaceTime [8]'
-        WHEN 16 THEN 'FaceTime Audio Only [16]'
+        WHEN 1 THEN 'Standard  [1]'
+        WHEN 8 THEN 'Full AV FaceTime  [8]'
+        WHEN 16 THEN 'FaceTime Audio Only  [16]'
         ELSE 'Unknown Value :' || ZCALLRECORD.ZCALLTYPE || ''
-    END AS 'ZCALLRECORD.zcalltype',
+    END AS 'Call Type',
 
-    ZCALLRECORD.ZSERVICE_PROVIDER AS 'ZCALLRECORD.zservice_provider',
+    ZCALLRECORD.ZSERVICE_PROVIDER AS 'Service Provider',
 
     /* Source for each line of data */
-    'CallHistory.storedata; Table: ZCALLRECORD(Z_PK:' || ZCALLRECORD.Z_PK || ')' AS 'data_source'
+    'CallHistory.storedata; Table: ZCALLRECORD(Z_PK:' || ZCALLRECORD.Z_PK || ')' AS 'Data Source'
 
 
 FROM ZCALLRECORD
